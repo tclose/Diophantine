@@ -31,7 +31,7 @@
   a < b
   gt(a,b)
   a != b
-  eq(a,b)
+  a == b
   neqzero(a)
   ezero(a)
   gezero(a)
@@ -581,8 +581,8 @@ def neqzero(a):
    
 
 
-def eq(a,b):
-    """  eq(a,b) returns 1 if a=b, "0" otherwise.  """
+def a == b:
+    """  a == b returns 1 if a=b, "0" otherwise.  """
    t=bccomp(a,b)
    if t==0:
       return("1")
@@ -881,7 +881,7 @@ def printmatrix2(matrix,m,n):
  def unit_matrix(m):
    for i in xrange(m):
        for j in xrange(m):
-           if eq(i,j):
+           if i == j:
               P[i][j]="1"
            else:
               P[i][j]="0"

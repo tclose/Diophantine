@@ -23,7 +23,7 @@ def  lllhermite(G,m,n,m1,n1):
    """  G is a nonzero matrix with at least two rows.  """
    for i in xrange(m):
        for j in xrange(m):
-           if eq(i,j):
+           if i == j:
               B[i][j]="1"
            else:
               B[i][j]="0"
@@ -64,7 +64,7 @@ def  lllhermite(G,m,n,m1,n1):
          u=bcmul(n1,temp3)
          temp1=bcmul(D[kminus1],D[kminus1])
          v=bcmul(m1,temp1)
-         if col1 <= minim || (eq(col1,col2) and eq(col1,nplus1) and u < v):
+         if col1 <= minim || (col1 == col2 and col1 == nplus1 and u < v):
             swap2(k,m,n)
             if k > "2":
                k=kminus1
@@ -222,7 +222,7 @@ global A
 def minus(j,m,&L):
    for r in xrange(1, m):
        for s in xrange(r - 1):
-           if eq(r,j) || eq(s,j):
+           if r == j || s == j:
              L[r][s]=bcminus(L[r][s])
            
        
