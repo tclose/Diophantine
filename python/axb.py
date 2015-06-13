@@ -45,7 +45,7 @@ if le(t,1):
         exit
 
 cols=cols + 1"""  Here cols is the number of columns of the augmented matrix  """
-size=bcmul(rows,cols)
+size=rows * cols
 if t < size:
 	print "number t of entries is less than m &times n = size<br>\n"
         print "<a href=\"./axb.html\">Return to main page</a><br>\n"
@@ -74,12 +74,12 @@ if t > size:
 		for i in xrange(rows):
 		    for j in xrange(cols):
                         k=ii + j
-                        k=bcsub(k,1)
+                        k=k - 1
                         mat[i][j]=a[k]
                     
                     ii=cols + ii
 		
-                m=bcsub(cols,1)
+                m=cols - 1
                 t=test_zeromat(mat,rows,m)
                 if eq(t,1):
                    print "Coeffficient matrix is the zero matrix<br>\n"

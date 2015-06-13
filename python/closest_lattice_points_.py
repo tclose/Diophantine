@@ -108,7 +108,7 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=bcsub(m,1)
+    mminus1=m - 1
     if mminus1 > 1:
        print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     else:
@@ -126,7 +126,7 @@ global lcv
     Qden=choleskyden
     QQnum=transpose(snum,m,m)
     QQden=transpose(sden,m,m)
-    m=bcsub(m,1)
+    m=m - 1
     for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
@@ -155,7 +155,7 @@ global lcv
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=bcminus(temp2)
-       x[i]=bcsub(temp3,1)
+       x[i]=temp3 - 1
        while(1)
           x[i]=x[i] + 1
           if le(x[i],UB[i]):
@@ -170,7 +170,7 @@ global lcv
                    coord[count]=x
                    for k in xrange(n):
                        temp=A[mplus1][k]
-                       multiplier_vector[count][k]=bcsub(temp,lcv[k])
+                       multiplier_vector[count][k]=temp - lcv[k]
                    
                    l=lengthsquared(multiplier_vector[count],n)
                    multiplier_vector[count][nplus1]=l
@@ -178,7 +178,7 @@ global lcv
                    lengtharray[count]=l
                    continue
               else:
-                i=bcsub(i,1)
+                i=i - 1
                 # now update U[i]
                 sumnum=0
                 sumden=1
@@ -260,7 +260,7 @@ global lcv
 def lengthsquared(a,n):
    sum=0
    for i in xrange(n):
-      temp=bcmul(a[i],a[i])
+      temp=a[i] * a[i]
       sum=sum + temp
    
    return(sum)

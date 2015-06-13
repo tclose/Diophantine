@@ -93,24 +93,24 @@ def mod(a,b):
 def  abs_mod(a,b):
 """  This returns r=mod(a,b) if r <= b/2, otherwise r-b. """
    r=mod(a,b)
-   temp=bcmul(2,r)
+   temp=2 * r
    if temp > b:
-      r=bcsub(r,b)
+      r=r - b
    
    return(r)
 
 
 def int(a,b):
 	if b<0:
-	     a=bcsub(0,a)
-	     b=bcsub(0,b)
+	     a=0 - a
+	     b=0 - b
 	
 	c=bcdiv(a,b)
 	d=bcmod(a,b)
 	if d==0 || a>0:
 		return(c)
 	else:
-		return(bcsub(c,1))
+		return(c - 1)
 	
 
 
@@ -121,10 +121,10 @@ def mpower(a,b,c):
 	while(y)
 		while(bcmod(y,2)==0)
 			y=bcdiv(y,2)
-			x=bcmod(bcmul(x,x),c)
+			x=bcmod(x * x,c)
 		
-		y=bcsub(y,1)
-		z=bcmod(bcmul(z,x),c)
+		y=y - 1
+		z=bcmod(z * x,c)
 	
 	return(z)
 
@@ -158,7 +158,7 @@ def  bcabs(a):
 	if a>=0:
 		return(a)
 	else:
-		h=bcsub(0,a)
+		h=0 - a
 		return(h)
 	
 
@@ -224,10 +224,10 @@ global multiplier2
 		a=b
 		b=c
 		c=bcmod(a,b)
-		temp1=bcmul(q,k1)
-		temp2=bcmul(q,k2)
-		h1=bcsub(l1,temp1)
-		h2=bcsub(l2,temp2)
+		temp1=q * k1
+		temp2=q * k2
+		h1=l1 - temp1
+		h2=l2 - temp2
 		l1=k1
 		l2=k2
 		k1=h1
@@ -235,7 +235,7 @@ global multiplier2
 	
 	multiplier1=k1
 	if s=="-1":
-		k2=bcsub(0,k2)
+		k2=0 - k2
 	
 	multiplier2=k2
 	return(b)
@@ -278,7 +278,7 @@ def  printpoly(a,n):
 	else:
            print "x"
 	
-	d=bcsub(n,1)
+	d=n - 1
   	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
 		if a[i] > 1:
@@ -330,7 +330,7 @@ def  printpolylambda(a,n):
 	else:
            print "&lambda"
 	
-	d=bcsub(n,1)
+	d=n - 1
   	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
 		if a[i] > 1:
@@ -380,7 +380,7 @@ def len(n):
 """  ceiling def  """
 function ceiling(a,b):
 	x=int(a,b)
-	if bccomp(bcmul(b,x),a)==0:
+	if bccomp(b * x,a)==0:
            return(x)
         
 	else:
@@ -391,7 +391,7 @@ function ceiling(a,b):
 def  lcm(a,b):
 """  lcm(a,b)  """
 	g=gcd(a,b)
-	h=bcmul(a,b)
+	h=a * b
 	k=bcdiv(h,g)
 	return(k)
 
@@ -402,10 +402,10 @@ def  lcma(array,n):
           b[i]=array[i]
 	
 	for i in xrange(n - 1):
-		j=bcsub(i,1)
+		j=i - 1
 		b[i]=lcm(b[i],b[j])
 	
-	j=bcsub(i,1)
+	j=i - 1
 	return(b[j])
 
 
@@ -415,10 +415,10 @@ def  gcda(array,n):
           b[i]=array[i]
 	
 	for i in xrange(n - 1):
-		j=bcsub(i,1)
+		j=i - 1
 		b[i]=gcd(b[i],b[j])
 	
-	j=bcsub(i,1)
+	j=i - 1
 	return(b[j])
 
 
@@ -430,10 +430,10 @@ def  gcda(array,n):
 	while(bccomp(y,0)>0)
 		while(bccomp(bcmod(y,2),0)==0)
 			y=bcdiv(y,2)
-			x=bcmul(x,x)
+			x=x * x
 		
-		y=bcsub(y,1)
-		z=bcmul(z,x)
+		y=y - 1
+		z=z * x
 	
 	return(z)
 
@@ -452,7 +452,7 @@ global multiplier1
 	b=multiplier1
 	y=bcdiv(n,a)
 	p=int(p,a)
-	temp1=bcmul(b,p)
+	temp1=b * p
 	solution=mod(temp1,y)
 	modulus=y
 	for(t=0t<at += 1)print " ",z+ty,","
@@ -468,7 +468,7 @@ global multiplier1
 	b=multiplier1
 	y=bcdiv(n,a)
 	p=int(p,a)
-	temp1=bcmul(b,p)
+	temp1=b * p
 	solution=mod(temp1,y)
 	modulus=y
 	return(solution)
@@ -487,15 +487,15 @@ global multiplier1
 global multiplier2
 
 	d = egcd(m,n)
-	if mod(bcsub(a,b),d)!=0:
+	if mod(a - b,d)!=0:
 		return(0)
 	
 	x= bcdiv(m,d)y=bcdiv(n,d)
-	z=bcdiv(bcmul(m,n),d)
-	temp1=bcmul(b,multiplier1)
-	temp1=bcmul(temp1,x)
-	temp2=bcmul(a,multiplier2)
-	temp2=bcmul(temp2,y)
+	z=bcdiv(m * n,d)
+	temp1=b * multiplier1
+	temp1=temp1 * x
+	temp2=a * multiplier2
+	temp2=temp2 * y
 	c=mod(temp1 + temp2,z)
 	chinese_modulus=z
 	chinese_solution=c
@@ -654,21 +654,21 @@ global zed2
                 while(ezero(bcmod(y,2)))
                         y=bcdiv(y,2)
                         temp=x1
-                        temp1=bcmul(x2,x2)
-                        temp2=bcmul(x1,x1)
-                        temp3=bcmul(dd,temp1)
+                        temp1=x2 * x2
+                        temp2=x1 * x1
+                        temp3=dd * temp1
                         x1=temp2 + temp3
-                        temp4=bcmul(temp,x2)
-                        x2=bcmul(2,temp4)
+                        temp4=temp * x2
+                        x2=2 * temp4
                 
-                y=bcsub(y,1)
+                y=y - 1
                 temp=zed1
-                temp1=bcmul(zed2,x2)
-                temp2=bcmul(zed1,x1)
-                temp3=bcmul(dd,temp1)
+                temp1=zed2 * x2
+                temp2=zed1 * x1
+                temp3=dd * temp1
                 zed1=temp2 + temp3
-                temp4=bcmul(temp,x2)
-                temp5=bcmul(zed2,x1)
+                temp4=temp * x2
+                temp5=zed2 * x1
                 zed2=temp4 + temp5
         
        """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
@@ -677,7 +677,7 @@ global zed2
 
 def bcminus(a):
 
-   t=bcsub(0,a)
+   t=0 - a
     return(t)
 
 
@@ -691,7 +691,7 @@ def gcd3(a,b,c):
 def falling_factorial(m,n):
     product=1
     for i in xrange(m - 1, n):
-         product=bcmul(product,i)
+         product=product * i
     
     return(product)
 
@@ -705,7 +705,7 @@ def print_matrix(a,b,c,d):
 
 def sort_[a,n]:
 global sorted_array
-   t=bcsub(n,1)
+   t=n - 1
    for i in xrange(t):
       temp1=i + 1
       for j in xrange(temp1, n):
@@ -741,15 +741,15 @@ def  bezout(a,b):
    while(gtzero(v3))
       q=bcdiv(d,v3)
       t3=bcmod(d,v3)
-      temp=bcmul(q,v1)
-      t1=bcsub(globalu,temp)
+      temp=q * v1
+      t1=globalu - temp
       globalu=v1
       d=v3
       v1=t1
       v3=t3
    
-   temp=bcmul(a,globalu)
-   temp=bcsub(d,temp)
+   temp=a * globalu
+   temp=d - temp
    globalv=bcdiv(temp,b)
    return(d)
 
@@ -775,8 +775,8 @@ def  bezout1(a,b):
    d=bezout(absa,absb)
    ta=sign(a)
    tb=sign(b)
-   globalu=bcmul(globalu,ta)
-   globalv=bcmul(globalv,tb)
+   globalu=globalu * ta
+   globalv=globalv * tb
    return(d)
 
 
@@ -798,9 +798,9 @@ def  lnearint(a,b):
           a=bcminus(a)
           b=bcminus(b)
         
-        x=bcmul(b,y)
-        z=bcsub(a,x)
-        z=bcmul(2,z)
+        x=b * y
+        z=a - x
+        z=2 * z
         if z > b:
           y=y + 1
         
@@ -810,8 +810,8 @@ def  lnearint(a,b):
 def  lmodd(m,n):
 """  lmodd(m,n) returns r, m=qn+r, -n/2 < r <= n/2  """
 	t=lnearint(m,n)
-	s=bcmul(n,t)
-	r=bcsub(m,s)
+	s=n * t
+	r=m - s
 	return(r)
 
 
@@ -916,8 +916,8 @@ def transpose1(&A,&m,&n):
 # creates the submatrix from rows p to q+ 
 def row_submatrix(A,p,q):
 global new_row_size
-    r=bcsub(p,1)
-    s=bcsub(q,p)
+    r=p - 1
+    s=q - p
     s=s + 1
     new_row_size=s
     for i in xrange(s):
@@ -930,8 +930,8 @@ global new_row_size
 # creates the submatrix from columns p to q+ 
 def col_submatrix(A,rows,p,q):
 global new_col_size
-    r=bcsub(p,1)
-    s=bcsub(q,p)
+    r=p - 1
+    s=q - p
     s=s + 1
     new_col_size=s
     for j in xrange(s):
@@ -955,8 +955,8 @@ def submatrix(A,rows,p1,q1,p2,q2):
 # replaces row i of A by q times row j, updating A
 def rowiminusqrowj(&A,n,i,q,j):
     for k in xrange(n):
-       t=bcmul(A[j][k],q)
-       A[i][k]=bcsub(A[i][k],t)
+       t=A[j][k] * q
+       A[i][k]=A[i][k] - t
     
     return(A)
 
@@ -964,8 +964,8 @@ def rowiminusqrowj(&A,n,i,q,j):
 # replaces column i of A by q times column j, updating A
 def coliminusqcolj(&A,m,i,q,j):
     for k in xrange(m):
-       t=bcmul(A[k][j],q)
-       A[k][i]=bcsub(A[k][i],t)
+       t=A[k][j] * q
+       A[k][i]=A[k][i] - t
     
 
 
@@ -975,7 +975,7 @@ def delete_row(&B,i,&m):
        temp=B[lplus1]
        B[l]=temp
    
-   m=bcsub(m,1)
+   m=m - 1
    return
 
 
@@ -1002,7 +1002,7 @@ def swap_cols(&P,m,j,k):
 def dotproduct(a,b,n):
    sum=0
    for j in xrange(n):
-       temp=bcmul(a[j],b[j])
+       temp=a[j] * b[j]
        sum=sum + temp
    
    return(sum)
@@ -1013,7 +1013,7 @@ def multmat(A,B,m,n,p):
        for k in xrange(p):
            sum=0
            for j in xrange(n):
-               t=bcmul(A[i][j],B[j][k])
+               t=A[i][j] * B[j][k]
                sum=sum + t
            
            C[i][k]=sum
@@ -1047,27 +1047,27 @@ def equalmat(A,B,rowsA,colsA,rowsB,colsB):
    return(1)
 
 def abpluscd(a,b,c,d):
-   s=bcmul(a,b)
-   t=bcmul(c,d)
+   s=a * b
+   t=c * d
    u=s + t
    return(u)
 
  def abminuscd(a,b,c,d):
-   s=bcmul(a,b)
-   t=bcmul(c,d)
-   u=bcsub(s,t)
+   s=a * b
+   t=c * d
+   u=s - t
    return(u)
 
 
 def aplusbc(a,b,c):
-   s=bcmul(b,c)
+   s=b * c
    t=a + s
    return(t)
 
 
 def aminusbc(a,b,c):
-   s=bcmul(b,c)
-   t=bcsub(a,s)
+   s=b * c
+   t=a - s
    return(t)
 
 
@@ -1075,8 +1075,8 @@ def aminusbc(a,b,c):
 def ratior(a,b,c,d):
   global rationum
   global ratioden
-  r=bcmul(a,d)
-  s=bcmul(b,c)
+  r=a * d
+  s=b * c
   g=gcd(r,s)
   if ltzero(s):
      r=bcminus(r)
@@ -1091,8 +1091,8 @@ def ratior(a,b,c,d):
 def multr(a,b,c,d):
   global multnum
   global multden
-  r=bcmul(a,c)
-  s=bcmul(b,d)
+  r=a * c
+  s=b * d
   g=gcd(r,s)
   multnum=bcdiv(r,g)
   multden=bcdiv(s,g)
@@ -1102,10 +1102,10 @@ def multr(a,b,c,d):
 def subr(a,b,c,d):
   global subnum
   global subden
-  r=bcmul(a,d)
-  s=bcmul(b,c)
-  t=bcsub(r,s)
-  u=bcmul(b,d)
+  r=a * d
+  s=b * c
+  t=r - s
+  u=b * d
   g=gcd(t,u)
   subnum=bcdiv(t,g)
   subden=bcdiv(u,g)
@@ -1115,10 +1115,10 @@ def subr(a,b,c,d):
 def addr(a,b,c,d):
   global addnum
   global addden
-  r=bcmul(a,d)
-  s=bcmul(b,c)
+  r=a * d
+  s=b * c
   t=r + s
-  u=bcmul(b,d)
+  u=b * d
   g=gcd(t,u)
   addnum=bcdiv(t,g)
   addden=bcdiv(u,g)
@@ -1181,7 +1181,7 @@ global lcv
    for j in xrange(n):
       sum=0
       for i in xrange(m):
-         t=bcmul(X[i],A[i][j])
+         t=X[i] * A[i][j]
          sum=sum + t
       
       lcv[j]=sum
@@ -1205,8 +1205,8 @@ global lcv
 
 
 def bcmul3(a,b,c):
- temp=bcmul(a,b)
- temp=bcmul(temp,c)
+ temp=a * b
+ temp=temp * c
  return(temp)
 
 
@@ -1260,15 +1260,15 @@ def printbinaryform(a,b,c,x,y):
 
 
 def bcmul4(a,b,c,d):
-   temp1=bcmul(a,b)
-   temp2=bcmul(c,d)
-   temp=bcmul(temp1,temp2)
+   temp1=a * b
+   temp2=c * d
+   temp=temp1 * temp2
    return(temp)
 
 
 def bcmul5(a,b,c,d,e):
    temp1=bcmul4(a,b,c,d)
-   temp=bcmul(temp1,e)
+   temp=temp1 * e
    return(temp)
 
  

@@ -54,16 +54,16 @@ def  lllhermite(G,m,n,m1,n1):
    k=2
    nplus1=n + 1
    while(k <= m)
-         kminus1=bcsub(k,1)
+         kminus1=k - 1
          reduce2(k,kminus1,m,n,D)
-         kminus2=bcsub(k,2)
+         kminus2=k - 2
          minim=minimum(col2,n)
-         temp1=bcmul(D[kminus2],D[k])
-         temp2=bcmul(L[k][kminus1],L[k][kminus1])
+         temp1=D[kminus2] * D[k]
+         temp2=L[k][kminus1] * L[k][kminus1]
          temp3=temp1 + temp2
-         u=bcmul(n1,temp3)
-         temp1=bcmul(D[kminus1],D[kminus1])
-         v=bcmul(m1,temp1)
+         u=n1 * temp3
+         temp1=D[kminus1] * D[kminus1]
+         v=m1 * temp1
          if col1 <= minim || (col1 == col2 and col1 == nplus1 and u < v):
             swap2(k,m,n)
             if k > 2:
@@ -92,18 +92,18 @@ def  lllhermite(G,m,n,m1,n1):
           break
        
    
-   rank=bcsub(m,i)
+   rank=m - i
    #print "rank = rank<br>\n"
    mplus1=m + 1
    for i in xrange(m):
         for j in xrange(n):
-           k=bcsub(mplus1,i)
+           k=mplus1 - i
            hnf[i][j]=A[k][j]
        
    
    for i in xrange(m):
        for j in xrange(m):
-           k=bcsub(mplus1,i)
+           k=mplus1 - i
            unimodular_matrix[i][j]=B[k][j]
        
    
@@ -193,7 +193,7 @@ global A
       q=int(A[k][col1],A[i][col1])
    else:
       t=bcabs(L[k][i])
-      t=bcmul(2,t)
+      t=2 * t
       if t > D[i]:
         q=lnearint(L[k][i],D[i])
       else:
@@ -203,18 +203,18 @@ global A
    if q != 0:
 #print "Row k . Row k - q &times Row i<br>\n"
       for j in xrange(n):
-          temp=bcmul(q,A[i][j])
-          A[k][j]=bcsub(A[k][j],temp)
+          temp=q * A[i][j]
+          A[k][j]=A[k][j] - temp
       
       for j in xrange(m):
-          temp=bcmul(q,B[i][j])
-          B[k][j]=bcsub(B[k][j],temp)
+          temp=q * B[i][j]
+          B[k][j]=B[k][j] - temp
       
-      temp=bcmul(q,D[i])
-      L[k][i]=bcsub(L[k][i],temp)
+      temp=q * D[i]
+      L[k][i]=L[k][i] - temp
       for j in xrange(i - 1):
-          temp=bcmul(q,L[i][j])
-          L[k][j]=bcsub(L[k][j],temp)
+          temp=q * L[i][j]
+          L[k][j]=L[k][j] - temp
       
    
 
@@ -235,7 +235,7 @@ global L
 global A
 global D
    
-   kminus1=bcsub(k,1)
+   kminus1=k - 1
    #print "Row k <. Row kminus1<br>\n"
    for j in xrange(n):
        temp=A[k][j]
@@ -247,7 +247,7 @@ global D
        B[k][j]=B[kminus1][j]
        B[kminus1][j]=temp
    
-   kminus2=bcsub(k,2)
+   kminus2=k - 2
    for j in xrange(kminus2):
        temp=L[k][j]
        L[k][j]=L[kminus1][j]
@@ -255,18 +255,18 @@ global D
    
    kplus1=k + 1
    for i in xrange(k, m):
-       temp1=bcmul(L[i][kminus1],D[k])
-       temp2=bcmul(L[i][k],L[k][kminus1])
-       t=bcsub(temp1,temp2)
-       temp1=bcmul(L[i][kminus1],L[k][kminus1])
-       temp2=bcmul(L[i][k],D[kminus2])
+       temp1=L[i][kminus1] * D[k]
+       temp2=L[i][k] * L[k][kminus1]
+       t=temp1 - temp2
+       temp1=L[i][kminus1] * L[k][kminus1]
+       temp2=L[i][k] * D[kminus2]
        temp3=temp1 + temp2
        L[i][kminus1]=bcdiv(temp3,D[kminus1])
        L[i][k]=bcdiv(t,D[kminus1])
    
 
-   temp1=bcmul(D[kminus2],D[k])
-   temp2=bcmul(L[k][kminus1],L[k][kminus1])
+   temp1=D[kminus2] * D[k]
+   temp2=L[k][kminus1] * L[k][kminus1]
    t=temp1 + temp2
 #var_dump(t)
    D[kminus1]=bcdiv(t,D[kminus1])
@@ -340,12 +340,12 @@ global rank
         print "AX=B has a solution: Y = "
         print[y,m]
         print "<br>\n"
-        nullity=bcsub(mplus1,rank)
+        nullity=mplus1 - rank
         if ezero(nullity):
            print "AX=B has a unique solution in integers<br>\n"
            return
         else:
-           lim=bcsub(mplus1,rank)
+           lim=mplus1 - rank
            for i in xrange(lim):
                rankplusi=rank + i
                for j in xrange(m):
@@ -404,7 +404,7 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=bcsub(m,1)
+    mminus1=m - 1
     #if mminus1 > 1:
        #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     #else:
@@ -422,7 +422,7 @@ global lcv
     Qden=choleskyden
     QQnum=transpose(Qnum,m,m)
     QQden=transpose(Qden,m,m)
-    m=bcsub(m,1)
+    m=m - 1
     for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
@@ -451,7 +451,7 @@ global lcv
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=bcminus(temp2)
-       x[i]=bcsub(temp3,1)
+       x[i]=temp3 - 1
        while(1)
           x[i]=x[i] + 1
           if le(x[i],UB[i]):
@@ -466,7 +466,7 @@ global lcv
                    coord[count]=x
                    for k in xrange(n):
                        temp=A[mplus1][k]
-                       multiplier_vector[count][k]=bcsub(temp,lcv[k])
+                       multiplier_vector[count][k]=temp - lcv[k]
                    
                    l=lengthsquared(multiplier_vector[count],n)
                    multiplier_vector[count][nplus1]=l
@@ -474,7 +474,7 @@ global lcv
                    lengtharray[count]=l
                    continue
               else:
-                i=bcsub(i,1)
+                i=i - 1
                 # now update U[i]
                 sumnum=0
                 sumden=1
