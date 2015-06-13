@@ -33,7 +33,7 @@
   a != b
   a == b
   a != 0
-  ezero(a)
+  a == 0
   a >= 0
   a <= 0
   a < 0
@@ -263,7 +263,7 @@ def maximum(x,y):
 
 def  printpoly(a,n):
 """  php program printpoly.php  """
-	if ezero(n):
+	if n == 0:
 		print "a[0]"
 	else:
 	if a[n] != 1:
@@ -288,7 +288,7 @@ def  printpoly(a,n):
 		   if i > 0:
 		       print "+"
 		   
-		   if ezero(i):
+		   if i == 0:
 		       	  print "+1"
 		   
 	        
@@ -315,7 +315,7 @@ def  printpoly(a,n):
 
 def  printpolylambda(a,n):
 """  php program printpolylambda.php  """
-	if ezero(n):
+	if n == 0:
 		print "a[0]"
 	else:
 	if a[n] != 1:
@@ -340,7 +340,7 @@ def  printpolylambda(a,n):
 		   if i > 0:
 		       print "+"
 		   
-		   if ezero(i):
+		   if i == 0:
 		       	  print "+1"
 		   
 	        
@@ -561,8 +561,8 @@ def a >= 0:
       return(0)
    
 
-def ezero(a):
-"""  ezero(a) returns 1 if a=0, 0 otherwise.  """
+def a == 0:
+"""  a == 0 returns 1 if a=0, 0 otherwise.  """
    t=bccomp(a,0)
    if t==0:
       return(1)
@@ -651,7 +651,7 @@ global zed2
         zed1=1
         zed2=0
         while y > 0:
-                while ezero(y % 2):
+                while y % 2 == 0:
                         y=y / 2
                         temp=x1
                         temp1=x2 * x2
@@ -731,7 +731,7 @@ def  bezout(a,b):
     global globalv
    globalu=1
    d=a
-   if ezero(b):
+   if b == 0:
       globalv=0
       return(a)
    else:
@@ -782,7 +782,7 @@ def  bezout1(a,b):
 
 def parity(a):
   r=a % 2
-  if ezero(r):
+  if r == 0:
     return(0)
   else:
     return(1)
@@ -1140,15 +1140,15 @@ def comparer(a,b,c,d):
 def printlc(A,X,m):
  flag=0
  s=zero[X,m]
- if ezero(s):
+ if s == 0:
     return(0)
  
  for i in xrange(m):
      t=X[i]
-     if ezero(t):
+     if t == 0:
         continue
      
-     if ezero(flag):
+     if flag == 0:
        if t != 1 and t != -1:
           print "t"print "b[i]"
        

@@ -64,7 +64,7 @@ global addden
 global multnum
 global multden
    y=int(c,d)
-   if ezero(a):
+   if a == 0:
       return(y)
    
    x=a / b
@@ -211,7 +211,7 @@ global lcv
                   #       print "<TD ALIGN=\"RIGHT\">"
                   #       minusa(coord[k],m) 
                   #       s=printlc(AA,coord[k],m)
-                  #       if ezero(s):
+                  #       if s == 0:
                   #          print "b[mplus1]"
                   #       else:
                   #          print "+b[mplus1]"

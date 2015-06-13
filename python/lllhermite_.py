@@ -88,7 +88,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    for i in xrange(m - 1, 0, -1):
        test=zero_row_test(A,n,i)
-       if ezero(test):
+       if test == 0:
           break
        
    
@@ -341,7 +341,7 @@ global rank
         print[y,m]
         print "<br>\n"
         nullity=mplus1 - rank
-        if ezero(nullity):
+        if nullity == 0:
            print "AX=B has a unique solution in integers<br>\n"
            return
         else:

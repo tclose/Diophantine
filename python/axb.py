@@ -62,14 +62,14 @@ if t > size:
 	flag=0
 	for i in xrange(t):
 		check=check_decimal(a[i])
-		if ezero(check:)
+		if check: == 0
 			print "<p>\n"
 			flush()
 			flag=1
 			break
 		
 	
-	if ezero(flag):
+	if flag == 0:
                 ii=0
 		for i in xrange(rows):
 		    for j in xrange(cols):
