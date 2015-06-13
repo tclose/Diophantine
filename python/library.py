@@ -266,7 +266,7 @@ def  printpoly(a,n):
 	if ezero(n):
 		print "a[0]"
 	else:
-	if neq(a[n],1):
+	if a[n] != 1:
 	    if eq(a[n],-1):
 	       print -
 	    else:
@@ -318,7 +318,7 @@ def  printpolylambda(a,n):
 	if ezero(n):
 		print "a[0]"
 	else:
-	if neq(a[n],1):
+	if a[n] != 1:
 	    if eq(a[n],-1):
 	       print -
 	    else:
@@ -1039,7 +1039,7 @@ def equalmat(A,B,rowsA,colsA,rowsB,colsB):
    
    for i in xrange(rowsA):
        for j in xrange(colsA):
-           if neq(A[i][j],B[i][j]):
+           if A[i][j] != B[i][j]:
               return(0)
            
        
@@ -1149,7 +1149,7 @@ def printlc(A,X,m):
         continue
      
      if ezero(flag):
-       if neq(t,1) and neq(t,-1):
+       if t != 1 and t != -1:
           print "t"print "b[i]"
        
        if eq(t,-1):
