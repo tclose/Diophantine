@@ -18,5 +18,3 @@ elif:
 	value=0
 	return value
 
-
-
