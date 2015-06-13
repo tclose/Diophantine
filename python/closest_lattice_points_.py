@@ -159,7 +159,7 @@ global lcv
        while(1)
           x[i]=x[i] + 1
           if le(x[i],UB[i]):
-              if eq(i,1):
+              if i == 1:
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
                    count=count + 1
@@ -234,7 +234,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
-                        if eq(multiplier_vector[k][nplus1],min_length):
+                        if multiplier_vector[k][nplus1] == min_length:
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[lcva[k],n]
@@ -244,7 +244,7 @@ global lcv
                         
                     
                     print "</TABLE>\n"
-                    if eq(min_count,1):
+                    if min_count == 1:
                        print " is the closest vector of &#8466 to P, with shortest distance squared min_length<br>\n"
                     else:
                        print " are the closest vectors of &#8466 to P, with shortest distance squared min_length<br>\n"

@@ -45,7 +45,7 @@ def  lllhermite(G,m,n,m1,n1):
    
 
    flag=flagcol(A,m,n)
-   if eq(flag,1):
+   if flag == 1:
       B[m][m]=-1
       for j in xrange(n):
           A[m][j]=-A[m][j]
@@ -134,7 +134,7 @@ def  flagcol(A,m,n):
               flag=1
               break
            
-       if eq(flag,1):
+       if flag == 1:
           break
        
     iplus1=i + 1
@@ -332,7 +332,7 @@ global rank
     
     #t=hnf[rank][nplus1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
     #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if eq(flag,0) and eq(hnf[rank][nplus1],1) and eq(flag1,0):
+    if flag == 0 and hnf[rank][nplus1] == 1 and flag1 == 0:
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
         for j in xrange(m):
           y[j]=-unimodular_matrix[rank][j]
@@ -352,13 +352,13 @@ global rank
                    basis[i][j]=unimodular_matrix[rankplusi][j]
                
            
-           if eq(nullity,1):
+           if nullity == 1:
               print "the row: "
            else:
               print "the rows: "
            
            printmat1(basis,lim,m)
-           if eq(nullity,1):
+           if nullity == 1:
               print "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n"
            else:
               print "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n"
@@ -455,7 +455,7 @@ global lcv
        while(1)
           x[i]=x[i] + 1
           if le(x[i],UB[i]):
-              if eq(i,1):
+              if i == 1:
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
                    count=count + 1
@@ -517,7 +517,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
-                        if eq(multiplier_vector[k][nplus1],min_length):
+                        if multiplier_vector[k][nplus1] == min_length:
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[multiplier_vector[k],n]
@@ -527,7 +527,7 @@ global lcv
                         
                     
                     print "</TABLE>\n"
-                    if eq(min_count,1):
+                    if min_count == 1:
                        print " is the shortest solution vector, length squared min_length<br>\n"
                     else:
                        print " are the shortest solution vectors, length squared min_length<br>\n"

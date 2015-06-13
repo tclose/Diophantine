@@ -81,7 +81,7 @@ if t > size:
 		
                 m=cols - 1
                 t=test_zeromat(mat,rows,m)
-                if eq(t,1):
+                if t == 1:
                    print "Coeffficient matrix is the zero matrix<br>\n"
                 else:
                    print "Augmented matrix [A|B]="

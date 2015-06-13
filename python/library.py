@@ -267,7 +267,7 @@ def  printpoly(a,n):
 		print "a[0]"
 	else:
 	if a[n] != 1:
-	    if eq(a[n],-1):
+	    if a[n] == -1:
 	       print -
 	    else:
 		print "a[n]"
@@ -284,7 +284,7 @@ def  printpoly(a,n):
 		if a[i] > 1:
 		       print "+a[i]"
 	        
-		if eq(a[i],1):
+		if a[i] == 1:
 		   if gtzero(i):
 		       print "+"
 		   
@@ -292,7 +292,7 @@ def  printpoly(a,n):
 		       	  print "+1"
 		   
 	        
-		if eq(a[i],-1):
+		if a[i] == -1:
 		   if gtzero(i):
 		       print -
 		   else:
@@ -305,7 +305,7 @@ def  printpoly(a,n):
 		if i > 1:
 	            print "x<sup>i</sup>"
 		
-		if eq(i,1):
+		if i == 1:
 		    print "x"
 		
             
@@ -319,7 +319,7 @@ def  printpolylambda(a,n):
 		print "a[0]"
 	else:
 	if a[n] != 1:
-	    if eq(a[n],-1):
+	    if a[n] == -1:
 	       print -
 	    else:
 		print "a[n]"
@@ -336,7 +336,7 @@ def  printpolylambda(a,n):
 		if a[i] > 1:
 		       print "+a[i]"
 	        
-		if eq(a[i],1):
+		if a[i] == 1:
 		   if gtzero(i):
 		       print "+"
 		   
@@ -344,7 +344,7 @@ def  printpolylambda(a,n):
 		       	  print "+1"
 		   
 	        
-		if eq(a[i],-1):
+		if a[i] == -1:
 		   if gtzero(i):
 		       print -
 		   else:
@@ -357,7 +357,7 @@ def  printpolylambda(a,n):
 		if i > 1:
 	            print "&lambda<sup>i</sup>"
 		
-		if eq(i,1):
+		if i == 1:
 		    print "&lambda"
 		
             
@@ -1152,23 +1152,23 @@ def printlc(A,X,m):
        if t != 1 and t != -1:
           print "t"print "b[i]"
        
-       if eq(t,-1):
+       if t == -1:
           print "-b[i]"
        
-       if eq(t,1):
+       if t == 1:
           print "b[i]"
        
        flag=1
      else:
        if gtzero(t):
-          if eq(t,1):
+          if t == 1:
              print "+b[i]"
           else:
              print "+t"print "b[i]"
           
        
        if ltzero(t):
-          if eq(t,-1):
+          if t == -1:
              print "-b[i]"
           else:
              print "t"print "b[i]"
@@ -1212,7 +1212,7 @@ def bcmul3(a,b,c):
 
 def pparity(e):
    t=bcmod(e,2)
-   if eq(t,1):
+   if t == 1:
      return(-1)
    else:
      return(1)
@@ -1223,20 +1223,20 @@ def printbinaryform(a,b,c,x,y):
 	if gt(a,1) || lt(a,-1):
            print"a&#8203x<sup>2</sup>"
         
-        if eq(a,1):
+        if a == 1:
            print"x<sup>2</sup>"
         
-        if eq(a,-1):
+        if a == -1:
            print"-x<sup>2</sup>"
         
 	if b != 0:
 	   if b > 1:
               print"+b&#8203xy"
            
-	   if eq(b,1):
+	   if b == 1:
               print"+xy"
            
-	   if eq(b,-1):
+	   if b == -1:
               print"-xy"
            
            if b < -1:
@@ -1250,10 +1250,10 @@ def printbinaryform(a,b,c,x,y):
 	   if c < -1:
               print"c&#8203y<sup>2</sup>"
            
-           if eq(c,1):
+           if c == 1:
               print"+y<sup>2</sup>"
            
-           if eq(c,-1):
+           if c == -1:
               print"-y<sup>2</sup>"
            
         
@@ -1291,7 +1291,7 @@ def bcadd6(a,b,c,d,e,f):
 
 
 def printaxplusby(a,x,b,y):
-   if eq(a,1):
+   if a == 1:
       print "x"
    else:
       print "-x"
@@ -1299,14 +1299,14 @@ def printaxplusby(a,x,b,y):
       print "ax"
    
    if gtzero(b):
-      if eq(b,1):
+      if b == 1:
          print " + y"
       else:
          print " + by"
       
    
    if ltzero(b):
-      if eq(b,-1):
+      if b == -1:
          print " - y"
       else:
          minusb=-b
