@@ -398,10 +398,10 @@ def  lcm(a,b):
 
 def  lcma(array,n):
 """  lcm(array[0],array[1],...,array[n-1])  """
-	for(i="0"bccomp(i,n)<0i=bcadd(i,"1"))
+	for i in xrange(n):
           b[i]=array[i]
 	
-	for(i="1"bccomp(i,n)<0i=bcadd(i,"1"))
+	for i in xrange(n - 1):
 		j=bcsub(i,"1")
 		b[i]=lcm(b[i],b[j])
 	
