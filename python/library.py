@@ -28,7 +28,7 @@
   powerdd(a,b,dd,n)
   a <= b
   ge(a,b)
-  lt(a,b)
+  a < b
   gt(a,b)
   neq(a,b)
   eq(a,b)
@@ -611,8 +611,8 @@ def gt(a,b):
    
 
 
-def lt(a,b):
-    """  lt(a,b) returns 1 if a < b, "0" otherwise.  """
+def a < b:
+    """  a < b returns 1 if a < b, "0" otherwise.  """
    t=bccomp(a,b)
    if t<0:
       return("1")

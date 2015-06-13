@@ -64,7 +64,7 @@ def  lllhermite(G,m,n,m1,n1):
          u=bcmul(n1,temp3)
          temp1=bcmul(D[kminus1],D[kminus1])
          v=bcmul(m1,temp1)
-         if col1 <= minim || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)):
+         if col1 <= minim || (eq(col1,col2) and eq(col1,nplus1) and u < v):
             swap2(k,m,n)
             if k > "2":
                k=kminus1
