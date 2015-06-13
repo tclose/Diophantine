@@ -4,10 +4,6 @@
   The Havas, Majewski, Matthews LLL method is used+ 
   We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+ 
 """
-
-import library
-import closest_lattice_points
-
 #global col1
 #global col2
 #global n + 1
@@ -18,6 +14,78 @@ import closest_lattice_points
 #global hnf
 #global unimodular_matrix
 #global rank
+
+
+def  axb(Ab,m,n,m1,n1):
+    """  A is m x n, b is m x 1, solving AX=b, X is n x 1+ 
+      Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
+                                                     [b^t]1]
+    """
+    #global hnf
+    #global unimodular_matrix
+    #global rank
+    for i in xrange(m + 1):
+        for j in xrange(n):
+            G[i][j]=Ab[i][j]
+    for i in xrange(m):
+        G[i][n + 1]=0
+    G[m + 1][n + 1]=1
+#    print "G="
+#    printmat1(G,m + 1,n + 1)
+#    print "<br>\n"
+    lllhermite(G,m + 1,n + 1,m1,n1)
+#    print "HNF(G)="
+#    printmat1(hnf,m + 1,n + 1)
+#    print "<br>\n"
+#    print "P ="
+#    printmat1(unimodular_matrix,m + 1,m + 1)
+#    print "is a unimodular matrix such that PG = HNF(G)"
+#    print "<br>\n"
+    flag=0
+    for i in xrange(rank - 1):
+        if hnf[i][n + 1] != 0:
+            flag=1
+            break
+    flag1=0
+    for j in xrange(n):
+        if hnf[rank][j] != 0:
+            flag1=1
+            break
+    if flag == 0 and hnf[rank][n + 1] == 1 and flag1 == 0:
+        #print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
+        for j in xrange(m):
+            y[j]=-unimodular_matrix[rank][j]
+        #print "AX=B has a solution: Y = "
+        #print[y,m]
+        #print "<br>\n"
+        nullity=m + 1 - rank
+        if nullity == 0:
+             print "AX=B has a unique solution in integers<br>\n"
+             return
+        else:
+             lim=m + 1 - rank
+             for i in xrange(lim):
+                 rankplusi=rank + i
+                 for j in xrange(m):
+                     basis[i][j]=unimodular_matrix[rankplusi][j]
+              if nullity == 1:
+                  print "the row: "
+              else:
+                  print "the rows: "
+              printmat1(basis,lim,m)
+              if nullity == 1:
+                  print "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n"
+              else:
+                  print "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n"
+    else:
+         print "AX=B has no solution in integers<br>\n"
+         return
+    # joining basis and y
+    for j in xrange(m):
+         basis[lim + 1][j]=y[j]
+    shortest_distance_axb(basis,lim + 1,m)
+    return
+
 
 def  lllhermite(G,m,n,m1,n1):
     """  G is a nonzero matrix with at least two rows.  """
@@ -201,80 +269,6 @@ def  zero_row_test(matrix,n,i):
     return 0
 
 
-def  axb(Ab,m,n,m1,n1):
-    """  A is m x n, b is m x 1, solving AX=b, X is n x 1+ 
-      Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
-                                                     [b^t]1]
-    """
-    #global hnf
-    #global unimodular_matrix
-    #global rank
-
-    for i in xrange(m + 1):
-        for j in xrange(n):
-            G[i][j]=Ab[i][j]
-    for i in xrange(m):
-        G[i][n + 1]=0
-    G[m + 1][n + 1]=1
-#    print "G="
-#    printmat1(G,m + 1,n + 1)
-#    print "<br>\n"
-#    lllhermite(G,m + 1,n + 1,m1,n1)
-#    print "HNF(G)="
-#    printmat1(hnf,m + 1,n + 1)
-#    print "<br>\n"
-#    print "P ="
-#    printmat1(unimodular_matrix,m + 1,m + 1)
-#    print "is a unimodular matrix such that PG = HNF(G)"
-#    print "<br>\n"
-    flag=0
-    for i in xrange(rank - 1):
-        if hnf[i][n + 1] != 0:
-            flag=1
-            break
-    flag1=0
-    for j in xrange(n):
-        if hnf[rank][j] != 0:
-            flag1=1
-            break
-    #t=hnf[rank][n + 1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
-    #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if flag == 0 and hnf[rank][n + 1] == 1 and flag1 == 0:
-        #print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
-        for j in xrange(m):
-            y[j]=-unimodular_matrix[rank][j]
-        #print "AX=B has a solution: Y = "
-        #print[y,m]
-        #print "<br>\n"
-        nullity=m + 1 - rank
-        if nullity == 0:
-             print "AX=B has a unique solution in integers<br>\n"
-             return
-        else:
-             lim=m + 1 - rank
-             for i in xrange(lim):
-                 rankplusi=rank + i
-                 for j in xrange(m):
-                     basis[i][j]=unimodular_matrix[rankplusi][j]
-              if nullity == 1:
-                  print "the row: "
-              else:
-                  print "the rows: "
-              printmat1(basis,lim,m)
-              if nullity == 1:
-                  print "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n"
-              else:
-                  print "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n"
-    else:
-         print "AX=B has no solution in integers<br>\n"
-         return
-    # joining basis and y
-    for j in xrange(m):
-         basis[lim + 1][j]=y[j]
-    shortest_distance_axb(basis,lim + 1,m)
-    return
-
-
 def shortest_distance_axb(A,m,n):
     #global choleskynum
     #global choleskyden
@@ -414,4 +408,244 @@ def shortest_distance_axb(A,m,n):
                         print " are the shortest solution vectors, length squared min_length<br>\n"
                     return
                 continue
+
+def gram(A,m,n):
+   for i in xrange(m):
+       for j in xrange(m):
+           B[i][j]=dotproduct(A[i],A[j],n)
+   return B
+
+
+def introot(a,b,c,d):
+    """
+    With Z=a/b, U=c/d, returns [sqrt(a/b)+c/d]. First ANSWER = [sqrt(Z)] + [U]. One then 
+    tests if Z < ([sqrt(Z)] + 1 -U)^2. If this does not hold, ANSWER += 1+ 
+    For use in fincke_pohst()+ 
+    """
+    y=int(c,d)
+    if a == 0:
+        return y
+    x=a / b
+    x=sqrt(x)
+    answer=x + y
+    subnum, subden = subr(c,d,y,1)
+    subnum, subden = subr(1,1,subnum,subden)
+    addnum, addden = addr(x,1,subnum,subden)
+    multnum, multden = multr(addnum,addden,addnum,addden)
+    t=comparer(multnum,multden,a,b)
+    if le(t,0):
+        answer=answer + 1
+    return answer
+
+def lengthsquared(a,n):
+    sm=0
+    for i in xrange(n):
+        temp=a[i] * a[i]
+        sm=sm + temp
+    return sm
+
+
+def int(a,b):
+    if b<0:
+         a=0 - a
+         b=0 - b
+    c=a / b
+    d=a % b
+    if d==0 || a>0:
+        return c
+    else:
+        return c - 1
+    
+
+def sign(a):
+    """  sign of an integer a  """
+    """  sign(a)=1,-1,0, according as a>0,a<0,a=0  """
+    if a>0:
+        return 1
+    if a<0:
+        return -1
+    return 0
+
+
+def gcd(m,n):
+    """   b=gcd(m,n) for any integers m and n  """
+    """  Euclid's division algorithm is used.  """
+    """  We use gcd(m,n)=gcd(|m|,|n|)  """
+    a=abs(m)  # a=r[0]
+    if n==0:
+         return a
+    b=abs(n)  # b=r[1]
+    c=mod(a,b)  # c=r[2]=r[0] mod(r[1])
+    while c:
+        a=b
+        b=c
+        c=mod(a,b)  # c=r[j]=r[j-2] mod(r[j-1]) 
+    return b
+   
+
+def egcd(p,q):
+    if q==0:
+        if p!=0:
+            s=sign(p)
+            if s==1:
+                multiplier1=1
+            else:
+                multiplier1=-1
+            return abs(p), multiplier1, 0
+        else:
+            return 0, 0, 0
+    a=p
+    b=abs(q)
+    c=a % b
+    s=sign(q)
+    if c==0:
+        if s==1:
+            multiplier2=1
+        else:
+            multiplier2=-1
+        return b, 0, multiplier2
+    l1=1
+    k1=0
+    l2=0
+    k2=1
+    while c!=0:
+        q=int(a,b)
+        a=b
+        b=c
+        c=a % b
+        temp1=q * k1
+        temp2=q * k2
+        h1=l1 - temp1
+        h2=l2 - temp2
+        l1=k1
+        l2=k2
+        k1=h1
+        k2=h2
+    if s==-1:
+        k2=0 - k2
+    return b, k1, k2
+
+
+def num_digits(n):
+    """  If n > 0, len(n) returns the number of base 10 digits of n  """
+    i=0
+    x=abs(n)
+    while x!=0:
+        x=int(x,10)
+        i=i + 1
+    return i
+
+
+def  lnearint(a,b):
+    """
+    left nearest integer 
+    returns y+1/2 if a/b=y+1/2, y integral+ 
+    """
+    y=int(a,b)
+    if b < 0:
+        a=-a
+        b=-b
+    x=b * y
+    z=a - x
+    z=2 * z
+    if z > b:
+        y=y + 1
+    return y
+
+
+def mina(a,n):
+    x=a[1]
+    for i in xrange(1, n):
+    if a[i] < x:
+        x=a[i]
+    return x
+
+
+def dotproduct(a,b,n):
+    sum=0
+    for j in xrange(n):
+        temp=a[j] * b[j]
+        sum=sum + temp
+    return sum
+
+
+def abminuscd(a,b,c,d):
+    s=a * b
+    t=c * d
+    u=s - t
+    return u
+
+
+def rationum, ratioden = ratior(a,b,c,d):
+    """ returns (a/b)/(c/d)"""
+    r=a * d
+    s=b * c
+    g=gcd(r,s)
+    if s < 0:
+        r=-r
+        s=-s
+    return r / g, s / g
+
+
+def multnum, multden = multr(a,b,c,d):
+    # returns (a/b)(c/d)
+    r=a * c
+    s=b * d
+    g=gcd(r,s)
+    return r / g, s / g
+
+
+def subnum, subden = subr(a,b,c,d):
+    r=a * d
+    s=b * c
+    t=r - s
+    u=b * d
+    g=gcd(t,u)
+    return t / g, u / g
+
+
+def addnum, addden = addr(a,b,c,d):
+    r=a * d
+    s=b * c
+    t=r + s
+    u=b * d
+    g=gcd(t,u)
+    return t / g, u / g
+
+
+def comparer(a,b,c,d):
+    """ Assumes b>0 and d>0.  Returns -1, 0 or 1 according as a/b <,=,> c/d+ """
+    t=abminuscd(a,d,b,c)
+    if t < 0:
+        return -1
+    if t > 0:
+        return 1
+    return 0
+
+
+def lcasvector(A,X,m,n):
+    """lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+"""
+    #global lcv
+    for j in xrange(n):
+        sum=0
+        for i in xrange(m):
+            t=X[i] * A[i][j]
+            sum=sum + t
+        lcv[j]=sum
+    return lcv
+
+
+def minusa(&a,n):
+    for j in xrange(n):
+        a[j]=-a[j]
+    return
+
+
+def test_zeromat(A,m,n):
+    """ This returns 1 if A is the zero matrix, otherwise returns 0+ """
+    for i in xrange(m):
+        for j in xrange(n):
+            if A[i][j] != 0:
+                return 0
+    return 1
 
