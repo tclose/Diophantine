@@ -1,82 +1,4 @@
 
-"""  file library.php 
-  This file contains the following functions:
-  mod(a,b)
-  abs_mod(a,b)
-  int(a,b)
-  mpower(a,b,c)
-  sign(a)
-  bcmul3(a,b,c)
-  abs(a)
-  gcd(m,n)
-  gcda(m,n)
-  egcd(p,q)
-  minimum(x,y)
-  maximum(x,y)
-  printpoly(a,n)
-  len(a)
-  ceiling(a,b)
-  lcm(a,b)
-  lcma(array,n)
-  exponential(a,b)
-  cong(m,p,n)
-  cong1(m,p,n)
-  chinese2(a,b,m,n)
-  chinesea(a,m,n)
-  inverse(a,m)
-  powerdd(a,b,dd,n)
-  gcd3(a,b,c)
-  bezout(a,b)
-  bezout1(a,b)
-  parity(a)
-  lnearint(a,b)
-  bcadd3(a,b,c)
-  abpluscd(a,b,c,d)
-  abminuscd(a,b,c,d)
-  aplusbc(a,b,c)
-  aminusbc(a,b,c)
-  print[a,n]
-  printmatrix(matrix,m,n)
-  print_matrix(a,b,c,d) # should change this to printmatrix2x2
-  printmat1(matrix,m,n) prints a matrix as a table with entries right justified
-  printmatrix(matrix,m,n) 
-  unit_matrix(m)
-  transpose(A,m,n)
-  transpose1(&A,&m,&n)
-  row_submatrix(A,p,q)
-  col_submatrix(A,rows,p,q)
-  submatrix(A,rows,p1,q1,p2,q2)
-  rowiminusqrowj(&A,n,i,q,j)
-  coliminusqcolj(&A,m,i,q,j)
-  delete_row(&B,i,&m)
-  delete_col(&B,j,m,&n)
-  swap_rows(&P,j,k)
-  swap_cols(&P,m,j,k)
-  dotproduct(a,b,n)
-  multmat(A,B,m,n,p)
-  matrixperm(&A,a,m)
-  equalmat(A,B,rowsA,colsA,rowsB,colsB)
-  printbinaryform(a,b,c,x,y)
-  """
-
-"""  the least non-negative remainder when an integer a is divided by a positive
-  integer b+ 
-  a % b=moda(a,b) if a>=0 or a<0 and b divides a
-  a % b=mod(a,b)-b if a<0, b>0, a not divisible by b+ 
-  """
-
-def mod(a,b):
-	c=a % b
-	if a>=0:
-		 return c
-	
-	if c==0:
-		return 0
-	
-	temp=c + b
-        return temp
-
-
 def  abs_mod(a,b):
 """  This returns r=mod(a,b) if r <= b/2, otherwise r-b. """
    r=mod(a,b)
@@ -116,10 +38,10 @@ def mpower(a,b,c):
 	return z
 
 
-"""  sign of an integer a  """
-"""  sign(a)=1,-1,0, according as a>0,a<0,a=0  """
 
 def sign(a):
+    """  sign of an integer a  """
+    """  sign(a)=1,-1,0, according as a>0,a<0,a=0  """
 	if a>0:
 		return 1
 	
@@ -129,10 +51,9 @@ def sign(a):
 	return 0
 
 
-"""  signn of an integer a  """
-"""  signn(a)=1,-1, according as a>=0,a<0  """
-
 def signn(a):
+    """  signn of an integer a  """
+    """  signn(a)=1,-1, according as a>=0,a<0  """
 	if a>=0:
 		return 1
 	else:
@@ -141,7 +62,7 @@ def signn(a):
 
 
 def  abs(a):
-"""  absolute value  """
+    """  absolute value  """
 	if a>=0:
 		return a
 	else:
@@ -150,11 +71,11 @@ def  abs(a):
 	
 
 
-"""   b=gcd(m,n) for any integers m and n  """
-"""  Euclid's division algorithm is used.  """
-"""  We use gcd(m,n)=gcd(|m|,|n|)  """
 
 def gcd(m,n):
+    """   b=gcd(m,n) for any integers m and n  """
+    """  Euclid's division algorithm is used.  """
+    """  We use gcd(m,n)=gcd(|m|,|n|)  """
 	a=abs(m)         """  a=r[0]  """ 
 	if n==0:
 	     return a
@@ -212,26 +133,22 @@ def egcd(p,q):
     return b, k1, k2
 
 
-"""  min(x,y)  """
 
 def minimum(x,y):
-	if y<x:
-		return y
-	else:
-		return x
+    """  min(x,y)  """
+    if y < x:
+        return y
+    else:
+        return x
 	
 
-
-"""  max(x,y)  """
-
 def maximum(x,y):
+    """  max(x,y)  """
 	if y>x:
 		return y
 	else:
 		return x
 	
-
-
 def  printpoly(a,n):
 """  php program printpoly.php  """
 	if n == 0:
@@ -437,37 +354,37 @@ def  cong1(m,p,n):
     return solution, modulus
 
 
-def chinese2(a,b,m,n):
-    """
-    the Chinese remainder theorem for the congruences x=a(mod m)
-    and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
-    The construction of O. Ore, American Mathematical Monthly,
-    vol.59,pp.365-370,1952, is implemented+ 
-    """
-    d, multiplier1, multiplier2 = egcd(m,n)
-    if a - b % d != 0:
-        return 0, None, None
-    x= m / d
-    y=n / d
-    z=m * n / d
-    temp1=b * multiplier1
-    temp1=temp1 * x
-    temp2=a * multiplier2
-    temp2=temp2 * y
-    c=mod(temp1 + temp2,z)
-    chinese_modulus=z
-    chinese_solution=c
-    return 1, chinese_modulus, chinese_solution
-
-def chinesea(a,m,n):
-    chinese_modulus=m[0]
-    chinese_solution=a[0]
-    for i in xrange(n - 1):
-        y, chinese_modulus, chinese_solution =chinese2(a[i],chinese_solution,m[i],chinese_modulus)
-        if y==0:
-            return 0
-    return 1, chinese_solution, chinese_modulus
-
+# def chinese2(a,b,m,n):
+#     """
+#     the Chinese remainder theorem for the congruences x=a(mod m)
+#     and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
+#     The construction of O. Ore, American Mathematical Monthly,
+#     vol.59,pp.365-370,1952, is implemented+ 
+#     """
+#     d, multiplier1, multiplier2 = egcd(m,n)
+#     if a - b % d != 0:
+#         return 0, None, None
+#     x= m / d
+#     y=n / d
+#     z=m * n / d
+#     temp1=b * multiplier1
+#     temp1=temp1 * x
+#     temp2=a * multiplier2
+#     temp2=temp2 * y
+#     c=mod(temp1 + temp2,z)
+#     chinese_modulus=z
+#     chinese_solution=c
+#     return 1, chinese_modulus, chinese_solution
+# 
+# def chinesea(a,m,n):
+#     chinese_modulus=m[0]
+#     chinese_solution=a[0]
+#     for i in xrange(n - 1):
+#         y, chinese_modulus, chinese_solution =chinese2(a[i],chinese_solution,m[i],chinese_modulus)
+#         if y==0:
+#             return 0
+#     return 1, chinese_solution, chinese_modulus
+ 
 
 def  inverse(a,m):
     """  Inverse of a (mod m)  """
@@ -475,36 +392,34 @@ def  inverse(a,m):
     return t
 
 
-def powerdd(a,b,dd,n):
-    """  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
-    #global zed1
-    #global zed2
-    x1=a
-    x2=b
-    y=n
-    zed1=1
-    zed2=0
-    while y > 0:
-        while y % 2 == 0:
-            y=y / 2
-            temp=x1
-            temp1=x2 * x2
-            temp2=x1 * x1
-            temp3=dd * temp1
-            x1=temp2 + temp3
-            temp4=temp * x2
-            x2=2 * temp4
-        y=y - 1
-        temp=zed1
-        temp1=zed2 * x2
-        temp2=zed1 * x1
-        temp3=dd * temp1
-        zed1=temp2 + temp3
-        temp4=temp * x2
-        temp5=zed2 * x1
-        zed2=temp4 + temp5
-   """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
-    return zed1, zed2
+# def powerdd(a,b,dd,n):
+#     """  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
+#     x1=a
+#     x2=b
+#     y=n
+#     zed1=1
+#     zed2=0
+#     while y > 0:
+#         while y % 2 == 0:
+#             y=y / 2
+#             temp=x1
+#             temp1=x2 * x2
+#             temp2=x1 * x1
+#             temp3=dd * temp1
+#             x1=temp2 + temp3
+#             temp4=temp * x2
+#             x2=2 * temp4
+#         y=y - 1
+#         temp=zed1
+#         temp1=zed2 * x2
+#         temp2=zed1 * x1
+#         temp3=dd * temp1
+#         zed1=temp2 + temp3
+#         temp4=temp * x2
+#         temp5=zed2 * x1
+#         zed2=temp4 + temp5
+#    """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
+#     return zed1, zed2
 
 def gcd3(a,b,c):
   t=gcd(a,b)
@@ -527,79 +442,73 @@ def print_matrix(a,b,c,d):
  return
 
 
-def sort_[a,n]:
-#global sorted_array
-   t=n - 1
-   for i in xrange(t):
-      temp1=i + 1
-      for j in xrange(temp1, n):
-         if a[i] > a[j]:
-            temp=a[i]
-            a[i]=a[j]
-            a[j]=temp
-   
-   for i in xrange(n):
-      sorted_array[i]=a[i]
-   return sorted_array
+#def sort_[a,n]:
+#   t=n - 1
+#   for i in xrange(t):
+#      temp1=i + 1
+#      for j in xrange(temp1, n):
+#         if a[i] > a[j]:
+#            temp=a[i]
+#            a[i]=a[j]
+#            a[j]=temp
+#   
+#   for i in xrange(n):
+#      sorted_array[i]=a[i]
+#   return sorted_array
 
 
-def  bezout(a,b):
-    """  From Henri Cohen' book, Alg. 1.3.6  13/07/2011
-    This assumes a >=0 and b >= 0+ 
-    returns d= gcd(a,b) and global variables globalu and globalv,
-    where d = globalu.a + globalv.b+ 
-    """
-    #global globalu
-    #global globalv
-   globalu=1
-   d=a
-   if b == 0:
-      globalv=0
-      return a
-   else:
-      v1=0
-      v3=b
-   
-   while v3 > 0:
-      q=d / v3
-      t3=d % v3
-      temp=q * v1
-      t1=globalu - temp
-      globalu=v1
-      d=v3
-      v1=t1
-      v3=t3
-   
-   temp=a * globalu
-   temp=d - temp
-   globalv=temp / b
-   return d, globalu, globalv
-
-
-def  bezout1(a,b):
-    """  Here a and b are any integers+ 
-    returns d= gcd(a,b) and global variables globalu and globalv,
-    where d = globalu.a + globalv.b+ 
-    """
-#    global globalu
-#    global globalv
-
-   if a < 0:
-     absa=-a
-   else:
-     absa=a
-   
-   if b < 0:
-     absb=-b
-   else:
-     absb=b
-   
-   d=bezout(absa,absb)
-   ta=sign(a)
-   tb=sign(b)
-   globalu=globalu * ta
-   globalv=globalv * tb
-   return d, globalu, globalv
+#def  bezout(a,b):
+#    """  From Henri Cohen' book, Alg. 1.3.6  13/07/2011
+#    This assumes a >=0 and b >= 0+ 
+#    returns d= gcd(a,b) and global variables u and v,
+#    where d = u.a + v.b+ 
+#    """
+#   u=1
+#   d=a
+#   if b == 0:
+#      v=0
+#      return a
+#   else:
+#      v1=0
+#      v3=b
+#   
+#   while v3 > 0:
+#      q=d / v3
+#      t3=d % v3
+#      temp=q * v1
+#      t1=u - temp
+#      u=v1
+#      d=v3
+#      v1=t1
+#      v3=t3
+#   
+#   temp=a * u
+#   temp=d - temp
+#   v=temp / b
+#   return d, u, v
+#
+#
+#def  bezout1(a,b):
+#    """  Here a and b are any integers+ 
+#    returns d= gcd(a,b) and global variables u and v,
+#    where d = u.a + v.b+ 
+#    """
+#   if a < 0:
+#     absa=-a
+#   else:
+#     absa=a
+#   
+#   if b < 0:
+#     absb=-b
+#   else:
+#     absb=b
+#   
+#   d, u, v =bezout(absa,absb)
+#   ta=sign(a)
+#   tb=sign(b)
+#   u=u * ta
+#   v=v * tb
+#   return d, u, v
 
 
 def parity(a):
@@ -610,11 +519,11 @@ def parity(a):
     return 1
   
 
-
 def  lnearint(a,b):
-"""  left nearest integer 
-  returns y+1/2 if a/b=y+1/2, y integral+ 
-  """
+    """
+    left nearest integer 
+    returns y+1/2 if a/b=y+1/2, y integral+ 
+    """
 	y=int(a,b)
         if b < 0:
           a=-a
@@ -722,7 +631,6 @@ def transpose1(&A,&m,&n):
 
 # creates the submatrix from rows p to q+ 
 def row_submatrix(A,p,q):
-#global new_row_size
     r=p - 1
     s=q - p
     s=s + 1
@@ -734,7 +642,6 @@ def row_submatrix(A,p,q):
 
 # creates the submatrix from columns p to q+ 
 def col_submatrix(A,rows,p,q):
-#global new_col_size
     r=p - 1
     s=q - p
     s=s + 1
@@ -748,10 +655,8 @@ def col_submatrix(A,rows,p,q):
 
 # creates the submatrix from rows p1 to q1, columns p2 to q2+ 
 def submatrix(A,rows,p1,q1,p2,q2):
-    #global new_row_size
-    #global new_col_size
-      B=row_submatrix(A,p1,q1)
-      C=col_submatrix(B,rows,p2,q2)
+      B, new_row_size=row_submatrix(A,p1,q1)
+      C, new_col_size=col_submatrix(B,rows,p2,q2)
       return C, new_row_size, new_col_size
 
 
