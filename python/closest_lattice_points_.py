@@ -154,7 +154,7 @@ global lcv
        UB[i]=introot(Znum,Zden,subnum,subden)
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
-       temp3=bcminus(temp2)
+       temp3=-temp2
        x[i]=temp3 - 1
        while(1)
           x[i]=x[i] + 1

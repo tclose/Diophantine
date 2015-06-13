@@ -24,7 +24,7 @@
   chinese2(a,b,m,n)
   chinesea(a,m,n)
   inverse(a,m)
-  bcminus(a)
+  -a
   powerdd(a,b,dd,n)
   a <= b
  a >= b
@@ -675,7 +675,7 @@ global zed2
         return
 
 
-def bcminus(a):
+def -a:
 
    t=0 - a
     return(t)
@@ -763,12 +763,12 @@ def  bezout1(a,b):
     global globalv
 
    if ltzero(a):
-     absa=bcminus(a)
+     absa=-a
    else:
      absa=a
    
    if ltzero(b):
-     absb=bcminus(b)
+     absb=-b
    else:
      absb=b
    
@@ -795,8 +795,8 @@ def  lnearint(a,b):
   """
 	y=int(a,b)
         if ltzero(b):
-          a=bcminus(a)
-          b=bcminus(b)
+          a=-a
+          b=-b
         
         x=b * y
         z=a - x
@@ -1079,8 +1079,8 @@ def ratior(a,b,c,d):
   s=b * c
   g=gcd(r,s)
   if ltzero(s):
-     r=bcminus(r)
-     s=bcminus(s)
+     r=-r
+     s=-s
   
   rationum=r / g
   ratioden=s / g
@@ -1190,7 +1190,7 @@ global lcv
 
  def minusa(&a,n):
    for j in xrange(n):
-       a[j]=bcminus(a[j])
+       a[j]=-a[j]
    
    return
 
@@ -1309,7 +1309,7 @@ def printaxplusby(a,x,b,y):
       if eq(b,"-1"):
          print " - y"
       else:
-         minusb=bcminus(b)
+         minusb=-b
          print " - minusby"
    return
 
@@ -1320,7 +1320,7 @@ def printxplusa(x,a):
       print " + a"
    
    if ltzero(a):
-      minusa=bcminus(a)
+      minusa=-a
       print " - minusa"
    
    return
@@ -1332,7 +1332,7 @@ def printaxplusbyplusc(a,x,b,y,c):
          print " + c"
       
       if ltzero(c):
-         minusc=bcminus(c)
+         minusc=-c
          print " - minusc"
       
       return

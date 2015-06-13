@@ -48,7 +48,7 @@ def  lllhermite(G,m,n,m1,n1):
    if eq(flag,1):
       B[m][m]="-1"
       for j in xrange(n):
-          A[m][j]=bcminus(A[m][j])
+          A[m][j]=-A[m][j]
       
    
    k=2
@@ -173,10 +173,10 @@ global A
             minus(i,m,L)
 #print "Row i . -Row i<br>\n"
             for jj in xrange(n):
-                A[i][jj]=bcminus(A[i][jj])
+                A[i][jj]=-A[i][jj]
             
             for jj in xrange(m):
-                B[i][jj]=bcminus(B[i][jj])
+                B[i][jj]=-B[i][jj]
             
          
          break
@@ -223,7 +223,7 @@ def minus(j,m,&L):
    for r in xrange(1, m):
        for s in xrange(r - 1):
            if r == j || s == j:
-             L[r][s]=bcminus(L[r][s])
+             L[r][s]=-L[r][s]
            
        
    
@@ -335,7 +335,7 @@ global rank
     if eq(flag,0) and eq(hnf[rank][nplus1],1) and eq(flag1,0):
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
         for j in xrange(m):
-          y[j]=bcminus(unimodular_matrix[rank][j])
+          y[j]=-unimodular_matrix[rank][j]
         
         print "AX=B has a solution: Y = "
         print[y,m]
@@ -450,7 +450,7 @@ global lcv
        UB[i]=introot(Znum,Zden,subnum,subden)
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
-       temp3=bcminus(temp2)
+       temp3=-temp2
        x[i]=temp3 - 1
        while(1)
           x[i]=x[i] + 1
