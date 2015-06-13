@@ -74,12 +74,12 @@
 
 """  the least non-negative remainder when an integer a is divided by a positive
   integer b+ 
-  bcmod(a,b)=moda(a,b) if a>=0 or a<0 and b divides a
-  bcmod(a,b)=mod(a,b)-b if a<0, b>0, a not divisible by b+ 
+  a % b=moda(a,b) if a>=0 or a<0 and b divides a
+  a % b=mod(a,b)-b if a<0, b>0, a not divisible by b+ 
   """
 
 def mod(a,b):
-	c=bcmod(a,b)
+	c=a % b
 	if a>=0:
 		 return(c)
 	
@@ -106,7 +106,7 @@ def int(a,b):
 	     b=0 - b
 	
 	c=a / b
-	d=bcmod(a,b)
+	d=a % b
 	if d==0 || a>0:
 		return(c)
 	else:
@@ -119,12 +119,12 @@ def mpower(a,b,c):
 	y=b
 	z=1
 	while y:
-		while bcmod(y,2)==0:
+		while y % 2==0:
 			y=y / 2
-			x=bcmod(x * x,c)
+			x=x * x % c
 		
 		y=y - 1
-		z=bcmod(z * x,c)
+		z=z * x % c
 	
 	return(z)
 
@@ -223,7 +223,7 @@ global multiplier2
 		q=int(a,b)
 		a=b
 		b=c
-		c=bcmod(a,b)
+		c=a % b
 		temp1=q * k1
 		temp2=q * k2
 		h1=l1 - temp1
@@ -428,7 +428,7 @@ def  gcda(array,n):
 	y=b
 	z=1
 	while bccomp(y,0)>0:
-		while bccomp(bcmod(y,2),0)==0:
+		while bccomp(y % 2,0)==0:
 			y=y / 2
 			x=x * x
 		
@@ -445,7 +445,7 @@ global solution
 global modulus
 global multiplier1
 	a=egcd(m,n)
-	temp=bcmod(p,a)
+	temp=p % a
 	if bccomp(temp,0)!=0:
 		return(0)
 	
@@ -651,7 +651,7 @@ global zed2
         zed1=1
         zed2=0
         while gtzero(y):
-                while ezero(bcmod(y,2)):
+                while ezero(y % 2):
                         y=y / 2
                         temp=x1
                         temp1=x2 * x2
@@ -740,7 +740,7 @@ def  bezout(a,b):
    
    while gtzero(v3):
       q=d / v3
-      t3=bcmod(d,v3)
+      t3=d % v3
       temp=q * v1
       t1=globalu - temp
       globalu=v1
@@ -781,7 +781,7 @@ def  bezout1(a,b):
 
 
 def parity(a):
-  r=bcmod(a,2)
+  r=a % 2
   if ezero(r):
     return(0)
   else:
@@ -1211,7 +1211,7 @@ def bcmul3(a,b,c):
 
 
 def pparity(e):
-   t=bcmod(e,2)
+   t=e % 2
    if t == 1:
      return(-1)
    else:
