@@ -109,12 +109,12 @@ global lcv
 
     m + 1=m
     
-    if mminus1 > 1:
-       print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
+    if m - 1 > 1:
+       print "&#8466 is the lattice spanned by the first m - 1 rows of A<br>\n"
     else:
        print "&#8466 is the lattice spanned by the first row of A<br>\n"
     
-    for i in xrange(mminus1):  # AA consists of the first m-1 rows of A
+    for i in xrange(m - 1):  # AA consists of the first m-1 rows of A
         for j in xrange(n):
             AA[i][j]=A[i][j]
         

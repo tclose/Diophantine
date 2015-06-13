@@ -55,22 +55,22 @@ def  lllhermite(G,m,n,m1,n1):
    n + 1=n + 1
    while k <= m:
          
-         reduce2(k,kminus1,m,n,D)
+         reduce2(k,k - 1,m,n,D)
          
          minim=minimum(col2,n)
-         temp1=D[kminus2] * D[k]
-         temp2=L[k][kminus1] * L[k][kminus1]
+         temp1=D[k - 2] * D[k]
+         temp2=L[k][k - 1] * L[k][k - 1]
          temp3=temp1 + temp2
          u=n1 * temp3
-         temp1=D[kminus1] * D[kminus1]
+         temp1=D[k - 1] * D[k - 1]
          v=m1 * temp1
          if col1 <= minim || (col1 == col2 and col1 == n + 1 and u < v):
             swap2(k,m,n)
             if k > 2:
-               k=kminus1
+               k=k - 1
             
          else:
-            for i in xrange(kminus2 - 1, 0, -1):
+            for i in xrange(k - 2 - 1, 0, -1):
                 reduce2(k,i,m,n,D)
             
             k=k + 1
@@ -236,40 +236,40 @@ global A
 global D
    
    
-   #print "Row k <. Row kminus1<br>\n"
+   #print "Row k <. Row k - 1<br>\n"
    for j in xrange(n):
        temp=A[k][j]
-       A[k][j]=A[kminus1][j]
-       A[kminus1][j]=temp
+       A[k][j]=A[k - 1][j]
+       A[k - 1][j]=temp
    
    for j in xrange(m):
        temp=B[k][j]
-       B[k][j]=B[kminus1][j]
-       B[kminus1][j]=temp
+       B[k][j]=B[k - 1][j]
+       B[k - 1][j]=temp
    
    
-   for j in xrange(kminus2):
+   for j in xrange(k - 2):
        temp=L[k][j]
-       L[k][j]=L[kminus1][j]
-       L[kminus1][j]=temp
+       L[k][j]=L[k - 1][j]
+       L[k - 1][j]=temp
    
    k + 1=k + 1
    for i in xrange(k, m):
-       temp1=L[i][kminus1] * D[k]
-       temp2=L[i][k] * L[k][kminus1]
+       temp1=L[i][k - 1] * D[k]
+       temp2=L[i][k] * L[k][k - 1]
        t=temp1 - temp2
-       temp1=L[i][kminus1] * L[k][kminus1]
-       temp2=L[i][k] * D[kminus2]
+       temp1=L[i][k - 1] * L[k][k - 1]
+       temp2=L[i][k] * D[k - 2]
        temp3=temp1 + temp2
-       L[i][kminus1]=temp3 / D[kminus1]
-       L[i][k]=t / D[kminus1]
+       L[i][k - 1]=temp3 / D[k - 1]
+       L[i][k]=t / D[k - 1]
    
 
-   temp1=D[kminus2] * D[k]
-   temp2=L[k][kminus1] * L[k][kminus1]
+   temp1=D[k - 2] * D[k]
+   temp2=L[k][k - 1] * L[k][k - 1]
    t=temp1 + temp2
 #var_dump(t)
-   D[kminus1]=t / D[kminus1]
+   D[k - 1]=t / D[k - 1]
    return
 
 
@@ -405,12 +405,12 @@ global lcv
 
     m + 1=m
     
-    #if mminus1 > 1:
-       #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
+    #if m - 1 > 1:
+       #print "&#8466 is the lattice spanned by the first m - 1 rows of A<br>\n"
     #else:
        #print "&#8466 is the lattice spanned by the first row of A<br>\n"
     #
-    for i in xrange(mminus1):  # AA consists of the first m-1 rows of A
+    for i in xrange(m - 1):  # AA consists of the first m-1 rows of A
         for j in xrange(n):
             AA[i][j]=A[i][j]
         
