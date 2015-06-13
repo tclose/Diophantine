@@ -183,62 +183,48 @@ def gcd(m,n):
    
 
 def egcd(p,q):
-global multiplier1
-global multiplier2
-
-	if q==0:
-		if p!=0:
-			s=sign(p)
-			if s==1:
-				multiplier1=1
-			else:
-				multiplier1=-1
-			
-			multiplier2=0
-			return abs(p)
-		else:
-			multiplier1=0
-			multiplier2=0
-			return 0
-		
-	
-	a=p
-	b=abs(q)
-	c=mod(a,b)
-	s=sign(q)
-	if c==0:
-		if s==1:
-			multiplier2=1
-		else:
-			multiplier2=-1
-		
-		multiplier1=0
-		return b
-	
-	l1=1
-	k1=0
-	l2=0
-	k2=1
-	while c!=0:
-		q=int(a,b)
-		a=b
-		b=c
-		c=a % b
-		temp1=q * k1
-		temp2=q * k2
-		h1=l1 - temp1
-		h2=l2 - temp2
-		l1=k1
-		l2=k2
-		k1=h1
-		k2=h2
-	
-	multiplier1=k1
-	if s==-1:
-		k2=0 - k2
-	
-	multiplier2=k2
-	return b
+    #global multiplier1
+    #global multiplier2
+    if q==0:
+        if p!=0:
+            s=sign(p)
+            if s==1:
+                multiplier1=1
+            else:
+                multiplier1=-1
+            return abs(p), multiplier1, 0
+        else:
+            return 0, 0, 0
+    a=p
+    b=abs(q)
+    c=a % b
+    s=sign(q)
+    if c==0:
+        if s==1:
+            multiplier2=1
+        else:
+            multiplier2=-1
+        return b, 0, multiplier2
+    l1=1
+    k1=0
+    l2=0
+    k2=1
+    while c!=0:
+            q=int(a,b)
+            a=b
+            b=c
+            c=a % b
+            temp1=q * k1
+            temp2=q * k2
+            h1=l1 - temp1
+            h2=l2 - temp2
+            l1=k1
+            l2=k2
+            k1=h1
+            k2=h2
+    if s==-1:
+        k2=0 - k2
+    return b, k1, k2
 
 
 """  min(x,y)  """
@@ -441,9 +427,9 @@ def  gcda(array,n):
     the congruence mx=p(mod n)  """
 
 def cong(m,p,n):
-global solution
-global modulus
-global multiplier1
+#global solution
+#global modulus
+#global multiplier1
 	a=egcd(m,n)
 	temp=p % a
 	if bccomp(temp,0)!=0:
@@ -457,13 +443,13 @@ global multiplier1
 	modulus=y
 	for(t=0t<at += 1)print " ",z+ty,","
 	print " mod ",n,"\n"
-	return 1
+	return solution, modulus, multiplier
 
 
 def  cong1(m,p,n):
     """   the congruence mx=p(mod n) slightly modified version of cong(m,p,n)  """
-global modulus
-global multiplier1
+#global modulus
+#global multiplier1
 	a=egcd(m,n)
 	b=multiplier1
 	y=n / a
@@ -471,7 +457,7 @@ global multiplier1
 	temp1=b * p
 	solution=mod(temp1,y)
 	modulus=y
-	return solution
+	return solution, modulus, multiplier
 
 
 # the Chinese remainder theorem for the congruences x=a(mod m)
@@ -480,10 +466,10 @@ global multiplier1
 # vol.59,pp.365-370,1952, is implemented+ 
 
 def chinese2(a,b,m,n):
-global chinese_modulus
-global chinese_solution
-global multiplier1
-global multiplier2
+#global chinese_modulus
+#global chinese_solution
+#global multiplier1
+#global multiplier2
 
 	d = egcd(m,n)
 	if mod(a - b,d)!=0:
@@ -498,21 +484,18 @@ global multiplier2
 	c=mod(temp1 + temp2,z)
 	chinese_modulus=z
 	chinese_solution=c
-	return 1
-
+	return 1, chinese_modulus, chinese_solution, multiplier1, multiplier2
 
 def chinesea(a,m,n):
-global chinese_solution
-global chinese_modulus
+#global chinese_solution
+#global chinese_modulus
         chinese_modulus=m[0]
         chinese_solution=a[0]
         for i in xrange(n - 1):
                 y=chinese2(a[i],chinese_solution,m[i],chinese_modulus)
                 if y==0:
                         return 0
-                
-        
-        return 1
+        return 1, chinese_solution, chinese_modulus
 
 
 def  inverse(a,m):
@@ -523,9 +506,8 @@ def  inverse(a,m):
 
 def powerdd(a,b,dd,n):
     """  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
-global zed1
-global zed2
-
+#global zed1
+#global zed2
         x1=a
         x2=b
         y=n
@@ -553,17 +535,9 @@ global zed2
                 zed2=temp4 + temp5
         
        """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
-        return
-
-
-def -a:
-
-   t=0 - a
-    return t
-
+        return zed1, zed2
 
 def gcd3(a,b,c):
-
   t=gcd(a,b)
   t=gcd(t,c)
   return t
@@ -585,7 +559,7 @@ def print_matrix(a,b,c,d):
 
 
 def sort_[a,n]:
-global sorted_array
+#global sorted_array
    t=n - 1
    for i in xrange(t):
       temp1=i + 1
@@ -594,12 +568,10 @@ global sorted_array
             temp=a[i]
             a[i]=a[j]
             a[j]=temp
-         
-      
    
    for i in xrange(n):
       sorted_array[i]=a[i]
-   
+   return sorted_array
 
 
 def  bezout(a,b):
@@ -608,8 +580,8 @@ def  bezout(a,b):
     returns d= gcd(a,b) and global variables globalu and globalv,
     where d = globalu.a + globalv.b+ 
     """
-    global globalu
-    global globalv
+    #global globalu
+    #global globalv
    globalu=1
    d=a
    if b == 0:
@@ -632,7 +604,7 @@ def  bezout(a,b):
    temp=a * globalu
    temp=d - temp
    globalv=temp / b
-   return d
+   return d, globalu, globalv
 
 
 def  bezout1(a,b):
@@ -640,8 +612,8 @@ def  bezout1(a,b):
     returns d= gcd(a,b) and global variables globalu and globalv,
     where d = globalu.a + globalv.b+ 
     """
-    global globalu
-    global globalv
+#    global globalu
+#    global globalv
 
    if a < 0:
      absa=-a
@@ -658,7 +630,7 @@ def  bezout1(a,b):
    tb=sign(b)
    globalu=globalu * ta
    globalv=globalv * tb
-   return d
+   return d, globalu, globalv
 
 
 def parity(a):
@@ -701,8 +673,6 @@ def mina(a,n):
     for i in xrange(1, n):
          if a[i] < x:
             x=a[i]
-         
-    
     return x
  
 
@@ -721,9 +691,7 @@ def  printmat1(matrix,m,n):
        for j in xrange(n):
            k=matrix[i][j]
           print "<TD ALIGN=\"RIGHT\">k</TD>"
-       
        print "</TR>\n"
-   
    print "</TABLE>\n"
 
 
@@ -731,16 +699,13 @@ def printmatrix(matrix,m,n):
     for i in xrange(m):
        for j in xrange(n):
        print matrix[i][j] print " "
-       
        print "<br>\n"
     
-
 
 def printmatrix2(matrix,m,n):
     for i in xrange(m):
        for j in xrange(n):
           print matrix[i][j] print " "
-       
        print "<br>\n"
     
 
@@ -748,14 +713,13 @@ def printmatrix2(matrix,m,n):
     print "("
     for i in xrange(n - 1):
        print "a[i], "
-    
     print "a[n]) "
     return
+
 
  def printarray1(a,n):
     for i in xrange(n):
        print "a[i], "
-    
     print "a[n]"
     return
 
@@ -766,9 +730,6 @@ def printmatrix2(matrix,m,n):
               P[i][j]=1
            else:
               P[i][j]=0
-           
-        
-   
    return P
  
 
@@ -777,8 +738,6 @@ def transpose(A,m,n):
      for j in xrange(n):
          for i in xrange(m):
              transposed[j][i]=A[i][j]
-         
-     
      return transposed
 
 
@@ -786,8 +745,6 @@ def transpose1(&A,&m,&n):
      for j in xrange(n):
          for i in xrange(m):
              transposed[j][i]=A[i][j]
-         
-     
      A=transposed
      temp=m
      m=n
@@ -796,7 +753,7 @@ def transpose1(&A,&m,&n):
 
 # creates the submatrix from rows p to q+ 
 def row_submatrix(A,p,q):
-global new_row_size
+#global new_row_size
     r=p - 1
     s=q - p
     s=s + 1
@@ -804,13 +761,11 @@ global new_row_size
     for i in xrange(s):
         z=i + r
         B[i]=A[z]
-    
-    return B
-
+    return B, new_row_size
 
 # creates the submatrix from columns p to q+ 
 def col_submatrix(A,rows,p,q):
-global new_col_size
+#global new_col_size
     r=p - 1
     s=q - p
     s=s + 1
@@ -819,18 +774,16 @@ global new_col_size
         z=j + r
         for i in xrange(rows):
             B[i][j]=A[i][z]
-        
-    
-    return B
+    return B, new_col_size
 
 
 # creates the submatrix from rows p1 to q1, columns p2 to q2+ 
 def submatrix(A,rows,p1,q1,p2,q2):
-    global new_row_size
-    global new_col_size
+    #global new_row_size
+    #global new_col_size
       B=row_submatrix(A,p1,q1)
       C=col_submatrix(B,rows,p2,q2)
-      return C
+      return C, new_row_size, new_col_size
 
 
 # replaces row i of A by q times row j, updating A
@@ -838,7 +791,6 @@ def rowiminusqrowj(&A,n,i,q,j):
     for k in xrange(n):
        t=A[j][k] * q
        A[i][k]=A[i][k] - t
-    
     return A
 
 
@@ -849,13 +801,10 @@ def coliminusqcolj(&A,m,i,q,j):
        A[k][i]=A[k][i] - t
     
 
-
 def delete_row(&B,i,&m):
    for l in xrange(i, m):
-
        temp=B[l + 1]
        B[l]=temp
-   
    m=m - 1
    return
 
@@ -879,13 +828,11 @@ def swap_cols(&P,m,j,k):
        P[i][k]=temp
    
 
-
 def dotproduct(a,b,n):
    sum=0
    for j in xrange(n):
        temp=a[j] * b[j]
        sum=sum + temp
-   
    return sum
 
 
@@ -896,10 +843,7 @@ def multmat(A,B,m,n,p):
            for j in xrange(n):
                t=A[i][j] * B[j][k]
                sum=sum + t
-           
            C[i][k]=sum
-       
-   
    return C
 
 
@@ -908,8 +852,6 @@ def matrixperm(&A,a,m):
    for i in xrange(m):
        for j in xrange(m):
            B[i]=A[a[i]]
-       
-   
    A=B
 
 
@@ -917,14 +859,10 @@ def matrixperm(&A,a,m):
 def equalmat(A,B,rowsA,colsA,rowsB,colsB):
    if rowsA != rowsB || colsA != colsB:
       return 0
-   
    for i in xrange(rowsA):
        for j in xrange(colsA):
            if A[i][j] != B[i][j]:
               return 0
-           
-       
-   
    return 1
 
 def abpluscd(a,b,c,d):
@@ -954,56 +892,47 @@ def aminusbc(a,b,c):
 
 # returns (a/b)/(c/d)
 def ratior(a,b,c,d):
-  global rationum
-  global ratioden
+#  global rationum
+#  global ratioden
   r=a * d
   s=b * c
   g=gcd(r,s)
   if s < 0:
      r=-r
      s=-s
-  
-  rationum=r / g
-  ratioden=s / g
-  return
+  return r / g, s / g
 
 
 # returns (a/b)(c/d)
 def multr(a,b,c,d):
-  global multnum
-  global multden
+#  global multnum
+#  global multden
   r=a * c
   s=b * d
   g=gcd(r,s)
-  multnum=r / g
-  multden=s / g
-  return
+  return r / g, s / g
 
 
 def subr(a,b,c,d):
-  global subnum
-  global subden
+#  global subnum
+#  global subden
   r=a * d
   s=b * c
   t=r - s
   u=b * d
   g=gcd(t,u)
-  subnum=t / g
-  subden=u / g
-  return
+  return t / g, u / g
 
 
 def addr(a,b,c,d):
-  global addnum
-  global addden
+#  global addnum
+#  global addden
   r=a * d
   s=b * c
   t=r + s
   u=b * d
   g=gcd(t,u)
-  addnum=t / g
-  addden=u / g
-  return
+  return t / g, u / g
 
 
 # Assumes b>0 and d>0.  Returns -1, 0 or 1 according as a/b <,=,> c/d+ 
@@ -1011,10 +940,8 @@ def comparer(a,b,c,d):
   t=abminuscd(a,d,b,c)
   if t < 0:
      return -1
-  
   if t > 0:
      return 1
-  
   return 0
 
 
@@ -1023,22 +950,17 @@ def printlc(A,X,m):
  s=zero[X,m]
  if s == 0:
     return 0
- 
  for i in xrange(m):
      t=X[i]
      if t == 0:
         continue
-     
      if flag == 0:
        if t != 1 and t != -1:
           print "t"print "b[i]"
-       
        if t == -1:
           print "-b[i]"
-       
        if t == 1:
           print "b[i]"
-       
        flag=1
      else:
        if t > 0:
@@ -1046,8 +968,6 @@ def printlc(A,X,m):
              print "+b[i]"
           else:
              print "+t"print "b[i]"
-          
-       
        if t < 0:
           if t == -1:
              print "-b[i]"
@@ -1058,21 +978,18 @@ def printlc(A,X,m):
 
 # lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+ 
 def lcasvector(A,X,m,n):
-global lcv
+#global lcv
    for j in xrange(n):
       sum=0
       for i in xrange(m):
          t=X[i] * A[i][j]
          sum=sum + t
-      
       lcv[j]=sum
-   
-   return
+   return lcv
 
  def minusa(&a,n):
    for j in xrange(n):
        a[j]=-a[j]
-   
    return
 
 
@@ -1099,7 +1016,6 @@ def pparity(e):
      return 1
    
 
-
 def printbinaryform(a,b,c,x,y):
 	if gt(a,1) || lt(a,-1):
            print"a&#8203x<sup>2</sup>"
@@ -1122,8 +1038,6 @@ def printbinaryform(a,b,c,x,y):
            
            if b < -1:
               print"b&#8203xy"
-           
-        
 	if c != 0:
 	   if c > 1:
               print"+c&#8203y<sup>2</sup>"
@@ -1136,8 +1050,6 @@ def printbinaryform(a,b,c,x,y):
            
            if c == -1:
               print"-y<sup>2</sup>"
-           
-        
 
 
 def bcmul4(a,b,c,d):
@@ -1199,11 +1111,9 @@ def printxplusa(x,a):
    print x
    if a > 0:
       print " + a"
-   
    if a < 0:
       minusa=-a
       print " - minusa"
-   
    return
 
 
@@ -1211,11 +1121,9 @@ def printaxplusbyplusc(a,x,b,y,c):
    null=printaxplusby(a,x,b,y)
       if c > 0:
          print " + c"
-      
       if c < 0:
          minusc=-c
          print " - minusc"
-      
       return
 
 
