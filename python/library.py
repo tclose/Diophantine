@@ -36,7 +36,7 @@
   ezero(a)
   a >= 0
   lezero(a)
-  ltzero(a)
+  a < 0
   a > 0
   gcd3(a,b,c)
   bezout(a,b)
@@ -542,8 +542,8 @@ def a > 0:
    
 
 
-def ltzero(a):
-    """  ltzero(a) returns 1 if a<0, 0 otherwise.  """
+def a < 0:
+    """  a < 0 returns 1 if a<0, 0 otherwise.  """
    t=bccomp(a,0)
    if t<0:
       return(1)
@@ -762,12 +762,12 @@ def  bezout1(a,b):
     global globalu
     global globalv
 
-   if ltzero(a):
+   if a < 0:
      absa=-a
    else:
      absa=a
    
-   if ltzero(b):
+   if b < 0:
      absb=-b
    else:
      absb=b
@@ -794,7 +794,7 @@ def  lnearint(a,b):
   returns y+1/2 if a/b=y+1/2, y integral+ 
   """
 	y=int(a,b)
-        if ltzero(b):
+        if b < 0:
           a=-a
           b=-b
         
@@ -1078,7 +1078,7 @@ def ratior(a,b,c,d):
   r=a * d
   s=b * c
   g=gcd(r,s)
-  if ltzero(s):
+  if s < 0:
      r=-r
      s=-s
   
@@ -1128,7 +1128,7 @@ def addr(a,b,c,d):
 # Assumes b>0 and d>0.  Returns -1, 0 or 1 according as a/b <,=,> c/d+ 
 def comparer(a,b,c,d):
   t=abminuscd(a,d,b,c)
-  if ltzero(t):
+  if t < 0:
      return(-1)
   
   if t > 0:
@@ -1167,7 +1167,7 @@ def printlc(A,X,m):
              print "+t"print "b[i]"
           
        
-       if ltzero(t):
+       if t < 0:
           if t == -1:
              print "-b[i]"
           else:
@@ -1305,7 +1305,7 @@ def printaxplusby(a,x,b,y):
          print " + by"
       
    
-   if ltzero(b):
+   if b < 0:
       if b == -1:
          print " - y"
       else:
@@ -1319,7 +1319,7 @@ def printxplusa(x,a):
    if a > 0:
       print " + a"
    
-   if ltzero(a):
+   if a < 0:
       minusa=-a
       print " - minusa"
    
@@ -1331,7 +1331,7 @@ def printaxplusbyplusc(a,x,b,y,c):
       if c > 0:
          print " + c"
       
-      if ltzero(c):
+      if c < 0:
          minusc=-c
          print " - minusc"
       

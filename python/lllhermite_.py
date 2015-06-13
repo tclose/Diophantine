@@ -151,7 +151,7 @@ def  flagcol(A,m,n):
     #  if i < m:
     #    return(0)
     #else:
-    # if ltzero(A[m][j]):
+    # if A[m][j] < 0:
      #   return(1)
     # else:
      #   return(0)
@@ -169,7 +169,7 @@ global A
    for j in xrange(n):
        if neqzero(A[i][j]):
          col1=j
-         if ltzero(A[i][col1]):
+         if A[i][col1] < 0:
             minus(i,m,L)
 #print "Row i . -Row i<br>\n"
             for jj in xrange(n):
