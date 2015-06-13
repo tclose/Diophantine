@@ -414,7 +414,7 @@ def  gcda(array,n):
 	for i in xrange(n):
           b[i]=array[i]
 	
-	for(i="1"i<ni=bcadd(i,"1"))
+	for i in xrange(n - 1):
 		j=bcsub(i,"1")
 		b[i]=gcd(b[i],b[j])
 	
@@ -507,7 +507,7 @@ global chinese_solution
 global chinese_modulus
         chinese_modulus=m[0]
         chinese_solution=a[0]
-        for(i="1"i<ni=bcadd(i,"1"))
+        for i in xrange(n - 1):
                 y=chinese2(a[i],chinese_solution,m[i],chinese_modulus)
                 if y=="0":
                         return("0")
