@@ -270,7 +270,7 @@ def lengthsquared(a,n):
 def zero[a,n]:
   flag=0
   for i in xrange(n):
-      if neqzero(a[i]):
+      if a[i] != 0:
         flag=1
         break
       

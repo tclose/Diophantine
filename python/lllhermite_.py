@@ -130,7 +130,7 @@ def  flagcol(A,m,n):
     flag=0
     for j in xrange(n):
        for i in xrange(m):
-           if(neqzero(A[i][j]))#found the first column with a nonzero elt, which is in row i
+           if(A[i][j] != 0)#found the first column with a nonzero elt, which is in row i
               flag=1
               break
            
@@ -139,7 +139,7 @@ def  flagcol(A,m,n):
        
     iplus1=i + 1
     for k in xrange(i, m):
-       if neqzero(A[k][j]:)
+       if A[k][j]: != 0
            return(0)
 
     if(A[i][j] > 0)# A[i][j] is the only elt in column j and is positive
@@ -167,7 +167,7 @@ global L
 global A
    col1=nplus1
    for j in xrange(n):
-       if neqzero(A[i][j]):
+       if A[i][j] != 0:
          col1=j
          if A[i][col1] < 0:
             minus(i,m,L)
@@ -184,7 +184,7 @@ global A
    
    col2=nplus1
    for j in xrange(n):
-       if neqzero(A[k][j]):
+       if A[k][j] != 0:
          col2=j
          break
        
@@ -279,7 +279,7 @@ def  zero_row_test(matrix,n,i):
   is returned. Otherwise 0 is returned+ 
   """
     for j in xrange(n):
-       if neqzero(matrix[i][j]):
+       if matrix[i][j] != 0:
          return(j)
        
     
@@ -318,14 +318,14 @@ global rank
     print "<br>\n"
     flag=0
     for i in xrange(rank - 1):
-        if neqzero(hnf[i][nplus1]):
+        if hnf[i][nplus1] != 0:
            flag=1
            break
         
     
     flag1=0
     for j in xrange(n):
-        if neqzero(hnf[rank][j]):
+        if hnf[rank][j] != 0:
            flag1=1
            break
         

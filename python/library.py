@@ -280,7 +280,7 @@ def  printpoly(a,n):
 	
 	d=n - 1
   	for i in xrange(d, 0, -1):
-	    if neqzero(a[i]):
+	    if a[i] != 0:
 		if a[i] > 1:
 		       print "+a[i]"
 	        
@@ -332,7 +332,7 @@ def  printpolylambda(a,n):
 	
 	d=n - 1
   	for i in xrange(d, 0, -1):
-	    if neqzero(a[i]):
+	    if a[i] != 0:
 		if a[i] > 1:
 		       print "+a[i]"
 	        
@@ -1199,7 +1199,7 @@ global lcv
  def test_zeromat(A,m,n):
       for i in xrange(m):
           for j in xrange(n):
-              if neqzero(A[i][j]):
+              if A[i][j] != 0:
                  return(0)
       return(1)
 
