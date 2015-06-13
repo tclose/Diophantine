@@ -60,7 +60,7 @@ if t > size:
 
 
 	flag="0"
-	for(i="0"lt(i,t)i=bcadd(i,"1"))
+	for i in xrange(t):
 		check=check_decimal(a[i])
 		if ezero(check:)
 			print "<p>\n"

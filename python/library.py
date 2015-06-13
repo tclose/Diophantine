@@ -706,7 +706,7 @@ def print_matrix(a,b,c,d):
 def sort_[a,n]:
 global sorted_array
    t=bcsub(n,"1")
-   for(i="0"lt(i,t)i=bcadd(i,"1"))
+   for i in xrange(t):
       temp1=bcadd(i,"1")
       for(j=temp1lt(j,n)j=bcadd(j,"1"))
          if a[i] > a[j]:
@@ -716,7 +716,7 @@ global sorted_array
          
       
    
-   for(i="0"lt(i,n)i=bcadd(i,"1"))
+   for i in xrange(n):
       sorted_array[i]=a[i]
    
 
@@ -856,8 +856,8 @@ def printmatrix(matrix,m,n):
 
 
 def printmatrix2(matrix,m,n):
-    for(i="0"lt(i,m)i=bcadd(i,"1"))
-       for(j="0"lt(j,n)j=bcadd(j,"1"))
+    for i in xrange(m):
+       for j in xrange(n):
           print matrix[i][j] print " "
        
        print "<br>\n"
@@ -872,7 +872,7 @@ def printmatrix2(matrix,m,n):
     return
 
  def printarray1(a,n):
-    for(i="0"lt(i,n)i=bcadd(i,"1"))
+    for i in xrange(n):
        print "a[i], "
     
     print "a[n]"
