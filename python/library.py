@@ -27,7 +27,7 @@
   bcminus(a)
   powerdd(a,b,dd,n)
   a <= b
-  ge(a,b)
+ a >= b
   a < b
   a > b
   a != b
@@ -621,8 +621,8 @@ def a < b:
    
 
 
-def ge(a,b):
-    """  ge(a,b) returns 1 if a >= b, "0" otherwise.  """
+defa >= b:
+    """ a >= b returns 1 if a >= b, "0" otherwise.  """
    t=bccomp(a,b)
    if t>=0:
       return("1")
