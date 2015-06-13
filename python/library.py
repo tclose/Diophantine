@@ -410,7 +410,7 @@ def  lcma(array,n):
 
 
 def  gcda(array,n):
-"""  gcda(array[0],array[1],...,array[n-1])  """
+    """  gcda(array[0],array[1],...,array[n-1])  """
 	for i in xrange(n):
           b[i]=array[i]
 	
@@ -438,7 +438,7 @@ def  gcda(array,n):
 	return(z)
 
 
-"""   the congruence mx=p(mod n)  """
+    the congruence mx=p(mod n)  """
 
 def cong(m,p,n):
 global solution
@@ -455,13 +455,13 @@ global multiplier1
 	temp1=bcmul(b,p)
 	solution=mod(temp1,y)
 	modulus=y
-	""" for(t=0t<at += 1)print " ",z+ty,","
+	for(t=0t<at += 1)print " ",z+ty,","
 	print " mod ",n,"\n" """
 	return("1")
 
 
 def  cong1(m,p,n):
-"""   the congruence mx=p(mod n) slightly modified version of cong(m,p,n)  """
+    """   the congruence mx=p(mod n) slightly modified version of cong(m,p,n)  """
 global modulus
 global multiplier1
 	a=egcd(m,n)
@@ -474,7 +474,7 @@ global multiplier1
 	return(solution)
 
 
-"""  the Chinese remainder theorem for the congruences x=a(mod m)
+    """  the Chinese remainder theorem for the congruences x=a(mod m)
   and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
   The construction of O. Ore, American Mathematical Monthly,
   vol.59,pp.365-370,1952, is implemented+ 
@@ -517,13 +517,13 @@ global chinese_modulus
 
 
 def  inverse(a,m):
-"""  Inverse of a (mod m)  """
+    """  Inverse of a (mod m)  """
 	t=cong1(a,"1",m)
 	return(t)
 
 
-"""  lezero(a) returns 1 if a<="0", "0" otherwise.  """
 def lezero(a):
+"""  lezero(a) returns 1 if a<="0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t<=0:
       return("1")
@@ -532,8 +532,8 @@ def lezero(a):
    
 
 
-"""  gtzero(a) returns 1 if a>"0", "0" otherwise.  """
 def gtzero(a):
+    """  gtzero(a) returns 1 if a>"0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t>0:
       return("1")
@@ -542,8 +542,8 @@ def gtzero(a):
    
 
 
-"""  ltzero(a) returns 1 if a<"0", "0" otherwise.  """
 def ltzero(a):
+    """  ltzero(a) returns 1 if a<"0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t<0:
       return("1")
@@ -552,8 +552,8 @@ def ltzero(a):
    
 
 
-"""  gezero(a) returns 1 if a>="0", "0" otherwise.  """
 def gezero(a):
+    """  gezero(a) returns 1 if a>="0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t>=0:
       return("1")
@@ -561,8 +561,8 @@ def gezero(a):
       return("0")
    
 
-"""  ezero(a) returns 1 if a="0", "0" otherwise.  """
 def ezero(a):
+"""  ezero(a) returns 1 if a="0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t==0:
       return("1")
@@ -571,8 +571,8 @@ def ezero(a):
    
 
 
-"""  neqzero(a) returns 1 if a != "0", "0" otherwise.  """
 def neqzero(a):
+    """  neqzero(a) returns 1 if a != "0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t!=0:
       return("1")
@@ -581,8 +581,8 @@ def neqzero(a):
    
 
 
-"""  eq(a,b) returns 1 if a=b, "0" otherwise.  """
 def eq(a,b):
+    """  eq(a,b) returns 1 if a=b, "0" otherwise.  """
    t=bccomp(a,b)
    if t==0:
       return("1")
@@ -591,8 +591,8 @@ def eq(a,b):
    
 
 
-"""  neq(a,b) returns 1 if a != b, "0" otherwise.  """
 def neq(a,b):
+    """  neq(a,b) returns 1 if a != b, "0" otherwise.  """
    t=bccomp(a,b)
    if t==0:
       return("0")
@@ -601,8 +601,8 @@ def neq(a,b):
    
 
 
-"""  gt(a,b) returns 1 if a > b, "0" otherwise.  """
 def gt(a,b):
+    """  gt(a,b) returns 1 if a > b, "0" otherwise.  """
    t=bccomp(a,b)
    if t>0:
       return("1")
@@ -611,8 +611,8 @@ def gt(a,b):
    
 
 
-"""  lt(a,b) returns 1 if a < b, "0" otherwise.  """
 def lt(a,b):
+    """  lt(a,b) returns 1 if a < b, "0" otherwise.  """
    t=bccomp(a,b)
    if t<0:
       return("1")
@@ -621,8 +621,8 @@ def lt(a,b):
    
 
 
-"""  ge(a,b) returns 1 if a >= b, "0" otherwise.  """
 def ge(a,b):
+    """  ge(a,b) returns 1 if a >= b, "0" otherwise.  """
    t=bccomp(a,b)
    if t>=0:
       return("1")
@@ -630,8 +630,8 @@ def ge(a,b):
       return("0")
    
 
-"""  le(a,b) returns 1 if a <= b, "0" otherwise.  """
 def le(a,b):
+    """  le(a,b) returns 1 if a <= b, "0" otherwise.  """
    t=bccomp(a,b)
    if t<="0":
       return("1")
@@ -641,7 +641,7 @@ def le(a,b):
 
 
 def powerdd(a,b,dd,n):
-"""  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
+    """  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
 global zed1
 global zed2
 
@@ -722,13 +722,13 @@ global sorted_array
 
 
 def  bezout(a,b):
-"""  From Henri Cohen' book, Alg. 1.3.6  13/07/2011
-  This assumes a >=0 and b >= 0+ 
-  returns d= gcd(a,b) and global variables globalu and globalv,
-  where d = globalu.a + globalv.b+ 
-  """
-global globalu
-global globalv
+    """  From Henri Cohen' book, Alg. 1.3.6  13/07/2011
+    This assumes a >=0 and b >= 0+ 
+    returns d= gcd(a,b) and global variables globalu and globalv,
+    where d = globalu.a + globalv.b+ 
+    """
+    global globalu
+    global globalv
    globalu="1"
    d=a
    if ezero(b):
@@ -755,12 +755,12 @@ global globalv
 
 
 def  bezout1(a,b):
-"""  Here a and b are any integers+ 
-  returns d= gcd(a,b) and global variables globalu and globalv,
-  where d = globalu.a + globalv.b+ 
-  """
-global globalu
-global globalv
+    """  Here a and b are any integers+ 
+    returns d= gcd(a,b) and global variables globalu and globalv,
+    where d = globalu.a + globalv.b+ 
+    """
+    global globalu
+    global globalv
 
    if ltzero(a):
      absa=bcminus(a)
@@ -833,9 +833,9 @@ def bcadd3(a,b,c):
 
 
 def  printmat1(matrix,m,n):
-"""  prints a matrix as a table with entries right justified  """
-   print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
-   for i in xrange(m):
+    """  prints a matrix as a table with entries right justified  """
+    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
+    for i in xrange(m):
        print "<TR>"
        for j in xrange(n):
            k=matrix[i][j]
@@ -945,8 +945,8 @@ global new_col_size
 
 # creates the submatrix from rows p1 to q1, columns p2 to q2+ 
 def submatrix(A,rows,p1,q1,p2,q2):
-global new_row_size
-global new_col_size
+    global new_row_size
+    global new_col_size
       B=row_submatrix(A,p1,q1)
       C=col_submatrix(B,rows,p2,q2)
       return(C)
@@ -1172,11 +1172,7 @@ def printlc(A,X,m):
              print "-b[i]"
           else:
              print "t"print "b[i]"
-          
-       
-     
- 
- return("1")
+       return("1")
 
 
 # lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+ 
@@ -1205,9 +1201,6 @@ global lcv
           for j in xrange(n):
               if neqzero(A[i][j]):
                  return("0")
-              
-          
-      
       return("1")
 
 
@@ -1318,8 +1311,6 @@ def printaxplusby(a,x,b,y):
       else:
          minusb=bcminus(b)
          print " - minusby"
-      
-   
    return
 
 
@@ -1348,7 +1339,6 @@ def printaxplusbyplusc(a,x,b,y,c):
 
 
 def gcd4(a,b,c,d):
-
   t=gcd(a,b)
   t=gcd(t,c)
   t=gcd(t,d)
