@@ -80,11 +80,11 @@
 
 def mod(a,b):
 	c=bcmod(a,b)
-	if a>="0":
+	if a>=0:
 		 return(c)
 	
-	if c=="0":
-		return("0")
+	if c==0:
+		return(0)
 	
 	temp=bcadd(c,b)
         return(temp)
@@ -93,7 +93,7 @@ def mod(a,b):
 def  abs_mod(a,b):
 """  This returns r=mod(a,b) if r <= b/2, otherwise r-b. """
    r=mod(a,b)
-   temp=bcmul("2",r)
+   temp=bcmul(2,r)
    if temp > b:
       r=bcsub(r,b)
    
@@ -101,13 +101,13 @@ def  abs_mod(a,b):
 
 
 def int(a,b):
-	if b<"0":
+	if b<0:
 	     a=bcsub(0,a)
 	     b=bcsub(0,b)
 	
 	c=bcdiv(a,b)
 	d=bcmod(a,b)
-	if d=="0" || a>"0":
+	if d==0 || a>0:
 		return(c)
 	else:
 		return(bcsub(c,1))
@@ -117,13 +117,13 @@ def int(a,b):
 def mpower(a,b,c):
 	x=mod(a,c)
 	y=b
-	z="1"
+	z=1
 	while(y)
-		while(bcmod(y,"2")==0)
-			y=bcdiv(y,"2")
+		while(bcmod(y,2)==0)
+			y=bcdiv(y,2)
 			x=bcmod(bcmul(x,x),c)
 		
-		y=bcsub(y,"1")
+		y=bcsub(y,1)
 		z=bcmod(bcmul(z,x),c)
 	
 	return(z)
@@ -133,21 +133,21 @@ def mpower(a,b,c):
 """  sign(a)=1,-1,0, according as a>0,a<0,a=0  """
 
 def sign(a):
-	if a>"0":
-		return("1")
+	if a>0:
+		return(1)
 	
-	if a<"0":
+	if a<0:
 		return("-1")
 	
-	return("0")
+	return(0)
 
 
 """  signn of an integer a  """
 """  signn(a)=1,-1, according as a>=0,a<0  """
 
 def signn(a):
-	if a>="0":
-		return("1")
+	if a>=0:
+		return(1)
 	else:
 		return("-1")
 	
@@ -155,7 +155,7 @@ def signn(a):
 
 def  bcabs(a):
 """  absolute value  """
-	if a>="0":
+	if a>=0:
 		return(a)
 	else:
 		h=bcsub(0,a)
@@ -169,7 +169,7 @@ def  bcabs(a):
 
 def gcd(m,n):
 	a=bcabs(m)         """  a=r[0]  """ 
-	if n=="0":
+	if n==0:
 	     return(a)
 	
         b=bcabs(n)         """  b=r[1]  """ 
@@ -186,40 +186,40 @@ def egcd(p,q):
 global multiplier1
 global multiplier2
 
-	if q=="0":
-		if p!="0":
+	if q==0:
+		if p!=0:
 			s=sign(p)
-			if s=="1":
-				multiplier1="1"
+			if s==1:
+				multiplier1=1
 			else:
 				multiplier1="-1"
 			
-			multiplier2="0"
+			multiplier2=0
 			return(bcabs(p))
 		else:
-			multiplier1="0"
-			multiplier2="0"
-			return("0")
+			multiplier1=0
+			multiplier2=0
+			return(0)
 		
 	
 	a=p
 	b=bcabs(q)
 	c=mod(a,b)
 	s=sign(q)
-	if c=="0":
-		if s=="1":
-			multiplier2="1"
+	if c==0:
+		if s==1:
+			multiplier2=1
 		else:
 			multiplier2="-1"
 		
-		multiplier1="0"
+		multiplier1=0
 		return(b)
 	
-	l1="1"
-	k1="0"
-	l2="0"
-	k2="1"
-	while(c!="0")
+	l1=1
+	k1=0
+	l2=0
+	k2=1
+	while(c!=0)
 		q=int(a,b)
 		a=b
 		b=c
@@ -235,7 +235,7 @@ global multiplier2
 	
 	multiplier1=k1
 	if s=="-1":
-		k2=bcsub("0",k2)
+		k2=bcsub(0,k2)
 	
 	multiplier2=k2
 	return(b)
@@ -266,25 +266,25 @@ def  printpoly(a,n):
 	if ezero(n):
 		print "a[0]"
 	else:
-	if neq(a[n],"1"):
+	if neq(a[n],1):
 	    if eq(a[n],"-1"):
 	       print "-"
 	    else:
 		print "a[n]"
 	    
 	
-	if n > "1":
+	if n > 1:
 	   print "x<sup>n</sup>"
 	else:
            print "x"
 	
-	d=bcsub(n,"1")
+	d=bcsub(n,1)
   	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
-		if a[i] > "1":
+		if a[i] > 1:
 		       print "+a[i]"
 	        
-		if eq(a[i],"1"):
+		if eq(a[i],1):
 		   if gtzero(i):
 		       print "+"
 		   
@@ -302,10 +302,10 @@ def  printpoly(a,n):
 		if a[i] < "-1":
 		       print "a[i]"
 	        
-		if i > "1":
+		if i > 1:
 	            print "x<sup>i</sup>"
 		
-		if eq(i,"1"):
+		if eq(i,1):
 		    print "x"
 		
             
@@ -318,25 +318,25 @@ def  printpolylambda(a,n):
 	if ezero(n):
 		print "a[0]"
 	else:
-	if neq(a[n],"1"):
+	if neq(a[n],1):
 	    if eq(a[n],"-1"):
 	       print "-"
 	    else:
 		print "a[n]"
 	    
 	
-	if n > "1":
+	if n > 1:
 	   print "&lambda<sup>n</sup>"
 	else:
            print "&lambda"
 	
-	d=bcsub(n,"1")
+	d=bcsub(n,1)
   	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
-		if a[i] > "1":
+		if a[i] > 1:
 		       print "+a[i]"
 	        
-		if eq(a[i],"1"):
+		if eq(a[i],1):
 		   if gtzero(i):
 		       print "+"
 		   
@@ -354,10 +354,10 @@ def  printpolylambda(a,n):
 		if a[i] < "-1":
 		       print "a[i]"
 	        
-		if i > "1":
+		if i > 1:
 	            print "&lambda<sup>i</sup>"
 		
-		if eq(i,"1"):
+		if eq(i,1):
 		    print "&lambda"
 		
             
@@ -368,9 +368,9 @@ def  printpolylambda(a,n):
 """  If n > 0, len(n) returns the number of base 10 digits of n  """
 
 def len(n):
-	i="0"
+	i=0
 	x=bcabs(n)
-	while(x!="0")
+	while(x!=0)
 		x=int(x,10)
 		i=bcadd(i,1)
 	
@@ -384,7 +384,7 @@ function ceiling(a,b):
            return(x)
         
 	else:
-           return(bcadd(x,"1"))
+           return(bcadd(x,1))
         
 
 
@@ -402,10 +402,10 @@ def  lcma(array,n):
           b[i]=array[i]
 	
 	for i in xrange(n - 1):
-		j=bcsub(i,"1")
+		j=bcsub(i,1)
 		b[i]=lcm(b[i],b[j])
 	
-	j=bcsub(i,"1")
+	j=bcsub(i,1)
 	return(b[j])
 
 
@@ -415,10 +415,10 @@ def  gcda(array,n):
           b[i]=array[i]
 	
 	for i in xrange(n - 1):
-		j=bcsub(i,"1")
+		j=bcsub(i,1)
 		b[i]=gcd(b[i],b[j])
 	
-	j=bcsub(i,"1")
+	j=bcsub(i,1)
 	return(b[j])
 
 
@@ -426,13 +426,13 @@ def  gcda(array,n):
   This performs the same def as bcpow(a,b):
 	x=a
 	y=b
-	z="1"
-	while(bccomp(y,"0")>0)
-		while(bccomp(bcmod(y,"2"),"0")==0)
-			y=bcdiv(y,"2")
+	z=1
+	while(bccomp(y,0)>0)
+		while(bccomp(bcmod(y,2),0)==0)
+			y=bcdiv(y,2)
 			x=bcmul(x,x)
 		
-		y=bcsub(y,"1")
+		y=bcsub(y,1)
 		z=bcmul(z,x)
 	
 	return(z)
@@ -446,8 +446,8 @@ global modulus
 global multiplier1
 	a=egcd(m,n)
 	temp=bcmod(p,a)
-	if bccomp(temp,"0")!=0:
-		return("0")
+	if bccomp(temp,0)!=0:
+		return(0)
 	
 	b=multiplier1
 	y=bcdiv(n,a)
@@ -457,7 +457,7 @@ global multiplier1
 	modulus=y
 	for(t=0t<at += 1)print " ",z+ty,","
 	print " mod ",n,"\n" """
-	return("1")
+	return(1)
 
 
 def  cong1(m,p,n):
@@ -487,8 +487,8 @@ global multiplier1
 global multiplier2
 
 	d = egcd(m,n)
-	if mod(bcsub(a,b),d)!="0":
-		return("0")
+	if mod(bcsub(a,b),d)!=0:
+		return(0)
 	
 	x= bcdiv(m,d)y=bcdiv(n,d)
 	z=bcdiv(bcmul(m,n),d)
@@ -499,7 +499,7 @@ global multiplier2
 	c=mod(bcadd(temp1,temp2),z)
 	chinese_modulus=z
 	chinese_solution=c
-	return("1")
+	return(1)
 
 
 def chinesea(a,m,n):
@@ -509,134 +509,134 @@ global chinese_modulus
         chinese_solution=a[0]
         for i in xrange(n - 1):
                 y=chinese2(a[i],chinese_solution,m[i],chinese_modulus)
-                if y=="0":
-                        return("0")
+                if y==0:
+                        return(0)
                 
         
-        return("1")
+        return(1)
 
 
 def  inverse(a,m):
     """  Inverse of a (mod m)  """
-	t=cong1(a,"1",m)
+	t=cong1(a,1,m)
 	return(t)
 
 
 def lezero(a):
-"""  lezero(a) returns 1 if a<="0", "0" otherwise.  """
-   t=bccomp(a,"0")
+"""  lezero(a) returns 1 if a<=0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t<=0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def gtzero(a):
-    """  gtzero(a) returns 1 if a>"0", "0" otherwise.  """
-   t=bccomp(a,"0")
+    """  gtzero(a) returns 1 if a>0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t>0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def ltzero(a):
-    """  ltzero(a) returns 1 if a<"0", "0" otherwise.  """
-   t=bccomp(a,"0")
+    """  ltzero(a) returns 1 if a<0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t<0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def gezero(a):
-    """  gezero(a) returns 1 if a>="0", "0" otherwise.  """
-   t=bccomp(a,"0")
+    """  gezero(a) returns 1 if a>=0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t>=0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 def ezero(a):
-"""  ezero(a) returns 1 if a="0", "0" otherwise.  """
-   t=bccomp(a,"0")
+"""  ezero(a) returns 1 if a=0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t==0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def a != 0:
-    """  a != 0 returns 1 if a != "0", "0" otherwise.  """
-   t=bccomp(a,"0")
+    """  a != 0 returns 1 if a != 0, 0 otherwise.  """
+   t=bccomp(a,0)
    if t!=0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def a == b:
-    """  a == b returns 1 if a=b, "0" otherwise.  """
+    """  a == b returns 1 if a=b, 0 otherwise.  """
    t=bccomp(a,b)
    if t==0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def a != b:
-    """  a != b returns 1 if a != b, "0" otherwise.  """
+    """  a != b returns 1 if a != b, 0 otherwise.  """
    t=bccomp(a,b)
    if t==0:
-      return("0")
+      return(0)
    else:
-      return("1")
+      return(1)
    
 
 
 def a > b:
-    """  a > b returns 1 if a > b, "0" otherwise.  """
+    """  a > b returns 1 if a > b, 0 otherwise.  """
    t=bccomp(a,b)
    if t>0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 def a < b:
-    """  a < b returns 1 if a < b, "0" otherwise.  """
+    """  a < b returns 1 if a < b, 0 otherwise.  """
    t=bccomp(a,b)
    if t<0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
 defa >= b:
-    """ a >= b returns 1 if a >= b, "0" otherwise.  """
+    """ a >= b returns 1 if a >= b, 0 otherwise.  """
    t=bccomp(a,b)
    if t>=0:
-      return("1")
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 def a <= b:
-    """  a <= b returns 1 if a <= b, "0" otherwise.  """
+    """  a <= b returns 1 if a <= b, 0 otherwise.  """
    t=bccomp(a,b)
-   if t<="0":
-      return("1")
+   if t<=0:
+      return(1)
    else:
-      return("0")
+      return(0)
    
 
 
@@ -648,20 +648,20 @@ global zed2
         x1=a
         x2=b
         y=n
-        zed1="1"
-        zed2="0"
+        zed1=1
+        zed2=0
         while(gtzero(y))
-                while(ezero(bcmod(y,"2")))
-                        y=bcdiv(y,"2")
+                while(ezero(bcmod(y,2)))
+                        y=bcdiv(y,2)
                         temp=x1
                         temp1=bcmul(x2,x2)
                         temp2=bcmul(x1,x1)
                         temp3=bcmul(dd,temp1)
                         x1=bcadd(temp2,temp3)
                         temp4=bcmul(temp,x2)
-                        x2=bcmul("2",temp4)
+                        x2=bcmul(2,temp4)
                 
-                y=bcsub(y,"1")
+                y=bcsub(y,1)
                 temp=zed1
                 temp1=bcmul(zed2,x2)
                 temp2=bcmul(zed1,x1)
@@ -677,7 +677,7 @@ global zed2
 
 def bcminus(a):
 
-   t=bcsub("0",a)
+   t=bcsub(0,a)
     return(t)
 
 
@@ -689,7 +689,7 @@ def gcd3(a,b,c):
 
 
 def falling_factorial(m,n):
-    product="1"
+    product=1
     for i in xrange(m - 1, n):
          product=bcmul(product,i)
     
@@ -705,9 +705,9 @@ def print_matrix(a,b,c,d):
 
 def sort_[a,n]:
 global sorted_array
-   t=bcsub(n,"1")
+   t=bcsub(n,1)
    for i in xrange(t):
-      temp1=bcadd(i,"1")
+      temp1=bcadd(i,1)
       for j in xrange(temp1, n):
          if a[i] > a[j]:
             temp=a[i]
@@ -729,13 +729,13 @@ def  bezout(a,b):
     """
     global globalu
     global globalv
-   globalu="1"
+   globalu=1
    d=a
    if ezero(b):
-      globalv="0"
+      globalv=0
       return(a)
    else:
-      v1="0"
+      v1=0
       v3=b
    
    while(gtzero(v3))
@@ -781,11 +781,11 @@ def  bezout1(a,b):
 
 
 def parity(a):
-  r=bcmod(a,"2")
+  r=bcmod(a,2)
   if ezero(r):
-    return("0")
+    return(0)
   else:
-    return("1")
+    return(1)
   
 
 
@@ -800,9 +800,9 @@ def  lnearint(a,b):
         
         x=bcmul(b,y)
         z=bcsub(a,x)
-        z=bcmul("2",z)
+        z=bcmul(2,z)
         if z > b:
-          y=bcadd(y,"1")
+          y=bcadd(y,1)
         
         return(y)
 
@@ -882,9 +882,9 @@ def printmatrix2(matrix,m,n):
    for i in xrange(m):
        for j in xrange(m):
            if i == j:
-              P[i][j]="1"
+              P[i][j]=1
            else:
-              P[i][j]="0"
+              P[i][j]=0
            
         
    
@@ -916,9 +916,9 @@ def transpose1(&A,&m,&n):
 # creates the submatrix from rows p to q+ 
 def row_submatrix(A,p,q):
 global new_row_size
-    r=bcsub(p,"1")
+    r=bcsub(p,1)
     s=bcsub(q,p)
-    s=bcadd(s,"1")
+    s=bcadd(s,1)
     new_row_size=s
     for i in xrange(s):
         z=bcadd(i,r)
@@ -930,9 +930,9 @@ global new_row_size
 # creates the submatrix from columns p to q+ 
 def col_submatrix(A,rows,p,q):
 global new_col_size
-    r=bcsub(p,"1")
+    r=bcsub(p,1)
     s=bcsub(q,p)
-    s=bcadd(s,"1")
+    s=bcadd(s,1)
     new_col_size=s
     for j in xrange(s):
         z=bcadd(j,r)
@@ -971,11 +971,11 @@ def coliminusqcolj(&A,m,i,q,j):
 
 def delete_row(&B,i,&m):
    for l in xrange(i, m):
-       lplus1=bcadd(l,"1")
+       lplus1=bcadd(l,1)
        temp=B[lplus1]
        B[l]=temp
    
-   m=bcsub(m,"1")
+   m=bcsub(m,1)
    return
 
 
@@ -1000,7 +1000,7 @@ def swap_cols(&P,m,j,k):
 
 
 def dotproduct(a,b,n):
-   sum="0"
+   sum=0
    for j in xrange(n):
        temp=bcmul(a[j],b[j])
        sum=bcadd(sum,temp)
@@ -1011,7 +1011,7 @@ def dotproduct(a,b,n):
 def multmat(A,B,m,n,p):
    for i in xrange(m):
        for k in xrange(p):
-           sum="0"
+           sum=0
            for j in xrange(n):
                t=bcmul(A[i][j],B[j][k])
                sum=bcadd(sum,t)
@@ -1035,16 +1035,16 @@ def matrixperm(&A,a,m):
 # outputs 1 or 0 according as A=B+ 
 def equalmat(A,B,rowsA,colsA,rowsB,colsB):
    if rowsA != rowsB || colsA != colsB:
-      return("0")
+      return(0)
    
    for i in xrange(rowsA):
        for j in xrange(colsA):
            if neq(A[i][j],B[i][j]):
-              return("0")
+              return(0)
            
        
    
-   return("1")
+   return(1)
 
 def abpluscd(a,b,c,d):
    s=bcmul(a,b)
@@ -1132,16 +1132,16 @@ def comparer(a,b,c,d):
      return("-1")
   
   if gtzero(t):
-     return("1")
+     return(1)
   
-  return("0")
+  return(0)
 
 
 def printlc(A,X,m):
- flag="0"
+ flag=0
  s=zero[X,m]
  if ezero(s):
-    return("0")
+    return(0)
  
  for i in xrange(m):
      t=X[i]
@@ -1149,19 +1149,19 @@ def printlc(A,X,m):
         continue
      
      if ezero(flag):
-       if neq(t,"1") and neq(t,"-1"):
+       if neq(t,1) and neq(t,"-1"):
           print "t"print "b[i]"
        
        if eq(t,"-1"):
           print "-b[i]"
        
-       if eq(t,"1"):
+       if eq(t,1):
           print "b[i]"
        
-       flag="1"
+       flag=1
      else:
        if gtzero(t):
-          if eq(t,"1"):
+          if eq(t,1):
              print "+b[i]"
           else:
              print "+t"print "b[i]"
@@ -1172,14 +1172,14 @@ def printlc(A,X,m):
              print "-b[i]"
           else:
              print "t"print "b[i]"
-       return("1")
+       return(1)
 
 
 # lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+ 
 def lcasvector(A,X,m,n):
 global lcv
    for j in xrange(n):
-      sum="0"
+      sum=0
       for i in xrange(m):
          t=bcmul(X[i],A[i][j])
          sum=bcadd(sum,t)
@@ -1200,8 +1200,8 @@ global lcv
       for i in xrange(m):
           for j in xrange(n):
               if neqzero(A[i][j]):
-                 return("0")
-      return("1")
+                 return(0)
+      return(1)
 
 
 def bcmul3(a,b,c):
@@ -1211,29 +1211,29 @@ def bcmul3(a,b,c):
 
 
 def pparity(e):
-   t=bcmod(e,"2")
-   if eq(t,"1"):
+   t=bcmod(e,2)
+   if eq(t,1):
      return("-1")
    else:
-     return("1")
+     return(1)
    
 
 
 def printbinaryform(a,b,c,x,y):
-	if gt(a,"1") || lt(a,"-1"):
+	if gt(a,1) || lt(a,"-1"):
            print"a&#8203x<sup>2</sup>"
         
-        if eq(a,"1"):
+        if eq(a,1):
            print"x<sup>2</sup>"
         
         if eq(a,"-1"):
            print"-x<sup>2</sup>"
         
 	if b != 0:
-	   if b > "1":
+	   if b > 1:
               print"+b&#8203xy"
            
-	   if eq(b,"1"):
+	   if eq(b,1):
               print"+xy"
            
 	   if eq(b,"-1"):
@@ -1244,13 +1244,13 @@ def printbinaryform(a,b,c,x,y):
            
         
 	if c != 0:
-	   if c > "1":
+	   if c > 1:
               print"+c&#8203y<sup>2</sup>"
            
 	   if c < "-1":
               print"c&#8203y<sup>2</sup>"
            
-           if eq(c,"1"):
+           if eq(c,1):
               print"+y<sup>2</sup>"
            
            if eq(c,"-1"):
@@ -1291,7 +1291,7 @@ def bcadd6(a,b,c,d,e,f):
 
 
 def printaxplusby(a,x,b,y):
-   if eq(a,"1"):
+   if eq(a,1):
       print "x"
    else:
       print "-x"
@@ -1299,7 +1299,7 @@ def printaxplusby(a,x,b,y):
       print "ax"
    
    if gtzero(b):
-      if eq(b,"1"):
+      if eq(b,1):
          print " + y"
       else:
          print " + by"

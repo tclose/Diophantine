@@ -12,11 +12,11 @@ def cholesky(A,m): # A is positive definite mxm
   Qnum=A
   for i in xrange(m):
       for j in xrange(m):
-          Qden[i][j]="1"
+          Qden[i][j]=1
       
   
   for i in xrange(1, m):
-     iplus1=bcadd(i,"1")
+     iplus1=bcadd(i,1)
      for j in xrange(i, m):
          Qnum[j][i]=Qnum[i][j]
          Qden[j][i]=Qden[i][j]
@@ -70,13 +70,13 @@ global multden
    x=bcdiv(a,b)
    x=bcsqrt(x)
    answer=bcadd(x,y)
-   subr(c,d,y,"1")
-   subr("1","1",subnum,subden)
-   addr(x,"1",subnum,subden)
+   subr(c,d,y,1)
+   subr(1,1,subnum,subden)
+   addr(x,1,subnum,subden)
    multr(addnum,addden,addnum,addden)
    t=comparer(multnum,multden,a,b)
-   if le(t,"0"):
-      answer=bcadd(answer,"1")
+   if le(t,0):
+      answer=bcadd(answer,1)
    
    return(answer)
 
@@ -94,13 +94,13 @@ global rationum
 global ratioden
 global lcv
 
-    count="0"
-    min_count="0"
+    count=0
+    min_count=0
 
     print "matrix A:"
     printmat1(A,m,n)
     print "<br>\n"
-    nplus1=bcadd(n,"1")
+    nplus1=bcadd(n,1)
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -108,8 +108,8 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=bcsub(m,"1")
-    if mminus1 > "1":
+    mminus1=bcsub(m,1)
+    if mminus1 > 1:
        print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     else:
        print "&#8466 is the lattice spanned by the first row of A<br>\n"
@@ -126,14 +126,14 @@ global lcv
     Qden=choleskyden
     QQnum=transpose(snum,m,m)
     QQden=transpose(sden,m,m)
-    m=bcsub(m,"1")
+    m=bcsub(m,1)
     for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
     
 
-    Cnum="0"
-    Cden="1"
+    Cnum=0
+    Cden=1
     for i in xrange(m):
         multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
         multr(multnum,multden,Qnum[i][i],Qden[i][i])
@@ -144,8 +144,8 @@ global lcv
     i=m
     Tnum[m]=Cnum
     Tden[m]=Cden
-    Unum[m]="0"
-    Uden[m]="1"
+    Unum[m]=0
+    Uden[m]=1
     while(1)
        ratior(Tnum[i],Tden[i],Qnum[i][i],Qden[i][i])
        Znum=rationum
@@ -155,14 +155,14 @@ global lcv
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=bcminus(temp2)
-       x[i]=bcsub(temp3,"1")
-       while("1")
-          x[i]=bcadd(x[i],"1")
+       x[i]=bcsub(temp3,1)
+       while(1)
+          x[i]=bcadd(x[i],1)
           if le(x[i],UB[i]):
-              if eq(i,"1"):
+              if eq(i,1):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
-                   count=bcadd(count,"1")
+                   count=bcadd(count,1)
                #  print "X[count]="print[x,m]
                    lcva[count]=lcv
                #  print "lcv[count]="print[lcv,n]
@@ -178,13 +178,13 @@ global lcv
                    lengtharray[count]=l
                    continue
               else:
-                i=bcsub(i,"1")
+                i=bcsub(i,1)
                 # now update U[i]
-                sumnum="0"
-                sumden="1"
-                iplus1=bcadd(i,"1")
+                sumnum=0
+                sumden=1
+                iplus1=bcadd(i,1)
                 for j in xrange(i, m):
-                    multr(Qnum[i][j],Qden[i][j],x[j],"1")
+                    multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
                     sumnum=addnum
                     sumden=addden
@@ -192,7 +192,7 @@ global lcv
                 Unum[i]=sumnum
                 Uden[i]=sumden
                 # now update T[i]
-                addr(x[iplus1],"1",Unum[iplus1],Uden[iplus1])
+                addr(x[iplus1],1,Unum[iplus1],Uden[iplus1])
                 subr(addnum,addden,Nnum[iplus1],Nden[iplus1])
                 multr(subnum,subden,subnum,subden)
                 multr(Qnum[iplus1][iplus1],Qden[iplus1][iplus1],multnum,multden)
@@ -202,7 +202,7 @@ global lcv
                 break
               
           else:
-             i=bcadd(i,"1")
+             i=bcadd(i,1)
              if i > m:
                     print "Here are the X[k] &isin &#8466, P - X[k], ||P-X[k]||<sup>2</sup> such that ||P-X[k]||<sup>2</sup> &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
@@ -240,11 +240,11 @@ global lcv
                            print[lcva[k],n]
                            print "</TD>"
                            print "</TR>\n"
-                           min_count=bcadd(min_count,"1")
+                           min_count=bcadd(min_count,1)
                         
                     
                     print "</TABLE>\n"
-                    if eq(min_count,"1"):
+                    if eq(min_count,1):
                        print " is the closest vector of &#8466 to P, with shortest distance squared min_length<br>\n"
                     else:
                        print " are the closest vectors of &#8466 to P, with shortest distance squared min_length<br>\n"
@@ -258,7 +258,7 @@ global lcv
 
 
 def lengthsquared(a,n):
-   sum="0"
+   sum=0
    for i in xrange(n):
       temp=bcmul(a[i],a[i])
       sum=bcadd(sum,temp)
@@ -268,10 +268,10 @@ def lengthsquared(a,n):
 
 # returns 0 if all of a[i] are zero, otherwise 1+ 
 def zero[a,n]:
-  flag="0"
+  flag=0
   for i in xrange(n):
       if neqzero(a[i]):
-        flag="1"
+        flag=1
         break
       
   

@@ -24,19 +24,19 @@ def  lllhermite(G,m,n,m1,n1):
    for i in xrange(m):
        for j in xrange(m):
            if i == j:
-              B[i][j]="1"
+              B[i][j]=1
            else:
-              B[i][j]="0"
+              B[i][j]=0
            
         
    
    for r in xrange(1, m):
        for s in xrange(r - 1):
-           L[r][s]="0"
+           L[r][s]=0
        
    
    for i in xrange(m + 1):
-        D[i]="1"
+        D[i]=1
    
    for i in xrange(m):
        for j in xrange(n):
@@ -45,18 +45,18 @@ def  lllhermite(G,m,n,m1,n1):
    
 
    flag=flagcol(A,m,n)
-   if eq(flag,"1"):
+   if eq(flag,1):
       B[m][m]="-1"
       for j in xrange(n):
           A[m][j]=bcminus(A[m][j])
       
    
-   k="2"
-   nplus1=bcadd(n,"1")
+   k=2
+   nplus1=bcadd(n,1)
    while(k <= m)
-         kminus1=bcsub(k,"1")
+         kminus1=bcsub(k,1)
          reduce2(k,kminus1,m,n,D)
-         kminus2=bcsub(k,"2")
+         kminus2=bcsub(k,2)
          minim=minimum(col2,n)
          temp1=bcmul(D[kminus2],D[k])
          temp2=bcmul(L[k][kminus1],L[k][kminus1])
@@ -66,14 +66,14 @@ def  lllhermite(G,m,n,m1,n1):
          v=bcmul(m1,temp1)
          if col1 <= minim || (col1 == col2 and col1 == nplus1 and u < v):
             swap2(k,m,n)
-            if k > "2":
+            if k > 2:
                k=kminus1
             
          else:
             for i in xrange(kminus2 - 1, 0, -1):
                 reduce2(k,i,m,n,D)
             
-            k=bcadd(k,"1")
+            k=bcadd(k,1)
          
    
    for i in xrange(m):
@@ -94,7 +94,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    rank=bcsub(m,i)
    #print "rank = rank<br>\n"
-   mplus1=bcadd(m,"1")
+   mplus1=bcadd(m,1)
    for i in xrange(m):
         for j in xrange(n):
            k=bcsub(mplus1,i)
@@ -107,15 +107,15 @@ def  lllhermite(G,m,n,m1,n1):
            unimodular_matrix[i][j]=B[k][j]
        
    
-#   rankplus1=bcadd(rank,"1")
+#   rankplus1=bcadd(rank,1)
 #   for i in xrange(rank, m):
  #      for j in xrange(n):
-  #         hnf[i][j]="0"
+  #         hnf[i][j]=0
    #    
  #  
  #  for i in xrange(rank, m):
   #     for j in xrange(n):
-   #        hnf[i][j]="0"
+   #        hnf[i][j]=0
     #   
  #  
    return
@@ -127,34 +127,34 @@ def  flagcol(A,m,n):
       returns 1 if the first nonzero column j of A contains only one nonzero entry, which is negative+ 
       This assumes A is a nonzero matrix with at least two rows+ 
     """
-    flag="0"
+    flag=0
     for j in xrange(n):
        for i in xrange(m):
            if(neqzero(A[i][j]))#found the first column with a nonzero elt, which is in row i
-              flag="1"
+              flag=1
               break
            
-       if eq(flag,"1"):
+       if eq(flag,1):
           break
        
-    iplus1=bcadd(i,"1")
+    iplus1=bcadd(i,1)
     for k in xrange(i, m):
        if neqzero(A[k][j]:)
-           return("0")
+           return(0)
 
     if(gtzero(A[i][j]))# A[i][j] is the only elt in column j and is positive
-      return("0")
+      return(0)
     else:# A[i][j] is the only elt in column j and is negative
-      return("1")
+      return(1)
 
     #   found:
     #  if i < m:
-    #    return("0")
+    #    return(0)
     #else:
     # if ltzero(A[m][j]):
-     #   return("1")
+     #   return(1)
     # else:
-     #   return("0")
+     #   return(0)
      #
      #
 
@@ -193,11 +193,11 @@ global A
       q=int(A[k][col1],A[i][col1])
    else:
       t=bcabs(L[k][i])
-      t=bcmul("2",t)
+      t=bcmul(2,t)
       if t > D[i]:
         q=lnearint(L[k][i],D[i])
       else:
-        q="0"
+        q=0
       
    
    if q != 0:
@@ -235,7 +235,7 @@ global L
 global A
 global D
    
-   kminus1=bcsub(k,"1")
+   kminus1=bcsub(k,1)
    #print "Row k <. Row kminus1<br>\n"
    for j in xrange(n):
        temp=A[k][j]
@@ -247,13 +247,13 @@ global D
        B[k][j]=B[kminus1][j]
        B[kminus1][j]=temp
    
-   kminus2=bcsub(k,"2")
+   kminus2=bcsub(k,2)
    for j in xrange(kminus2):
        temp=L[k][j]
        L[k][j]=L[kminus1][j]
        L[kminus1][j]=temp
    
-   kplus1=bcadd(k,"1")
+   kplus1=bcadd(k,1)
    for i in xrange(k, m):
        temp1=bcmul(L[i][kminus1],D[k])
        temp2=bcmul(L[i][k],L[k][kminus1])
@@ -283,7 +283,7 @@ def  zero_row_test(matrix,n,i):
          return(j)
        
     
-    return("0")
+    return(0)
 
 
 def  axb(Ab,m,n,m1,n1):
@@ -294,17 +294,17 @@ def  axb(Ab,m,n,m1,n1):
 global hnf
 global unimodular_matrix
 global rank
-    mplus1=bcadd(m,"1")
+    mplus1=bcadd(m,1)
     for i in xrange(mplus1):
         for j in xrange(n):
                G[i][j]=Ab[i][j]
         
     
-    nplus1=bcadd(n,"1")
+    nplus1=bcadd(n,1)
     for i in xrange(m):
-        G[i][nplus1]="0"
+        G[i][nplus1]=0
     
-    G[mplus1][nplus1]="1"
+    G[mplus1][nplus1]=1
     print "G="
     printmat1(G,mplus1,nplus1)
     print "<br>\n"
@@ -316,23 +316,23 @@ global rank
     printmat1(unimodular_matrix,mplus1,mplus1)
     print "is a unimodular matrix such that PG = HNF(G)"
     print "<br>\n"
-    flag="0"
+    flag=0
     for i in xrange(rank - 1):
         if neqzero(hnf[i][nplus1]):
-           flag="1"
+           flag=1
            break
         
     
-    flag1="0"
+    flag1=0
     for j in xrange(n):
         if neqzero(hnf[rank][j]):
-           flag1="1"
+           flag1=1
            break
         
     
     #t=hnf[rank][nplus1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
     #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if eq(flag,"0") and eq(hnf[rank][nplus1],"1") and eq(flag1,"0"):
+    if eq(flag,0) and eq(hnf[rank][nplus1],1) and eq(flag1,0):
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
         for j in xrange(m):
           y[j]=bcminus(unimodular_matrix[rank][j])
@@ -352,13 +352,13 @@ global rank
                    basis[i][j]=unimodular_matrix[rankplusi][j]
                
            
-           if eq(nullity,"1"):
+           if eq(nullity,1):
               print "the row: "
            else:
               print "the rows: "
            
            printmat1(basis,lim,m)
-           if eq(nullity,"1"):
+           if eq(nullity,1):
               print "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n"
            else:
               print "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n"
@@ -369,7 +369,7 @@ global rank
        return
     
     # joining basis and y
-    limplus1=bcadd(lim,"1")
+    limplus1=bcadd(lim,1)
     for j in xrange(m):
         basis[limplus1][j]=y[j]
     
@@ -390,13 +390,13 @@ global rationum
 global ratioden
 global lcv
 
-    count="0"
-    min_count="0"
+    count=0
+    min_count=0
 
     #print "matrix A:"
     #printmat1(A,m,n)
     #print "<br>\n"
-    nplus1=bcadd(n,"1")
+    nplus1=bcadd(n,1)
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -404,8 +404,8 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=bcsub(m,"1")
-    #if mminus1 > "1":
+    mminus1=bcsub(m,1)
+    #if mminus1 > 1:
        #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     #else:
        #print "&#8466 is the lattice spanned by the first row of A<br>\n"
@@ -422,14 +422,14 @@ global lcv
     Qden=choleskyden
     QQnum=transpose(Qnum,m,m)
     QQden=transpose(Qden,m,m)
-    m=bcsub(m,"1")
+    m=bcsub(m,1)
     for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
     
 
-    Cnum="0"
-    Cden="1"
+    Cnum=0
+    Cden=1
     for i in xrange(m):
         multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
         multr(multnum,multden,Qnum[i][i],Qden[i][i])
@@ -440,8 +440,8 @@ global lcv
     i=m
     Tnum[m]=Cnum
     Tden[m]=Cden
-    Unum[m]="0"
-    Uden[m]="1"
+    Unum[m]=0
+    Uden[m]=1
     while(1)
        ratior(Tnum[i],Tden[i],Qnum[i][i],Qden[i][i])
        Znum=rationum
@@ -451,14 +451,14 @@ global lcv
        subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=bcminus(temp2)
-       x[i]=bcsub(temp3,"1")
-       while("1")
-          x[i]=bcadd(x[i],"1")
+       x[i]=bcsub(temp3,1)
+       while(1)
+          x[i]=bcadd(x[i],1)
           if le(x[i],UB[i]):
-              if eq(i,"1"):
+              if eq(i,1):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
-                   count=bcadd(count,"1")
+                   count=bcadd(count,1)
                #  print "X[count]="print[x,m]
                    lcva[count]=lcv
                #  print "lcv[count]="print[lcv,n]
@@ -474,13 +474,13 @@ global lcv
                    lengtharray[count]=l
                    continue
               else:
-                i=bcsub(i,"1")
+                i=bcsub(i,1)
                 # now update U[i]
-                sumnum="0"
-                sumden="1"
-                iplus1=bcadd(i,"1")
+                sumnum=0
+                sumden=1
+                iplus1=bcadd(i,1)
                 for j in xrange(i, m):
-                    multr(Qnum[i][j],Qden[i][j],x[j],"1")
+                    multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
                     sumnum=addnum
                     sumden=addden
@@ -488,7 +488,7 @@ global lcv
                 Unum[i]=sumnum
                 Uden[i]=sumden
                 # now update T[i]
-                addr(x[iplus1],"1",Unum[iplus1],Uden[iplus1])
+                addr(x[iplus1],1,Unum[iplus1],Uden[iplus1])
                 subr(addnum,addden,Nnum[iplus1],Nden[iplus1])
                 multr(subnum,subden,subnum,subden)
                 multr(Qnum[iplus1][iplus1],Qden[iplus1][iplus1],multnum,multden)
@@ -498,7 +498,7 @@ global lcv
                 break
               
           else:
-             i=bcadd(i,"1")
+             i=bcadd(i,1)
              if i > m:
                     print "Here are the solution vectors with length squared &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
@@ -523,11 +523,11 @@ global lcv
                            print[multiplier_vector[k],n]
                            print "</TD>"
                            print "</TR>\n"
-                           min_count=bcadd(min_count,"1")
+                           min_count=bcadd(min_count,1)
                         
                     
                     print "</TABLE>\n"
-                    if eq(min_count,"1"):
+                    if eq(min_count,1):
                        print " is the shortest solution vector, length squared min_length<br>\n"
                     else:
                        print " are the shortest solution vectors, length squared min_length<br>\n"
