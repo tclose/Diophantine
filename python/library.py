@@ -7,7 +7,7 @@
   mpower(a,b,c)
   sign(a)
   bcmul3(a,b,c)
-  bcabs(a)
+  abs(a)
   gcd(m,n)
   gcda(m,n)
   egcd(p,q)
@@ -153,7 +153,7 @@ def signn(a):
 	
 
 
-def  bcabs(a):
+def  abs(a):
 """  absolute value  """
 	if a>=0:
 		return(a)
@@ -168,11 +168,11 @@ def  bcabs(a):
 """  We use gcd(m,n)=gcd(|m|,|n|)  """
 
 def gcd(m,n):
-	a=bcabs(m)         """  a=r[0]  """ 
+	a=abs(m)         """  a=r[0]  """ 
 	if n==0:
 	     return(a)
 	
-        b=bcabs(n)         """  b=r[1]  """ 
+        b=abs(n)         """  b=r[1]  """ 
         c=mod(a,b)        """  c=r[2]=r[0] mod(r[1])  """
         while(c)
 		a=b
@@ -195,7 +195,7 @@ global multiplier2
 				multiplier1="-1"
 			
 			multiplier2=0
-			return(bcabs(p))
+			return(abs(p))
 		else:
 			multiplier1=0
 			multiplier2=0
@@ -203,7 +203,7 @@ global multiplier2
 		
 	
 	a=p
-	b=bcabs(q)
+	b=abs(q)
 	c=mod(a,b)
 	s=sign(q)
 	if c==0:
@@ -369,7 +369,7 @@ def  printpolylambda(a,n):
 
 def len(n):
 	i=0
-	x=bcabs(n)
+	x=abs(n)
 	while(x!=0)
 		x=int(x,10)
 		i=i + 1

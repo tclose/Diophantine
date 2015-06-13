@@ -192,7 +192,7 @@ global A
    if col1 <= n:
       q=int(A[k][col1],A[i][col1])
    else:
-      t=bcabs(L[k][i])
+      t=abs(L[k][i])
       t=2 * t
       if t > D[i]:
         q=lnearint(L[k][i],D[i])
