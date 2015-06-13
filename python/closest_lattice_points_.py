@@ -10,8 +10,8 @@ def cholesky(A,m): # A is positive definite mxm
   global choleskyden
 
   Qnum=A
-  for(i=1le(i,m)i=bcadd(i,"1"))
-      for(j=1le(j,m)j=bcadd(j,"1"))
+  for i in xrange(m):
+      for j in xrange(m):
           Qden[i][j]="1"
       
   
@@ -35,8 +35,8 @@ def cholesky(A,m): # A is positive definite mxm
          
      
   
-  for(i=1le(i,m)i=bcadd(i,"1"))
-      for(j=1le(j,m)j=bcadd(j,"1"))
+  for i in xrange(m):
+      for j in xrange(m):
           choleskynum[i][j]=Qnum[i][j]
           choleskyden[i][j]=Qden[i][j]
       
