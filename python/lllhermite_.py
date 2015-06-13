@@ -35,7 +35,7 @@ def  lllhermite(G,m,n,m1,n1):
            L[r][s]="0"
        
    
-   for(i="0"le(i,m)i=bcadd(i,"1"))
+   for i in xrange(m + 1):
         D[i]="1"
    
    for i in xrange(m):
