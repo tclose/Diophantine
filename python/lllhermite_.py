@@ -200,7 +200,7 @@ global A
         q="0"
       
    
-   if neqzero(q):
+   if q != 0:
 #print "Row k . Row k - q &times Row i<br>\n"
       for j in xrange(n):
           temp=bcmul(q,A[i][j])

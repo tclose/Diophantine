@@ -32,7 +32,7 @@
   a > b
   a != b
   a == b
-  neqzero(a)
+  a != 0
   ezero(a)
   gezero(a)
   lezero(a)
@@ -571,8 +571,8 @@ def ezero(a):
    
 
 
-def neqzero(a):
-    """  neqzero(a) returns 1 if a != "0", "0" otherwise.  """
+def a != 0:
+    """  a != 0 returns 1 if a != "0", "0" otherwise.  """
    t=bccomp(a,"0")
    if t!=0:
       return("1")
@@ -1229,7 +1229,7 @@ def printbinaryform(a,b,c,x,y):
         if eq(a,"-1"):
            print"-x<sup>2</sup>"
         
-	if neqzero(b):
+	if b != 0:
 	   if b > "1":
               print"+b&#8203xy"
            
@@ -1243,7 +1243,7 @@ def printbinaryform(a,b,c,x,y):
               print"b&#8203xy"
            
         
-	if neqzero(c):
+	if c != 0:
 	   if c > "1":
               print"+c&#8203y<sup>2</sup>"
            
