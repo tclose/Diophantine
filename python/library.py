@@ -35,7 +35,7 @@
   a != 0
   ezero(a)
   a >= 0
-  lezero(a)
+  a <= 0
   a < 0
   a > 0
   gcd3(a,b,c)
@@ -522,8 +522,8 @@ def  inverse(a,m):
 	return(t)
 
 
-def lezero(a):
-"""  lezero(a) returns 1 if a<=0, 0 otherwise.  """
+def a <= 0:
+"""  a <= 0 returns 1 if a<=0, 0 otherwise.  """
    t=bccomp(a,0)
    if t<=0:
       return(1)
