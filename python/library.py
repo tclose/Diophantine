@@ -105,7 +105,7 @@ def int(a,b):
 	     a=0 - a
 	     b=0 - b
 	
-	c=bcdiv(a,b)
+	c=a / b
 	d=bcmod(a,b)
 	if d==0 || a>0:
 		return(c)
@@ -120,7 +120,7 @@ def mpower(a,b,c):
 	z=1
 	while(y)
 		while(bcmod(y,2)==0)
-			y=bcdiv(y,2)
+			y=y / 2
 			x=bcmod(x * x,c)
 		
 		y=y - 1
@@ -392,7 +392,7 @@ def  lcm(a,b):
 """  lcm(a,b)  """
 	g=gcd(a,b)
 	h=a * b
-	k=bcdiv(h,g)
+	k=h / g
 	return(k)
 
 
@@ -429,7 +429,7 @@ def  gcda(array,n):
 	z=1
 	while(bccomp(y,0)>0)
 		while(bccomp(bcmod(y,2),0)==0)
-			y=bcdiv(y,2)
+			y=y / 2
 			x=x * x
 		
 		y=y - 1
@@ -450,7 +450,7 @@ global multiplier1
 		return(0)
 	
 	b=multiplier1
-	y=bcdiv(n,a)
+	y=n / a
 	p=int(p,a)
 	temp1=b * p
 	solution=mod(temp1,y)
@@ -466,7 +466,7 @@ global modulus
 global multiplier1
 	a=egcd(m,n)
 	b=multiplier1
-	y=bcdiv(n,a)
+	y=n / a
 	p=int(p,a)
 	temp1=b * p
 	solution=mod(temp1,y)
@@ -490,8 +490,8 @@ global multiplier2
 	if mod(a - b,d)!=0:
 		return(0)
 	
-	x= bcdiv(m,d)y=bcdiv(n,d)
-	z=bcdiv(m * n,d)
+	x= m / dy=n / d
+	z=m * n / d
 	temp1=b * multiplier1
 	temp1=temp1 * x
 	temp2=a * multiplier2
@@ -652,7 +652,7 @@ global zed2
         zed2=0
         while(gtzero(y))
                 while(ezero(bcmod(y,2)))
-                        y=bcdiv(y,2)
+                        y=y / 2
                         temp=x1
                         temp1=x2 * x2
                         temp2=x1 * x1
@@ -739,7 +739,7 @@ def  bezout(a,b):
       v3=b
    
    while(gtzero(v3))
-      q=bcdiv(d,v3)
+      q=d / v3
       t3=bcmod(d,v3)
       temp=q * v1
       t1=globalu - temp
@@ -750,7 +750,7 @@ def  bezout(a,b):
    
    temp=a * globalu
    temp=d - temp
-   globalv=bcdiv(temp,b)
+   globalv=temp / b
    return(d)
 
 
@@ -1082,8 +1082,8 @@ def ratior(a,b,c,d):
      r=bcminus(r)
      s=bcminus(s)
   
-  rationum=bcdiv(r,g)
-  ratioden=bcdiv(s,g)
+  rationum=r / g
+  ratioden=s / g
   return
 
 
@@ -1094,8 +1094,8 @@ def multr(a,b,c,d):
   r=a * c
   s=b * d
   g=gcd(r,s)
-  multnum=bcdiv(r,g)
-  multden=bcdiv(s,g)
+  multnum=r / g
+  multden=s / g
   return
 
 
@@ -1107,8 +1107,8 @@ def subr(a,b,c,d):
   t=r - s
   u=b * d
   g=gcd(t,u)
-  subnum=bcdiv(t,g)
-  subden=bcdiv(u,g)
+  subnum=t / g
+  subden=u / g
   return
 
 
@@ -1120,8 +1120,8 @@ def addr(a,b,c,d):
   t=r + s
   u=b * d
   g=gcd(t,u)
-  addnum=bcdiv(t,g)
-  addden=bcdiv(u,g)
+  addnum=t / g
+  addden=u / g
   return
 
 
@@ -1347,10 +1347,10 @@ def gcd4(a,b,c,d):
 
 def printdXequalsaxplusbyplusc(d,X,a,x,b,y,c):
    t=gcd4(d,a,b,c)
-   d=bcdiv(d,t)
-   a=bcdiv(a,t)
-   b=bcdiv(b,t)
-   c=bcdiv(c,t)
+   d=d / t
+   a=a / t
+   b=b / t
+   c=c / t
    print "dX = "
    null=printaxplusbyplusc(a,x,b,y,c)
    return

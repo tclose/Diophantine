@@ -67,7 +67,7 @@ global multden
    if ezero(a):
       return(y)
    
-   x=bcdiv(a,b)
+   x=a / b
    x=bcsqrt(x)
    answer=x + y
    subr(c,d,y,1)

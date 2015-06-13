@@ -261,15 +261,15 @@ global D
        temp1=L[i][kminus1] * L[k][kminus1]
        temp2=L[i][k] * D[kminus2]
        temp3=temp1 + temp2
-       L[i][kminus1]=bcdiv(temp3,D[kminus1])
-       L[i][k]=bcdiv(t,D[kminus1])
+       L[i][kminus1]=temp3 / D[kminus1]
+       L[i][k]=t / D[kminus1]
    
 
    temp1=D[kminus2] * D[k]
    temp2=L[k][kminus1] * L[k][kminus1]
    t=temp1 + temp2
 #var_dump(t)
-   D[kminus1]=bcdiv(t,D[kminus1])
+   D[kminus1]=t / D[kminus1]
    return
 
 
