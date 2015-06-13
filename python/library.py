@@ -456,7 +456,7 @@ global multiplier1
 	solution=mod(temp1,y)
 	modulus=y
 	for(t=0t<at += 1)print " ",z+ty,","
-	print " mod ",n,"\n" """
+	print " mod ",n,"\n"
 	return 1
 
 
@@ -474,11 +474,10 @@ global multiplier1
 	return solution
 
 
-    """  the Chinese remainder theorem for the congruences x=a(mod m)
-  and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
-  The construction of O. Ore, American Mathematical Monthly,
-  vol.59,pp.365-370,1952, is implemented+ 
-  """
+# the Chinese remainder theorem for the congruences x=a(mod m)
+# and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
+# The construction of O. Ore, American Mathematical Monthly,
+# vol.59,pp.365-370,1952, is implemented+ 
 
 def chinese2(a,b,m,n):
 global chinese_modulus
@@ -520,124 +519,6 @@ def  inverse(a,m):
     """  Inverse of a (mod m)  """
 	t=cong1(a,1,m)
 	return t
-
-
-def a <= 0:
-"""  a <= 0 returns 1 if a<=0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t<=0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a > 0:
-    """  a > 0 returns 1 if a>0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t>0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a < 0:
-    """  a < 0 returns 1 if a<0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t<0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a >= 0:
-    """  a >= 0 returns 1 if a>=0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t>=0:
-      return 1
-   else:
-      return 0
-   
-
-def a == 0:
-"""  a == 0 returns 1 if a=0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t==0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a != 0:
-    """  a != 0 returns 1 if a != 0, 0 otherwise.  """
-   t=bccomp(a,0)
-   if t!=0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a == b:
-    """  a == b returns 1 if a=b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t==0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a != b:
-    """  a != b returns 1 if a != b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t==0:
-      return 0
-   else:
-      return 1
-   
-
-
-def a > b:
-    """  a > b returns 1 if a > b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t>0:
-      return 1
-   else:
-      return 0
-   
-
-
-def a < b:
-    """  a < b returns 1 if a < b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t<0:
-      return 1
-   else:
-      return 0
-   
-
-
-defa >= b:
-    """ a >= b returns 1 if a >= b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t>=0:
-      return 1
-   else:
-      return 0
-   
-
-def a <= b:
-    """  a <= b returns 1 if a <= b, 0 otherwise.  """
-   t=bccomp(a,b)
-   if t<=0:
-      return 1
-   else:
-      return 0
-   
 
 
 def powerdd(a,b,dd,n):
