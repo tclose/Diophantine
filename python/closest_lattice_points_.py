@@ -146,7 +146,7 @@ global lcv
     Tden[m]=Cden
     Unum[m]=0
     Uden[m]=1
-    while(1)
+    while 1:
        ratior(Tnum[i],Tden[i],Qnum[i][i],Qden[i][i])
        Znum=rationum
        Zden=ratioden
@@ -156,7 +156,7 @@ global lcv
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=-temp2
        x[i]=temp3 - 1
-       while(1)
+       while 1:
           x[i]=x[i] + 1
           if le(x[i],UB[i]):
               if i == 1:

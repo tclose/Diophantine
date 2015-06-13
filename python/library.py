@@ -118,8 +118,8 @@ def mpower(a,b,c):
 	x=mod(a,c)
 	y=b
 	z=1
-	while(y)
-		while(bcmod(y,2)==0)
+	while y:
+		while bcmod(y,2)==0:
 			y=y / 2
 			x=bcmod(x * x,c)
 		
@@ -174,7 +174,7 @@ def gcd(m,n):
 	
         b=abs(n)         """  b=r[1]  """ 
         c=mod(a,b)        """  c=r[2]=r[0] mod(r[1])  """
-        while(c)
+        while c:
 		a=b
                 b=c
                 c=mod(a,b)    """  c=r[j]=r[j-2] mod(r[j-1])  """
@@ -219,7 +219,7 @@ global multiplier2
 	k1=0
 	l2=0
 	k2=1
-	while(c!=0)
+	while c!=0:
 		q=int(a,b)
 		a=b
 		b=c
@@ -370,7 +370,7 @@ def  printpolylambda(a,n):
 def len(n):
 	i=0
 	x=abs(n)
-	while(x!=0)
+	while x!=0:
 		x=int(x,10)
 		i=i + 1
 	
@@ -427,8 +427,8 @@ def  gcda(array,n):
 	x=a
 	y=b
 	z=1
-	while(bccomp(y,0)>0)
-		while(bccomp(bcmod(y,2),0)==0)
+	while bccomp(y,0)>0:
+		while bccomp(bcmod(y,2),0)==0:
 			y=y / 2
 			x=x * x
 		
@@ -650,8 +650,8 @@ global zed2
         y=n
         zed1=1
         zed2=0
-        while(gtzero(y))
-                while(ezero(bcmod(y,2)))
+        while gtzero(y):
+                while ezero(bcmod(y,2)):
                         y=y / 2
                         temp=x1
                         temp1=x2 * x2
@@ -738,7 +738,7 @@ def  bezout(a,b):
       v1=0
       v3=b
    
-   while(gtzero(v3))
+   while gtzero(v3):
       q=d / v3
       t3=bcmod(d,v3)
       temp=q * v1
