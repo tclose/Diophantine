@@ -765,7 +765,7 @@ def aminusbc(a,b,c):
 
 
 # returns (a/b)/(c/d)
-def ratior(a,b,c,d):
+def rationum, ratioden = ratior(a,b,c,d):
 #  global rationum
 #  global ratioden
   r=a * d
@@ -778,7 +778,7 @@ def ratior(a,b,c,d):
 
 
 # returns (a/b)(c/d)
-def multr(a,b,c,d):
+def multnum, multden = multr(a,b,c,d):
 #  global multnum
 #  global multden
   r=a * c
@@ -787,7 +787,7 @@ def multr(a,b,c,d):
   return r / g, s / g
 
 
-def subr(a,b,c,d):
+def subnum, subden = subr(a,b,c,d):
 #  global subnum
 #  global subden
   r=a * d
@@ -798,7 +798,7 @@ def subr(a,b,c,d):
   return t / g, u / g
 
 
-def addr(a,b,c,d):
+def addnum, addden = addr(a,b,c,d):
 #  global addnum
 #  global addden
   r=a * d

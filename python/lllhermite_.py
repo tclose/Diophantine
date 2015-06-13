@@ -431,9 +431,9 @@ global lcv
     Cnum=0
     Cden=1
     for i in xrange(m):
-        multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
-        multr(multnum,multden,Qnum[i][i],Qden[i][i])
-        addr(Cnum,Cden,multnum,multden)
+        multnum, multden = multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
+        multnum, multden = multr(multnum,multden,Qnum[i][i],Qden[i][i])
+        addnum, addden = addr(Cnum,Cden,multnum,multden)
         Cnum=addnum
         Cden=addden
     
@@ -443,12 +443,12 @@ global lcv
     Unum[m]=0
     Uden[m]=1
     while 1:
-       ratior(Tnum[i],Tden[i],Qnum[i][i],Qden[i][i])
+       rationum, ratioden = ratior(Tnum[i],Tden[i],Qnum[i][i],Qden[i][i])
        Znum=rationum
        Zden=ratioden
-       subr(Nnum[i],Nden[i],Unum[i],Uden[i])
+       subnum, subden = subr(Nnum[i],Nden[i],Unum[i],Uden[i])
        UB[i]=introot(Znum,Zden,subnum,subden)
-       subr(Unum[i],Uden[i],Nnum[i],Nden[i])
+       subnum, subden = subr(Unum[i],Uden[i],Nnum[i],Nden[i])
        temp2=introot(Znum,Zden,subnum,subden)
        temp3=-temp2
        x[i]=temp3 - 1
@@ -480,19 +480,19 @@ global lcv
                 sumden=1
 
                 for j in xrange(i, m):
-                    multr(Qnum[i][j],Qden[i][j],x[j],1)
-                    addr(sumnum,sumden,multnum,multden)
+                    multnum, multden = multr(Qnum[i][j],Qden[i][j],x[j],1)
+                    addnum, addden = addr(sumnum,sumden,multnum,multden)
                     sumnum=addnum
                     sumden=addden
                 
                 Unum[i]=sumnum
                 Uden[i]=sumden
                 # now update T[i]
-                addr(x[i + 1],1,Unum[i + 1],Uden[i + 1])
-                subr(addnum,addden,Nnum[i + 1],Nden[i + 1])
-                multr(subnum,subden,subnum,subden)
-                multr(Qnum[i + 1][i + 1],Qden[i + 1][i + 1],multnum,multden)
-                subr(Tnum[i + 1],Tden[i + 1],multnum,multden)
+                addnum, addden = addr(x[i + 1],1,Unum[i + 1],Uden[i + 1])
+                subnum, subden = subr(addnum,addden,Nnum[i + 1],Nden[i + 1])
+                multnum, multden = multr(subnum,subden,subnum,subden)
+                multnum, multden = multr(Qnum[i + 1][i + 1],Qden[i + 1][i + 1],multnum,multden)
+                subnum, subden = subr(Tnum[i + 1],Tden[i + 1],multnum,multden)
                 Tnum[i]=subnum
                 Tden[i]=subden
                 break
