@@ -16,7 +16,7 @@ def cholesky(A,m): # A is positive definite mxm
       
   
   for i in xrange(1, m):
-     iplus1=bcadd(i,1)
+     iplus1=i + 1
      for j in xrange(i, m):
          Qnum[j][i]=Qnum[i][j]
          Qden[j][i]=Qden[i][j]
@@ -69,14 +69,14 @@ global multden
    
    x=bcdiv(a,b)
    x=bcsqrt(x)
-   answer=bcadd(x,y)
+   answer=x + y
    subr(c,d,y,1)
    subr(1,1,subnum,subden)
    addr(x,1,subnum,subden)
    multr(addnum,addden,addnum,addden)
    t=comparer(multnum,multden,a,b)
    if le(t,0):
-      answer=bcadd(answer,1)
+      answer=answer + 1
    
    return(answer)
 
@@ -100,7 +100,7 @@ global lcv
     print "matrix A:"
     printmat1(A,m,n)
     print "<br>\n"
-    nplus1=bcadd(n,1)
+    nplus1=n + 1
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -157,12 +157,12 @@ global lcv
        temp3=bcminus(temp2)
        x[i]=bcsub(temp3,1)
        while(1)
-          x[i]=bcadd(x[i],1)
+          x[i]=x[i] + 1
           if le(x[i],UB[i]):
               if eq(i,1):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
-                   count=bcadd(count,1)
+                   count=count + 1
                #  print "X[count]="print[x,m]
                    lcva[count]=lcv
                #  print "lcv[count]="print[lcv,n]
@@ -182,7 +182,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                iplus1=bcadd(i,1)
+                iplus1=i + 1
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
@@ -202,7 +202,7 @@ global lcv
                 break
               
           else:
-             i=bcadd(i,1)
+             i=i + 1
              if i > m:
                     print "Here are the X[k] &isin &#8466, P - X[k], ||P-X[k]||<sup>2</sup> such that ||P-X[k]||<sup>2</sup> &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
@@ -240,7 +240,7 @@ global lcv
                            print[lcva[k],n]
                            print "</TD>"
                            print "</TR>\n"
-                           min_count=bcadd(min_count,1)
+                           min_count=min_count + 1
                         
                     
                     print "</TABLE>\n"
@@ -261,7 +261,7 @@ def lengthsquared(a,n):
    sum=0
    for i in xrange(n):
       temp=bcmul(a[i],a[i])
-      sum=bcadd(sum,temp)
+      sum=sum + temp
    
    return(sum)
 

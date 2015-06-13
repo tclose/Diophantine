@@ -52,7 +52,7 @@ def  lllhermite(G,m,n,m1,n1):
       
    
    k=2
-   nplus1=bcadd(n,1)
+   nplus1=n + 1
    while(k <= m)
          kminus1=bcsub(k,1)
          reduce2(k,kminus1,m,n,D)
@@ -60,7 +60,7 @@ def  lllhermite(G,m,n,m1,n1):
          minim=minimum(col2,n)
          temp1=bcmul(D[kminus2],D[k])
          temp2=bcmul(L[k][kminus1],L[k][kminus1])
-         temp3=bcadd(temp1,temp2)
+         temp3=temp1 + temp2
          u=bcmul(n1,temp3)
          temp1=bcmul(D[kminus1],D[kminus1])
          v=bcmul(m1,temp1)
@@ -73,7 +73,7 @@ def  lllhermite(G,m,n,m1,n1):
             for i in xrange(kminus2 - 1, 0, -1):
                 reduce2(k,i,m,n,D)
             
-            k=bcadd(k,1)
+            k=k + 1
          
    
    for i in xrange(m):
@@ -94,7 +94,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    rank=bcsub(m,i)
    #print "rank = rank<br>\n"
-   mplus1=bcadd(m,1)
+   mplus1=m + 1
    for i in xrange(m):
         for j in xrange(n):
            k=bcsub(mplus1,i)
@@ -107,7 +107,7 @@ def  lllhermite(G,m,n,m1,n1):
            unimodular_matrix[i][j]=B[k][j]
        
    
-#   rankplus1=bcadd(rank,1)
+#   rankplus1=rank + 1
 #   for i in xrange(rank, m):
  #      for j in xrange(n):
   #         hnf[i][j]=0
@@ -137,7 +137,7 @@ def  flagcol(A,m,n):
        if eq(flag,1):
           break
        
-    iplus1=bcadd(i,1)
+    iplus1=i + 1
     for k in xrange(i, m):
        if neqzero(A[k][j]:)
            return(0)
@@ -253,21 +253,21 @@ global D
        L[k][j]=L[kminus1][j]
        L[kminus1][j]=temp
    
-   kplus1=bcadd(k,1)
+   kplus1=k + 1
    for i in xrange(k, m):
        temp1=bcmul(L[i][kminus1],D[k])
        temp2=bcmul(L[i][k],L[k][kminus1])
        t=bcsub(temp1,temp2)
        temp1=bcmul(L[i][kminus1],L[k][kminus1])
        temp2=bcmul(L[i][k],D[kminus2])
-       temp3=bcadd(temp1,temp2)
+       temp3=temp1 + temp2
        L[i][kminus1]=bcdiv(temp3,D[kminus1])
        L[i][k]=bcdiv(t,D[kminus1])
    
 
    temp1=bcmul(D[kminus2],D[k])
    temp2=bcmul(L[k][kminus1],L[k][kminus1])
-   t=bcadd(temp1,temp2)
+   t=temp1 + temp2
 #var_dump(t)
    D[kminus1]=bcdiv(t,D[kminus1])
    return
@@ -294,13 +294,13 @@ def  axb(Ab,m,n,m1,n1):
 global hnf
 global unimodular_matrix
 global rank
-    mplus1=bcadd(m,1)
+    mplus1=m + 1
     for i in xrange(mplus1):
         for j in xrange(n):
                G[i][j]=Ab[i][j]
         
     
-    nplus1=bcadd(n,1)
+    nplus1=n + 1
     for i in xrange(m):
         G[i][nplus1]=0
     
@@ -347,7 +347,7 @@ global rank
         else:
            lim=bcsub(mplus1,rank)
            for i in xrange(lim):
-               rankplusi=bcadd(rank,i)
+               rankplusi=rank + i
                for j in xrange(m):
                    basis[i][j]=unimodular_matrix[rankplusi][j]
                
@@ -369,7 +369,7 @@ global rank
        return
     
     # joining basis and y
-    limplus1=bcadd(lim,1)
+    limplus1=lim + 1
     for j in xrange(m):
         basis[limplus1][j]=y[j]
     
@@ -396,7 +396,7 @@ global lcv
     #print "matrix A:"
     #printmat1(A,m,n)
     #print "<br>\n"
-    nplus1=bcadd(n,1)
+    nplus1=n + 1
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -453,12 +453,12 @@ global lcv
        temp3=bcminus(temp2)
        x[i]=bcsub(temp3,1)
        while(1)
-          x[i]=bcadd(x[i],1)
+          x[i]=x[i] + 1
           if le(x[i],UB[i]):
               if eq(i,1):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
-                   count=bcadd(count,1)
+                   count=count + 1
                #  print "X[count]="print[x,m]
                    lcva[count]=lcv
                #  print "lcv[count]="print[lcv,n]
@@ -478,7 +478,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                iplus1=bcadd(i,1)
+                iplus1=i + 1
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
@@ -498,7 +498,7 @@ global lcv
                 break
               
           else:
-             i=bcadd(i,1)
+             i=i + 1
              if i > m:
                     print "Here are the solution vectors with length squared &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
@@ -523,7 +523,7 @@ global lcv
                            print[multiplier_vector[k],n]
                            print "</TD>"
                            print "</TR>\n"
-                           min_count=bcadd(min_count,1)
+                           min_count=min_count + 1
                         
                     
                     print "</TABLE>\n"

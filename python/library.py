@@ -86,7 +86,7 @@ def mod(a,b):
 	if c==0:
 		return(0)
 	
-	temp=bcadd(c,b)
+	temp=c + b
         return(temp)
 
 
@@ -372,7 +372,7 @@ def len(n):
 	x=bcabs(n)
 	while(x!=0)
 		x=int(x,10)
-		i=bcadd(i,1)
+		i=i + 1
 	
 	return(i)
 
@@ -384,7 +384,7 @@ function ceiling(a,b):
            return(x)
         
 	else:
-           return(bcadd(x,1))
+           return(x + 1)
         
 
 
@@ -496,7 +496,7 @@ global multiplier2
 	temp1=bcmul(temp1,x)
 	temp2=bcmul(a,multiplier2)
 	temp2=bcmul(temp2,y)
-	c=mod(bcadd(temp1,temp2),z)
+	c=mod(temp1 + temp2,z)
 	chinese_modulus=z
 	chinese_solution=c
 	return(1)
@@ -657,7 +657,7 @@ global zed2
                         temp1=bcmul(x2,x2)
                         temp2=bcmul(x1,x1)
                         temp3=bcmul(dd,temp1)
-                        x1=bcadd(temp2,temp3)
+                        x1=temp2 + temp3
                         temp4=bcmul(temp,x2)
                         x2=bcmul(2,temp4)
                 
@@ -666,10 +666,10 @@ global zed2
                 temp1=bcmul(zed2,x2)
                 temp2=bcmul(zed1,x1)
                 temp3=bcmul(dd,temp1)
-                zed1=bcadd(temp2,temp3)
+                zed1=temp2 + temp3
                 temp4=bcmul(temp,x2)
                 temp5=bcmul(zed2,x1)
-                zed2=bcadd(temp4,temp5)
+                zed2=temp4 + temp5
         
        """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
         return
@@ -707,7 +707,7 @@ def sort_[a,n]:
 global sorted_array
    t=bcsub(n,1)
    for i in xrange(t):
-      temp1=bcadd(i,1)
+      temp1=i + 1
       for j in xrange(temp1, n):
          if a[i] > a[j]:
             temp=a[i]
@@ -802,7 +802,7 @@ def  lnearint(a,b):
         z=bcsub(a,x)
         z=bcmul(2,z)
         if z > b:
-          y=bcadd(y,1)
+          y=y + 1
         
         return(y)
 
@@ -827,8 +827,8 @@ def mina(a,n):
 
 
 def bcadd3(a,b,c):
-    sum=bcadd(a,b)
-    sum=bcadd(sum,c)
+    sum=a + b
+    sum=sum + c
     return(sum)
 
 
@@ -918,10 +918,10 @@ def row_submatrix(A,p,q):
 global new_row_size
     r=bcsub(p,1)
     s=bcsub(q,p)
-    s=bcadd(s,1)
+    s=s + 1
     new_row_size=s
     for i in xrange(s):
-        z=bcadd(i,r)
+        z=i + r
         B[i]=A[z]
     
     return(B)
@@ -932,10 +932,10 @@ def col_submatrix(A,rows,p,q):
 global new_col_size
     r=bcsub(p,1)
     s=bcsub(q,p)
-    s=bcadd(s,1)
+    s=s + 1
     new_col_size=s
     for j in xrange(s):
-        z=bcadd(j,r)
+        z=j + r
         for i in xrange(rows):
             B[i][j]=A[i][z]
         
@@ -971,7 +971,7 @@ def coliminusqcolj(&A,m,i,q,j):
 
 def delete_row(&B,i,&m):
    for l in xrange(i, m):
-       lplus1=bcadd(l,1)
+       lplus1=l + 1
        temp=B[lplus1]
        B[l]=temp
    
@@ -1003,7 +1003,7 @@ def dotproduct(a,b,n):
    sum=0
    for j in xrange(n):
        temp=bcmul(a[j],b[j])
-       sum=bcadd(sum,temp)
+       sum=sum + temp
    
    return(sum)
 
@@ -1014,7 +1014,7 @@ def multmat(A,B,m,n,p):
            sum=0
            for j in xrange(n):
                t=bcmul(A[i][j],B[j][k])
-               sum=bcadd(sum,t)
+               sum=sum + t
            
            C[i][k]=sum
        
@@ -1049,7 +1049,7 @@ def equalmat(A,B,rowsA,colsA,rowsB,colsB):
 def abpluscd(a,b,c,d):
    s=bcmul(a,b)
    t=bcmul(c,d)
-   u=bcadd(s,t)
+   u=s + t
    return(u)
 
  def abminuscd(a,b,c,d):
@@ -1061,7 +1061,7 @@ def abpluscd(a,b,c,d):
 
 def aplusbc(a,b,c):
    s=bcmul(b,c)
-   t=bcadd(a,s)
+   t=a + s
    return(t)
 
 
@@ -1117,7 +1117,7 @@ def addr(a,b,c,d):
   global addden
   r=bcmul(a,d)
   s=bcmul(b,c)
-  t=bcadd(r,s)
+  t=r + s
   u=bcmul(b,d)
   g=gcd(t,u)
   addnum=bcdiv(t,g)
@@ -1182,7 +1182,7 @@ global lcv
       sum=0
       for i in xrange(m):
          t=bcmul(X[i],A[i][j])
-         sum=bcadd(sum,t)
+         sum=sum + t
       
       lcv[j]=sum
    
@@ -1274,19 +1274,19 @@ def bcmul5(a,b,c,d,e):
  
 def bcadd4(a,b,c,d):
    temp1=bcadd3(a,b,c)
-   temp=bcadd(temp1,d)
+   temp=temp1 + d
    return(temp)
 
 
 def bcadd5(a,b,c,d,e):
    temp1=bcadd4(a,b,c,d)
-   temp=bcadd(temp1,e)
+   temp=temp1 + e
    return(temp)
 
 
 def bcadd6(a,b,c,d,e,f):
    temp1=bcadd5(a,b,c,d,e)
-   temp=bcadd(temp1,f)
+   temp=temp1 + f
    return(temp)
 
 

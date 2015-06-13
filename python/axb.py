@@ -44,7 +44,7 @@ if le(t,1):
 	flush()
         exit
 
-cols=bcadd(cols,1)"""  Here cols is the number of columns of the augmented matrix  """
+cols=cols + 1"""  Here cols is the number of columns of the augmented matrix  """
 size=bcmul(rows,cols)
 if t < size:
 	print "number t of entries is less than m &times n = size<br>\n"
@@ -73,11 +73,11 @@ if t > size:
                 ii=0
 		for i in xrange(rows):
 		    for j in xrange(cols):
-                        k=bcadd(ii,j)
+                        k=ii + j
                         k=bcsub(k,1)
                         mat[i][j]=a[k]
                     
-                    ii=bcadd(cols,ii)
+                    ii=cols + ii
 		
                 m=bcsub(cols,1)
                 t=test_zeromat(mat,rows,m)
