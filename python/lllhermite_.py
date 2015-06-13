@@ -31,7 +31,7 @@ def  lllhermite(G,m,n,m1,n1):
         
    
    for(r="2"le(r,m)r=bcadd(r,"1"))
-       for(s="1"lt(s,r)s=bcadd(s,"1"))
+       for s in xrange(r - 1):
            L[r][s]="0"
        
    
@@ -212,7 +212,7 @@ global A
       
       temp=bcmul(q,D[i])
       L[k][i]=bcsub(L[k][i],temp)
-      for(j="1"lt(j,i)j=bcadd(j,"1"))
+      for j in xrange(i - 1):
           temp=bcmul(q,L[i][j])
           L[k][j]=bcsub(L[k][j],temp)
       
@@ -221,7 +221,7 @@ global A
 
 def minus(j,m,&L):
    for(r="2"le(r,m)r=bcadd(r,"1"))
-       for(s="1"lt(s,r)s=bcadd(s,"1"))
+       for s in xrange(r - 1):
            if eq(r,j) || eq(s,j):
              L[r][s]=bcminus(L[r][s])
            
@@ -317,7 +317,7 @@ global rank
     print "is a unimodular matrix such that PG = HNF(G)"
     print "<br>\n"
     flag="0"
-    for(i="1"lt(i,rank)i=bcadd(i,"1"))
+    for i in xrange(rank - 1):
         if neqzero(hnf[i][nplus1]):
            flag="1"
            break

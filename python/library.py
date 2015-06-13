@@ -865,7 +865,7 @@ def printmatrix2(matrix,m,n):
 
  def print[a,n]:
     print "("
-    for(i="1"lt(i,n)i=bcadd(i,"1"))
+    for i in xrange(n - 1):
        print "a[i], "
     
     print "a[n]) "
@@ -992,7 +992,7 @@ def swap_rows(&P,j,k):
 
 
 def swap_cols(&P,m,j,k):
-   for(i="1"lt(i,m)i=bcadd(i,"1"))
+   for i in xrange(m - 1):
        temp=P[i][j]
        P[i][j]=P[i][k]
        P[i][k]=temp
