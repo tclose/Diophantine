@@ -279,7 +279,7 @@ def  printpoly(a,n):
            print "x"
 	
 	d=bcsub(n,"1")
-  	for(i=dgezero(i)i=bcsub(i,"1"))
+  	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
 		if a[i] > "1":
 		       print "+a[i]"
@@ -331,7 +331,7 @@ def  printpolylambda(a,n):
            print "&lambda"
 	
 	d=bcsub(n,"1")
-  	for(i=dgezero(i)i=bcsub(i,"1"))
+  	for i in xrange(d, 0, -1):
 	    if neqzero(a[i]):
 		if a[i] > "1":
 		       print "+a[i]"
