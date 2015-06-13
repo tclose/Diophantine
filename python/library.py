@@ -708,7 +708,7 @@ global sorted_array
    t=bcsub(n,"1")
    for i in xrange(t):
       temp1=bcadd(i,"1")
-      for(j=temp1lt(j,n)j=bcadd(j,"1"))
+      for j in xrange(temp1, n):
          if a[i] > a[j]:
             temp=a[i]
             a[i]=a[j]
@@ -970,7 +970,7 @@ def coliminusqcolj(&A,m,i,q,j):
 
 
 def delete_row(&B,i,&m):
-   for(l=ilt(l,m)l=bcadd(l,"1"))
+   for l in xrange(i, m):
        lplus1=bcadd(l,"1")
        temp=B[lplus1]
        B[l]=temp

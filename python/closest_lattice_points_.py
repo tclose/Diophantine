@@ -15,7 +15,7 @@ def cholesky(A,m): # A is positive definite mxm
           Qden[i][j]="1"
       
   
-  for(i=1lt(i,m)i=bcadd(i,"1"))
+  for i in xrange(1, m):
      iplus1=bcadd(i,"1")
      for(j=iplus1le(j,m)j=bcadd(j,"1"))
          Qnum[j][i]=Qnum[i][j]
