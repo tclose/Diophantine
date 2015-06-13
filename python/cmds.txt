@@ -1,0 +1,2 @@
+for f in *.py; do sed  -i '' -e 's/if(gt(\([^)]*\),\([^)]*\)))/if \1 > \2:/g' lllhermite_.py; done
+for f in *.py; do sed  -i '' -e 's/if(lt(\([^)]*\),\([^)]*\)))/if \1 < \2:/g' lllhermite_.py; done

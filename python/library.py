@@ -94,7 +94,7 @@ def  abs_mod(a,b):
 """  This returns r=mod(a,b) if r <= b/2, otherwise r-b. """
    r=mod(a,b)
    temp=bcmul("2",r)
-   if(gt(temp,b))
+   if temp > b:
       r=bcsub(r,b)
    
    return(r)
@@ -273,7 +273,7 @@ def  printpoly(a,n):
 		print "a[n]"
 	    
 	
-	if(gt(n,"1"))
+	if n > "1":
 	   print "x<sup>n</sup>"
 	else:
            print "x"
@@ -281,7 +281,7 @@ def  printpoly(a,n):
 	d=bcsub(n,"1")
   	for(i=dgezero(i)i=bcsub(i,"1"))
 	    if(neqzero(a[i]))
-		if(gt(a[i],"1"))
+		if a[i] > "1":
 		       print "+a[i]"
 	        
 		if(eq(a[i],"1"))
@@ -299,10 +299,10 @@ def  printpoly(a,n):
 			print "-1"
 		   
 	        
-		if(lt(a[i],"-1"))
+		if a[i] < "-1":
 		       print "a[i]"
 	        
-		if(gt(i,"1"))
+		if i > "1":
 	            print "x<sup>i</sup>"
 		
 		if(eq(i,"1"))
@@ -325,7 +325,7 @@ def  printpolylambda(a,n):
 		print "a[n]"
 	    
 	
-	if(gt(n,"1"))
+	if n > "1":
 	   print "&lambda<sup>n</sup>"
 	else:
            print "&lambda"
@@ -333,7 +333,7 @@ def  printpolylambda(a,n):
 	d=bcsub(n,"1")
   	for(i=dgezero(i)i=bcsub(i,"1"))
 	    if(neqzero(a[i]))
-		if(gt(a[i],"1"))
+		if a[i] > "1":
 		       print "+a[i]"
 	        
 		if(eq(a[i],"1"))
@@ -351,10 +351,10 @@ def  printpolylambda(a,n):
 			print "-1"
 		   
 	        
-		if(lt(a[i],"-1"))
+		if a[i] < "-1":
 		       print "a[i]"
 	        
-		if(gt(i,"1"))
+		if i > "1":
 	            print "&lambda<sup>i</sup>"
 		
 		if(eq(i,"1"))
@@ -709,7 +709,7 @@ global sorted_array
    for(i="0"lt(i,t)i=bcadd(i,"1"))
       temp1=bcadd(i,"1")
       for(j=temp1lt(j,n)j=bcadd(j,"1"))
-         if(gt(a[i],a[j]))
+         if a[i] > a[j]:
             temp=a[i]
             a[i]=a[j]
             a[j]=temp
@@ -801,7 +801,7 @@ def  lnearint(a,b):
         x=bcmul(b,y)
         z=bcsub(a,x)
         z=bcmul("2",z)
-        if(gt(z,b))
+        if z > b:
           y=bcadd(y,"1")
         
         return(y)
@@ -818,7 +818,7 @@ def  lmodd(m,n):
 def mina(a,n):
     x=a[1]
     for(i="2"le(i,n)i=bcadd(i,"1"))
-         if(lt(a[i],x))
+         if a[i] < x:
             x=a[i]
          
     
@@ -1237,7 +1237,7 @@ def printbinaryform(a,b,c,x,y):
            print"-x<sup>2</sup>"
         
 	if(neqzero(b))
-	   if(gt(b,"1"))
+	   if b > "1":
               print"+b&#8203xy"
            
 	   if(eq(b,"1"))
@@ -1246,15 +1246,15 @@ def printbinaryform(a,b,c,x,y):
 	   if(eq(b,"-1"))
               print"-xy"
            
-           if(lt(b,"-1"))
+           if b < "-1":
               print"b&#8203xy"
            
         
 	if(neqzero(c))
-	   if(gt(c,"1"))
+	   if c > "1":
               print"+c&#8203y<sup>2</sup>"
            
-	   if(lt(c,"-1"))
+	   if c < "-1":
               print"c&#8203y<sup>2</sup>"
            
            if(eq(c,"1"))

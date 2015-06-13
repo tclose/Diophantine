@@ -109,7 +109,7 @@ global lcv
 
     mplus1=m
     mminus1=bcsub(m,"1")
-    if(gt(mminus1,"1"))
+    if mminus1 > "1":
        print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     else:
        print "&#8466 is the lattice spanned by the first row of A<br>\n"
@@ -203,7 +203,7 @@ global lcv
               
           else:
              i=bcadd(i,"1")
-             if(gt(i,m))
+             if i > m:
                     print "Here are the X[k] &isin &#8466, P - X[k], ||P-X[k]||<sup>2</sup> such that ||P-X[k]||<sup>2</sup> &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
                     for(k="1"le(k,count)k=bcadd(k,"1"))

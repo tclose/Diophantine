@@ -66,7 +66,7 @@ def  lllhermite(G,m,n,m1,n1):
          v=bcmul(m1,temp1)
          if(le(col1,minim) || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)))
             swap2(k,m,n)
-            if(gt(k,"2"))
+            if k > "2":
                k=kminus1
             
          else:
@@ -148,7 +148,7 @@ def  flagcol(A,m,n):
       return("1")
 
     #   found:
-    #  if(lt(i,m))
+    #  if i < m:
     #    return("0")
     #else:
     # if(ltzero(A[m][j]))
@@ -194,7 +194,7 @@ global A
    else:
       t=bcabs(L[k][i])
       t=bcmul("2",t)
-      if(gt(t,D[i]))
+      if t > D[i]:
         q=lnearint(L[k][i],D[i])
       else:
         q="0"
@@ -405,7 +405,7 @@ global lcv
 
     mplus1=m
     mminus1=bcsub(m,"1")
-    #if(gt(mminus1,"1"))
+    #if mminus1 > "1":
        #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     #else:
        #print "&#8466 is the lattice spanned by the first row of A<br>\n"
@@ -499,7 +499,7 @@ global lcv
               
           else:
              i=bcadd(i,"1")
-             if(gt(i,m))
+             if i > m:
                     print "Here are the solution vectors with length squared &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
                     for(k="1"le(k,count)k=bcadd(k,"1"))

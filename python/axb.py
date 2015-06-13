@@ -15,22 +15,22 @@ if check1=="0" || check2=="0":
         print "<p>\n"
         exit
 
-if(gt(rows,"50"))
+if rows > "50":
   print "row dimension is &gt 50<br>\n"
   print "<a href=\"./axb.html\">Return to main page</a><br>\n"
   exit
 
-if(gt(cols,"50"))
+if cols > "50":
   print "column dimension is &gt 50<br>\n"
   print "<a href=\"./axb.html\">Return to main page</a><br>\n"
   exit
 
-if(lt(rows,"1"))
+if rows < "1":
   print "row dimension is &lt 1<br>\n"
   print "<a href=\"./axb.html\">Return to main page</a><br>\n"
   exit
 
-if(lt(cols,"1"))
+if cols < "1":
   print "column dimension is &lt 1<br>\n"
   print "<a href=\"./axb.html\">Return to main page</a><br>\n"
   exit
@@ -46,13 +46,13 @@ if(le(t,"1"))
 
 cols=bcadd(cols,"1")"""  Here cols is the number of columns of the augmented matrix  """
 size=bcmul(rows,cols)
-if(lt(t,size))
+if t < size:
 	print "number t of entries is less than m &times n = size<br>\n"
         print "<a href=\"./axb.html\">Return to main page</a><br>\n"
 	flush()
         exit
 
-if(gt(t,size))
+if t > size:
 	print "number t of entries is greater than m &times n = size<br>\n"
         print "<a href=\"./axb.html\">Return to main page</a><br>\n"
 	flush()
