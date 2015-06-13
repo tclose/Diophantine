@@ -25,7 +25,7 @@ def cholesky(A,m): # A is positive definite mxm
          Qden[i][j]=ratioden
      
      for k in xrange(i, m):
-         for(l=kle(l,m)l=bcadd(l,"1"))
+         for l in xrange(k - 1, m):
                multr(Qnum[k][i],Qden[k][i],Qnum[i][l],Qden[i][l])
                t2num=multnum
                t2den=multden

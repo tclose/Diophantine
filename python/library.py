@@ -690,7 +690,7 @@ def gcd3(a,b,c):
 
 def falling_factorial(m,n):
     product="1"
-    for(i=mle(i,n)i=bcadd(i,"1"))
+    for i in xrange(m - 1, n):
          product=bcmul(product,i)
     
     return(product)
@@ -847,8 +847,8 @@ def  printmat1(matrix,m,n):
 
 
 def printmatrix(matrix,m,n):
-    for(i="1"i<=mi=bcadd(i,"1"))
-       for(j="1"j<=nj=bcadd(j,"1"))
+    for i in xrange(m):
+       for j in xrange(n):
        print matrix[i][j] print " "
        
        print "<br>\n"
