@@ -411,7 +411,7 @@ def  lcma(array,n):
 
 def  gcda(array,n):
 """  gcda(array[0],array[1],...,array[n-1])  """
-	for(i="0"i<ni=bcadd(i,"1"))
+	for i in xrange(n):
           b[i]=array[i]
 	
 	for(i="1"i<ni=bcadd(i,"1"))
