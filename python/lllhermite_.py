@@ -10,7 +10,7 @@ import closest_lattice_points_
 
 global col1
 global col2
-global nplus1
+global n + 1
 global B
 global L
 global A
@@ -52,7 +52,7 @@ def  lllhermite(G,m,n,m1,n1):
       
    
    k=2
-   nplus1=n + 1
+   n + 1=n + 1
    while k <= m:
          
          reduce2(k,kminus1,m,n,D)
@@ -64,7 +64,7 @@ def  lllhermite(G,m,n,m1,n1):
          u=n1 * temp3
          temp1=D[kminus1] * D[kminus1]
          v=m1 * temp1
-         if col1 <= minim || (col1 == col2 and col1 == nplus1 and u < v):
+         if col1 <= minim || (col1 == col2 and col1 == n + 1 and u < v):
             swap2(k,m,n)
             if k > 2:
                k=kminus1
@@ -94,20 +94,20 @@ def  lllhermite(G,m,n,m1,n1):
    
    rank=m - i
    #print "rank = rank<br>\n"
-   mplus1=m + 1
+   m + 1=m + 1
    for i in xrange(m):
         for j in xrange(n):
-           k=mplus1 - i
+           k=m + 1 - i
            hnf[i][j]=A[k][j]
        
    
    for i in xrange(m):
        for j in xrange(m):
-           k=mplus1 - i
+           k=m + 1 - i
            unimodular_matrix[i][j]=B[k][j]
        
    
-#   rankplus1=rank + 1
+#   rank + 1=rank + 1
 #   for i in xrange(rank, m):
  #      for j in xrange(n):
   #         hnf[i][j]=0
@@ -137,7 +137,7 @@ def  flagcol(A,m,n):
        if flag == 1:
           break
        
-    iplus1=i + 1
+    i + 1=i + 1
     for k in xrange(i, m):
        if A[k][j]: != 0
            return(0)
@@ -161,11 +161,11 @@ def  flagcol(A,m,n):
 def reduce2(k,i,m,n,D):
 global col1
 global col2
-global nplus1
+global n + 1
 global B
 global L
 global A
-   col1=nplus1
+   col1=n + 1
    for j in xrange(n):
        if A[i][j] != 0:
          col1=j
@@ -182,7 +182,7 @@ global A
          break
        
    
-   col2=nplus1
+   col2=n + 1
    for j in xrange(n):
        if A[k][j] != 0:
          col2=j
@@ -253,7 +253,7 @@ global D
        L[k][j]=L[kminus1][j]
        L[kminus1][j]=temp
    
-   kplus1=k + 1
+   k + 1=k + 1
    for i in xrange(k, m):
        temp1=L[i][kminus1] * D[k]
        temp2=L[i][k] * L[k][kminus1]
@@ -294,31 +294,31 @@ def  axb(Ab,m,n,m1,n1):
 global hnf
 global unimodular_matrix
 global rank
-    mplus1=m + 1
-    for i in xrange(mplus1):
+    m + 1=m + 1
+    for i in xrange(m + 1):
         for j in xrange(n):
                G[i][j]=Ab[i][j]
         
     
-    nplus1=n + 1
+    n + 1=n + 1
     for i in xrange(m):
-        G[i][nplus1]=0
+        G[i][n + 1]=0
     
-    G[mplus1][nplus1]=1
+    G[m + 1][n + 1]=1
     print "G="
-    printmat1(G,mplus1,nplus1)
+    printmat1(G,m + 1,n + 1)
     print "<br>\n"
-    lllhermite(G,mplus1,nplus1,m1,n1)
+    lllhermite(G,m + 1,n + 1,m1,n1)
     print "HNF(G)="
-    printmat1(hnf,mplus1,nplus1)
+    printmat1(hnf,m + 1,n + 1)
     print "<br>\n"
     print "P ="
-    printmat1(unimodular_matrix,mplus1,mplus1)
+    printmat1(unimodular_matrix,m + 1,m + 1)
     print "is a unimodular matrix such that PG = HNF(G)"
     print "<br>\n"
     flag=0
     for i in xrange(rank - 1):
-        if hnf[i][nplus1] != 0:
+        if hnf[i][n + 1] != 0:
            flag=1
            break
         
@@ -330,9 +330,9 @@ global rank
            break
         
     
-    #t=hnf[rank][nplus1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
+    #t=hnf[rank][n + 1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
     #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if flag == 0 and hnf[rank][nplus1] == 1 and flag1 == 0:
+    if flag == 0 and hnf[rank][n + 1] == 1 and flag1 == 0:
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
         for j in xrange(m):
           y[j]=-unimodular_matrix[rank][j]
@@ -340,12 +340,12 @@ global rank
         print "AX=B has a solution: Y = "
         print[y,m]
         print "<br>\n"
-        nullity=mplus1 - rank
+        nullity=m + 1 - rank
         if nullity == 0:
            print "AX=B has a unique solution in integers<br>\n"
            return
         else:
-           lim=mplus1 - rank
+           lim=m + 1 - rank
            for i in xrange(lim):
                rankplusi=rank + i
                for j in xrange(m):
@@ -369,11 +369,11 @@ global rank
        return
     
     # joining basis and y
-    limplus1=lim + 1
+    lim + 1=lim + 1
     for j in xrange(m):
-        basis[limplus1][j]=y[j]
+        basis[lim + 1][j]=y[j]
     
-    shortest_distance_axb(basis,limplus1,m)
+    shortest_distance_axb(basis,lim + 1,m)
     return
 
 
@@ -396,14 +396,14 @@ global lcv
     #print "matrix A:"
     #printmat1(A,m,n)
     #print "<br>\n"
-    nplus1=n + 1
+    n + 1=n + 1
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
     #print "P = A[m] =  "print[A[m],n]print "<br>\n"
    # lengthj=dotproduct(Am,Am,m)
 
-    mplus1=m
+    m + 1=m
     
     #if mminus1 > 1:
        #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
@@ -424,8 +424,8 @@ global lcv
     QQden=transpose(Qden,m,m)
     m=m - 1
     for i in xrange(m):# the N vector
-        Nnum[i]=Qnum[i][mplus1]
-        Nden[i]=Qden[i][mplus1]
+        Nnum[i]=Qnum[i][m + 1]
+        Nden[i]=Qden[i][m + 1]
     
 
     Cnum=0
@@ -465,11 +465,11 @@ global lcv
                #  print "<br>\n"
                    coord[count]=x
                    for k in xrange(n):
-                       temp=A[mplus1][k]
+                       temp=A[m + 1][k]
                        multiplier_vector[count][k]=temp - lcv[k]
                    
                    l=lengthsquared(multiplier_vector[count],n)
-                   multiplier_vector[count][nplus1]=l
+                   multiplier_vector[count][n + 1]=l
                 # print "P-X[count]="print[multiplier_vector[count],n]print": l<br>\n"
                    lengtharray[count]=l
                    continue
@@ -478,7 +478,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                iplus1=i + 1
+                i + 1=i + 1
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
@@ -488,11 +488,11 @@ global lcv
                 Unum[i]=sumnum
                 Uden[i]=sumden
                 # now update T[i]
-                addr(x[iplus1],1,Unum[iplus1],Uden[iplus1])
-                subr(addnum,addden,Nnum[iplus1],Nden[iplus1])
+                addr(x[i + 1],1,Unum[i + 1],Uden[i + 1])
+                subr(addnum,addden,Nnum[i + 1],Nden[i + 1])
                 multr(subnum,subden,subnum,subden)
-                multr(Qnum[iplus1][iplus1],Qden[iplus1][iplus1],multnum,multden)
-                subr(Tnum[iplus1],Tden[iplus1],multnum,multden)
+                multr(Qnum[i + 1][i + 1],Qden[i + 1][i + 1],multnum,multden)
+                subr(Tnum[i + 1],Tden[i + 1],multnum,multden)
                 Tnum[i]=subnum
                 Tden[i]=subden
                 break
@@ -517,7 +517,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
-                        if multiplier_vector[k][nplus1] == min_length:
+                        if multiplier_vector[k][n + 1] == min_length:
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[multiplier_vector[k],n]

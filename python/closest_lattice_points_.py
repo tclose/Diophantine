@@ -16,7 +16,7 @@ def cholesky(A,m): # A is positive definite mxm
       
   
   for i in xrange(1, m):
-     iplus1=i + 1
+     i + 1=i + 1
      for j in xrange(i, m):
          Qnum[j][i]=Qnum[i][j]
          Qden[j][i]=Qden[i][j]
@@ -100,14 +100,14 @@ global lcv
     print "matrix A:"
     printmat1(A,m,n)
     print "<br>\n"
-    nplus1=n + 1
+    n + 1=n + 1
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
     print "P = A[m] =  "print[A[m],n]print "<br>\n"
    # lengthj=dotproduct(Am,Am,m)
 
-    mplus1=m
+    m + 1=m
     
     if mminus1 > 1:
        print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
@@ -128,8 +128,8 @@ global lcv
     QQden=transpose(sden,m,m)
     m=m - 1
     for i in xrange(m):# the N vector
-        Nnum[i]=Qnum[i][mplus1]
-        Nden[i]=Qden[i][mplus1]
+        Nnum[i]=Qnum[i][m + 1]
+        Nden[i]=Qden[i][m + 1]
     
 
     Cnum=0
@@ -169,11 +169,11 @@ global lcv
                #  print "<br>\n"
                    coord[count]=x
                    for k in xrange(n):
-                       temp=A[mplus1][k]
+                       temp=A[m + 1][k]
                        multiplier_vector[count][k]=temp - lcv[k]
                    
                    l=lengthsquared(multiplier_vector[count],n)
-                   multiplier_vector[count][nplus1]=l
+                   multiplier_vector[count][n + 1]=l
                 # print "P-X[count]="print[multiplier_vector[count],n]print": l<br>\n"
                    lengtharray[count]=l
                    continue
@@ -182,7 +182,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                iplus1=i + 1
+                i + 1=i + 1
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)
@@ -192,11 +192,11 @@ global lcv
                 Unum[i]=sumnum
                 Uden[i]=sumden
                 # now update T[i]
-                addr(x[iplus1],1,Unum[iplus1],Uden[iplus1])
-                subr(addnum,addden,Nnum[iplus1],Nden[iplus1])
+                addr(x[i + 1],1,Unum[i + 1],Uden[i + 1])
+                subr(addnum,addden,Nnum[i + 1],Nden[i + 1])
                 multr(subnum,subden,subnum,subden)
-                multr(Qnum[iplus1][iplus1],Qden[iplus1][iplus1],multnum,multden)
-                subr(Tnum[iplus1],Tden[iplus1],multnum,multden)
+                multr(Qnum[i + 1][i + 1],Qden[i + 1][i + 1],multnum,multden)
+                subr(Tnum[i + 1],Tden[i + 1],multnum,multden)
                 Tnum[i]=subnum
                 Tden[i]=subden
                 break
@@ -212,9 +212,9 @@ global lcv
                   #       minusa(coord[k],m) 
                   #       s=printlc(AA,coord[k],m)
                   #       if s == 0:
-                  #          print "b[mplus1]"
+                  #          print "b[m + 1]"
                   #       else:
-                  #          print "+b[mplus1]"
+                  #          print "+b[m + 1]"
                   #       
                   #       print "="
                   #       print "</TD>"
@@ -234,7 +234,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
-                        if multiplier_vector[k][nplus1] == min_length:
+                        if multiplier_vector[k][n + 1] == min_length:
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[lcva[k],n]
