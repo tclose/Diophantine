@@ -817,7 +817,7 @@ def  lmodd(m,n):
 
 def mina(a,n):
     x=a[1]
-    for(i="2"le(i,n)i=bcadd(i,"1"))
+    for i in xrange(1, n):
          if a[i] < x:
             x=a[i]
          

@@ -30,7 +30,7 @@ def  lllhermite(G,m,n,m1,n1):
            
         
    
-   for(r="2"le(r,m)r=bcadd(r,"1"))
+   for r in xrange(1, m):
        for s in xrange(r - 1):
            L[r][s]="0"
        
@@ -220,7 +220,7 @@ global A
 
 
 def minus(j,m,&L):
-   for(r="2"le(r,m)r=bcadd(r,"1"))
+   for r in xrange(1, m):
        for s in xrange(r - 1):
            if eq(r,j) || eq(s,j):
              L[r][s]=bcminus(L[r][s])
