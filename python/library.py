@@ -30,7 +30,7 @@
   ge(a,b)
   a < b
   gt(a,b)
-  neq(a,b)
+  a != b
   eq(a,b)
   neqzero(a)
   ezero(a)
@@ -591,8 +591,8 @@ def eq(a,b):
    
 
 
-def neq(a,b):
-    """  neq(a,b) returns 1 if a != b, "0" otherwise.  """
+def a != b:
+    """  a != b returns 1 if a != b, "0" otherwise.  """
    t=bccomp(a,b)
    if t==0:
       return("0")
@@ -1034,7 +1034,7 @@ def matrixperm(&A,a,m):
 
 # outputs 1 or 0 according as A=B+ 
 def equalmat(A,B,rowsA,colsA,rowsB,colsB):
-   if neq(rowsA,rowsB) || neq(colsA,colsB):
+   if rowsA != rowsB || colsA != colsB:
       return("0")
    
    for i in xrange(rowsA):
