@@ -23,7 +23,7 @@ def  lllhermite(G,m,n,m1,n1):
    """  G is a nonzero matrix with at least two rows.  """
    for(i="1"le(i,m)i=bcadd(i,"1"))
        for(j="1"le(j,m)j=bcadd(j,"1"))
-           if(eq(i,j))
+           if eq(i,j):
               B[i][j]="1"
            else:
               B[i][j]="0"
@@ -45,7 +45,7 @@ def  lllhermite(G,m,n,m1,n1):
    
 
    flag=flagcol(A,m,n)
-   if(eq(flag,"1"))
+   if eq(flag,"1"):
       B[m][m]="-1"
       for(j="1"le(j,n)j=bcadd(j,"1"))
           A[m][j]=bcminus(A[m][j])
@@ -64,7 +64,7 @@ def  lllhermite(G,m,n,m1,n1):
          u=bcmul(n1,temp3)
          temp1=bcmul(D[kminus1],D[kminus1])
          v=bcmul(m1,temp1)
-         if(le(col1,minim) || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)))
+         if le(col1,minim) || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)):
             swap2(k,m,n)
             if k > "2":
                k=kminus1
@@ -88,7 +88,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    for(i=mge(i,"1")i=bcsub(i,"1"))
        test=zero_row_test(A,n,i)
-       if(ezero(test))
+       if ezero(test):
           break
        
    
@@ -134,7 +134,7 @@ def  flagcol(A,m,n):
               flag="1"
               break
            
-       if(eq(flag,"1"))
+       if eq(flag,"1"):
           break
        
     iplus1=bcadd(i,"1")
@@ -151,7 +151,7 @@ def  flagcol(A,m,n):
     #  if i < m:
     #    return("0")
     #else:
-    # if(ltzero(A[m][j]))
+    # if ltzero(A[m][j]):
      #   return("1")
     # else:
      #   return("0")
@@ -167,9 +167,9 @@ global L
 global A
    col1=nplus1
    for(j="1"le(j,n)j=bcadd(j,"1"))
-       if(neqzero(A[i][j]))
+       if neqzero(A[i][j]):
          col1=j
-         if(ltzero(A[i][col1]))
+         if ltzero(A[i][col1]):
             minus(i,m,L)
 #print "Row i . -Row i<br>\n"
             for(jj="1"le(jj,n)jj=bcadd(jj,"1"))
@@ -184,12 +184,12 @@ global A
    
    col2=nplus1
    for(j="1"le(j,n)j=bcadd(j,"1"))
-       if(neqzero(A[k][j]))
+       if neqzero(A[k][j]):
          col2=j
          break
        
    
-   if(le(col1,n))
+   if le(col1,n):
       q=int(A[k][col1],A[i][col1])
    else:
       t=bcabs(L[k][i])
@@ -200,7 +200,7 @@ global A
         q="0"
       
    
-   if(neqzero(q))
+   if neqzero(q):
 #print "Row k . Row k - q &times Row i<br>\n"
       for(j="1"le(j,n)j=bcadd(j,"1"))
           temp=bcmul(q,A[i][j])
@@ -222,7 +222,7 @@ global A
 def minus(j,m,&L):
    for(r="2"le(r,m)r=bcadd(r,"1"))
        for(s="1"lt(s,r)s=bcadd(s,"1"))
-           if(eq(r,j) || eq(s,j))
+           if eq(r,j) || eq(s,j):
              L[r][s]=bcminus(L[r][s])
            
        
@@ -279,7 +279,7 @@ def  zero_row_test(matrix,n,i):
   is returned. Otherwise 0 is returned+ 
   """
     for(j="1"le(j,n)j=bcadd(j,"1"))
-       if(neqzero(matrix[i][j]))
+       if neqzero(matrix[i][j]):
          return(j)
        
     
@@ -318,21 +318,21 @@ global rank
     print "<br>\n"
     flag="0"
     for(i="1"lt(i,rank)i=bcadd(i,"1"))
-        if(neqzero(hnf[i][nplus1]))
+        if neqzero(hnf[i][nplus1]):
            flag="1"
            break
         
     
     flag1="0"
     for(j="1"le(j,n)j=bcadd(j,"1"))
-        if(neqzero(hnf[rank][j]))
+        if neqzero(hnf[rank][j]):
            flag1="1"
            break
         
     
     #t=hnf[rank][nplus1] this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
     #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if(eq(flag,"0") and eq(hnf[rank][nplus1],"1") and eq(flag1,"0"))
+    if eq(flag,"0") and eq(hnf[rank][nplus1],"1") and eq(flag1,"0"):
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
         for(j="1"le(j,m)j=bcadd(j,"1"))
           y[j]=bcminus(unimodular_matrix[rank][j])
@@ -341,7 +341,7 @@ global rank
         print[y,m]
         print "<br>\n"
         nullity=bcsub(mplus1,rank)
-        if(ezero(nullity))
+        if ezero(nullity):
            print "AX=B has a unique solution in integers<br>\n"
            return
         else:
@@ -352,13 +352,13 @@ global rank
                    basis[i][j]=unimodular_matrix[rankplusi][j]
                
            
-           if(eq(nullity,"1"))
+           if eq(nullity,"1"):
               print "the row: "
            else:
               print "the rows: "
            
            printmat1(basis,lim,m)
-           if(eq(nullity,"1"))
+           if eq(nullity,"1"):
               print "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n"
            else:
               print "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n"
@@ -454,8 +454,8 @@ global lcv
        x[i]=bcsub(temp3,"1")
        while("1")
           x[i]=bcadd(x[i],"1")
-          if(le(x[i],UB[i]))
-              if(eq(i,"1"))
+          if le(x[i],UB[i]):
+              if eq(i,"1"):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
                    count=bcadd(count,"1")
@@ -517,7 +517,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
                     for(k="1"le(k,count)k=bcadd(k,"1"))
-                        if(eq(multiplier_vector[k][nplus1],min_length))
+                        if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[multiplier_vector[k],n]
@@ -527,7 +527,7 @@ global lcv
                         
                     
                     print "</TABLE>\n"
-                    if(eq(min_count,"1"))
+                    if eq(min_count,"1"):
                        print " is the shortest solution vector, length squared min_length<br>\n"
                     else:
                        print " are the shortest solution vectors, length squared min_length<br>\n"

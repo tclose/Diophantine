@@ -38,7 +38,7 @@ if cols < "1":
 matrix=trim(matrix)
 a=split('[ ]+',matrix)
 t=len(a)
-if(le(t,"1"))
+if le(t,"1"):
 	print "number of entries is less than or equal to 1<br>\n"
         print "<a href=\"./axb.html\">Return to main page</a><br>\n"
 	flush()
@@ -69,7 +69,7 @@ if t > size:
 			break
 		
 	
-	if(ezero(flag))
+	if ezero(flag):
                 ii="0"
 		for(i="1"le(i,rows)i=bcadd(i,"1"))
 		    for(j="1"le(j,cols)j=bcadd(j,"1"))
@@ -81,7 +81,7 @@ if t > size:
 		
                 m=bcsub(cols,"1")
                 t=test_zeromat(mat,rows,m)
-                if(eq(t,"1"))
+                if eq(t,"1"):
                    print "Coeffficient matrix is the zero matrix<br>\n"
                 else:
                    print "Augmented matrix [A|B]="

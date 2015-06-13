@@ -64,7 +64,7 @@ global addden
 global multnum
 global multden
    y=int(c,d)
-   if(ezero(a))
+   if ezero(a):
       return(y)
    
    x=bcdiv(a,b)
@@ -75,7 +75,7 @@ global multden
    addr(x,"1",subnum,subden)
    multr(addnum,addden,addnum,addden)
    t=comparer(multnum,multden,a,b)
-   if(le(t,"0"))
+   if le(t,"0"):
       answer=bcadd(answer,"1")
    
    return(answer)
@@ -158,8 +158,8 @@ global lcv
        x[i]=bcsub(temp3,"1")
        while("1")
           x[i]=bcadd(x[i],"1")
-          if(le(x[i],UB[i]))
-              if(eq(i,"1"))
+          if le(x[i],UB[i]):
+              if eq(i,"1"):
                    #s=printlc(A,x,m)
                    lcasvector(AA,x,m,n)
                    count=bcadd(count,"1")
@@ -211,7 +211,7 @@ global lcv
                   #       print "<TD ALIGN=\"RIGHT\">"
                   #       minusa(coord[k],m) 
                   #       s=printlc(AA,coord[k],m)
-                  #       if(ezero(s))
+                  #       if ezero(s):
                   #          print "b[mplus1]"
                   #       else:
                   #          print "+b[mplus1]"
@@ -234,7 +234,7 @@ global lcv
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
                     for(k="1"le(k,count)k=bcadd(k,"1"))
-                        if(eq(multiplier_vector[k][nplus1],min_length))
+                        if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[lcva[k],n]
@@ -244,7 +244,7 @@ global lcv
                         
                     
                     print "</TABLE>\n"
-                    if(eq(min_count,"1"))
+                    if eq(min_count,"1"):
                        print " is the closest vector of &#8466 to P, with shortest distance squared min_length<br>\n"
                     else:
                        print " are the closest vectors of &#8466 to P, with shortest distance squared min_length<br>\n"
@@ -270,7 +270,7 @@ def lengthsquared(a,n):
 def zero[a,n]:
   flag="0"
   for(i="1"le(i,n)i=bcadd(i,"1"))
-      if(neqzero(a[i]))
+      if neqzero(a[i]):
         flag="1"
         break
       
