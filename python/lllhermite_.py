@@ -142,7 +142,7 @@ def  flagcol(A,m,n):
        if neqzero(A[k][j]:)
            return(0)
 
-    if(gtzero(A[i][j]))# A[i][j] is the only elt in column j and is positive
+    if(A[i][j] > 0)# A[i][j] is the only elt in column j and is positive
       return(0)
     else:# A[i][j] is the only elt in column j and is negative
       return(1)

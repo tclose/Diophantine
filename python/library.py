@@ -37,7 +37,7 @@
   gezero(a)
   lezero(a)
   ltzero(a)
-  gtzero(a)
+  a > 0
   gcd3(a,b,c)
   bezout(a,b)
   bezout1(a,b)
@@ -285,7 +285,7 @@ def  printpoly(a,n):
 		       print "+a[i]"
 	        
 		if a[i] == 1:
-		   if gtzero(i):
+		   if i > 0:
 		       print "+"
 		   
 		   if ezero(i):
@@ -293,7 +293,7 @@ def  printpoly(a,n):
 		   
 	        
 		if a[i] == -1:
-		   if gtzero(i):
+		   if i > 0:
 		       print -
 		   else:
 			print -1
@@ -337,7 +337,7 @@ def  printpolylambda(a,n):
 		       print "+a[i]"
 	        
 		if a[i] == 1:
-		   if gtzero(i):
+		   if i > 0:
 		       print "+"
 		   
 		   if ezero(i):
@@ -345,7 +345,7 @@ def  printpolylambda(a,n):
 		   
 	        
 		if a[i] == -1:
-		   if gtzero(i):
+		   if i > 0:
 		       print -
 		   else:
 			print -1
@@ -532,8 +532,8 @@ def lezero(a):
    
 
 
-def gtzero(a):
-    """  gtzero(a) returns 1 if a>0, 0 otherwise.  """
+def a > 0:
+    """  a > 0 returns 1 if a>0, 0 otherwise.  """
    t=bccomp(a,0)
    if t>0:
       return(1)
@@ -650,7 +650,7 @@ global zed2
         y=n
         zed1=1
         zed2=0
-        while gtzero(y):
+        while y > 0:
                 while ezero(y % 2):
                         y=y / 2
                         temp=x1
@@ -738,7 +738,7 @@ def  bezout(a,b):
       v1=0
       v3=b
    
-   while gtzero(v3):
+   while v3 > 0:
       q=d / v3
       t3=d % v3
       temp=q * v1
@@ -1131,7 +1131,7 @@ def comparer(a,b,c,d):
   if ltzero(t):
      return(-1)
   
-  if gtzero(t):
+  if t > 0:
      return(1)
   
   return(0)
@@ -1160,7 +1160,7 @@ def printlc(A,X,m):
        
        flag=1
      else:
-       if gtzero(t):
+       if t > 0:
           if t == 1:
              print "+b[i]"
           else:
@@ -1298,7 +1298,7 @@ def printaxplusby(a,x,b,y):
    else:
       print "ax"
    
-   if gtzero(b):
+   if b > 0:
       if b == 1:
          print " + y"
       else:
@@ -1316,7 +1316,7 @@ def printaxplusby(a,x,b,y):
 
 def printxplusa(x,a):
    print x
-   if gtzero(a):
+   if a > 0:
       print " + a"
    
    if ltzero(a):
@@ -1328,7 +1328,7 @@ def printxplusa(x,a):
 
 def printaxplusbyplusc(a,x,b,y,c):
    null=printaxplusby(a,x,b,y)
-      if gtzero(c):
+      if c > 0:
          print " + c"
       
       if ltzero(c):
