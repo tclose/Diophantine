@@ -53,7 +53,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    k="2"
    nplus1=bcadd(n,"1")
-   while(le(k,m))
+   while(k <= m)
          kminus1=bcsub(k,"1")
          reduce2(k,kminus1,m,n,D)
          kminus2=bcsub(k,"2")
@@ -64,7 +64,7 @@ def  lllhermite(G,m,n,m1,n1):
          u=bcmul(n1,temp3)
          temp1=bcmul(D[kminus1],D[kminus1])
          v=bcmul(m1,temp1)
-         if le(col1,minim) || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)):
+         if col1 <= minim || (eq(col1,col2) and eq(col1,nplus1) and lt(u,v)):
             swap2(k,m,n)
             if k > "2":
                k=kminus1
@@ -189,7 +189,7 @@ global A
          break
        
    
-   if le(col1,n):
+   if col1 <= n:
       q=int(A[k][col1],A[i][col1])
    else:
       t=bcabs(L[k][i])

@@ -26,7 +26,7 @@
   inverse(a,m)
   bcminus(a)
   powerdd(a,b,dd,n)
-  le(a,b)
+  a <= b
   ge(a,b)
   lt(a,b)
   gt(a,b)
@@ -630,8 +630,8 @@ def ge(a,b):
       return("0")
    
 
-def le(a,b):
-    """  le(a,b) returns 1 if a <= b, "0" otherwise.  """
+def a <= b:
+    """  a <= b returns 1 if a <= b, "0" otherwise.  """
    t=bccomp(a,b)
    if t<="0":
       return("1")
