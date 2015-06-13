@@ -16,7 +16,7 @@ def cholesky(A,m): # A is positive definite mxm
       
   
   for i in xrange(1, m):
-     i + 1=i + 1
+
      for j in xrange(i, m):
          Qnum[j][i]=Qnum[i][j]
          Qden[j][i]=Qden[i][j]
@@ -100,7 +100,7 @@ global lcv
     print "matrix A:"
     printmat1(A,m,n)
     print "<br>\n"
-    n + 1=n + 1
+
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -182,7 +182,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                i + 1=i + 1
+
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)

@@ -52,7 +52,7 @@ def  lllhermite(G,m,n,m1,n1):
       
    
    k=2
-   n + 1=n + 1
+
    while k <= m:
          
          reduce2(k,k - 1,m,n,D)
@@ -94,7 +94,7 @@ def  lllhermite(G,m,n,m1,n1):
    
    rank=m - i
    #print "rank = rank<br>\n"
-   m + 1=m + 1
+
    for i in xrange(m):
         for j in xrange(n):
            k=m + 1 - i
@@ -137,7 +137,7 @@ def  flagcol(A,m,n):
        if flag == 1:
           break
        
-    i + 1=i + 1
+
     for k in xrange(i, m):
        if A[k][j]: != 0
            return(0)
@@ -253,7 +253,7 @@ global D
        L[k][j]=L[k - 1][j]
        L[k - 1][j]=temp
    
-   k + 1=k + 1
+
    for i in xrange(k, m):
        temp1=L[i][k - 1] * D[k]
        temp2=L[i][k] * L[k][k - 1]
@@ -294,13 +294,13 @@ def  axb(Ab,m,n,m1,n1):
 global hnf
 global unimodular_matrix
 global rank
-    m + 1=m + 1
+
     for i in xrange(m + 1):
         for j in xrange(n):
                G[i][j]=Ab[i][j]
         
     
-    n + 1=n + 1
+
     for i in xrange(m):
         G[i][n + 1]=0
     
@@ -369,7 +369,7 @@ global rank
        return
     
     # joining basis and y
-    lim + 1=lim + 1
+
     for j in xrange(m):
         basis[lim + 1][j]=y[j]
     
@@ -396,7 +396,7 @@ global lcv
     #print "matrix A:"
     #printmat1(A,m,n)
     #print "<br>\n"
-    n + 1=n + 1
+
     #for j in xrange(n):
     # Am[j]=A[m][j]
   #
@@ -478,7 +478,7 @@ global lcv
                 # now update U[i]
                 sumnum=0
                 sumden=1
-                i + 1=i + 1
+
                 for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],1)
                     addr(sumnum,sumden,multnum,multden)

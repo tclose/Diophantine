@@ -971,7 +971,7 @@ def coliminusqcolj(&A,m,i,q,j):
 
 def delete_row(&B,i,&m):
    for l in xrange(i, m):
-       l + 1=l + 1
+
        temp=B[l + 1]
        B[l]=temp
    
