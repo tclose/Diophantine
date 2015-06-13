@@ -21,8 +21,8 @@ global rank
 
 def  lllhermite(G,m,n,m1,n1):
    """  G is a nonzero matrix with at least two rows.  """
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            if eq(i,j):
               B[i][j]="1"
            else:
@@ -38,8 +38,8 @@ def  lllhermite(G,m,n,m1,n1):
    for(i="0"le(i,m)i=bcadd(i,"1"))
         D[i]="1"
    
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,n)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(n):
            A[i][j]=G[i][j]
        
    
@@ -47,7 +47,7 @@ def  lllhermite(G,m,n,m1,n1):
    flag=flagcol(A,m,n)
    if eq(flag,"1"):
       B[m][m]="-1"
-      for(j="1"le(j,n)j=bcadd(j,"1"))
+      for j in xrange(n):
           A[m][j]=bcminus(A[m][j])
       
    
@@ -76,13 +76,13 @@ def  lllhermite(G,m,n,m1,n1):
             k=bcadd(k,"1")
          
    
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,n)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(n):
            hnf[i][j]=A[i][j]
        
    
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            unimodular_matrix[i][j]=B[i][j]
        
    
@@ -95,26 +95,26 @@ def  lllhermite(G,m,n,m1,n1):
    rank=bcsub(m,i)
    #print "rank = rank<br>\n"
    mplus1=bcadd(m,"1")
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-        for(j="1"le(j,n)j=bcadd(j,"1"))
+   for i in xrange(m):
+        for j in xrange(n):
            k=bcsub(mplus1,i)
            hnf[i][j]=A[k][j]
        
    
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            k=bcsub(mplus1,i)
            unimodular_matrix[i][j]=B[k][j]
        
    
 #   rankplus1=bcadd(rank,"1")
 #   for(i=rankplus1le(i,m)i=bcadd(i,"1"))
- #      for(j="1"le(j,n)j=bcadd(j,"1"))
+ #      for j in xrange(n):
   #         hnf[i][j]="0"
    #    
  #  
  #  for(i=rankplus1le(i,m)i=bcadd(i,"1"))
-  #     for(j="1"le(j,n)j=bcadd(j,"1"))
+  #     for j in xrange(n):
    #        hnf[i][j]="0"
     #   
  #  
@@ -128,8 +128,8 @@ def  flagcol(A,m,n):
       This assumes A is a nonzero matrix with at least two rows+ 
     """
     flag="0"
-    for(j="1"le(j,n)j=bcadd(j,"1"))
-       for(i="1"le(i,m)i=bcadd(i,"1"))
+    for j in xrange(n):
+       for i in xrange(m):
            if(neqzero(A[i][j]))#found the first column with a nonzero elt, which is in row i
               flag="1"
               break
@@ -166,16 +166,16 @@ global B
 global L
 global A
    col1=nplus1
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
        if neqzero(A[i][j]):
          col1=j
          if ltzero(A[i][col1]):
             minus(i,m,L)
 #print "Row i . -Row i<br>\n"
-            for(jj="1"le(jj,n)jj=bcadd(jj,"1"))
+            for jj in xrange(n):
                 A[i][jj]=bcminus(A[i][jj])
             
-            for(jj="1"le(jj,m)jj=bcadd(jj,"1"))
+            for jj in xrange(m):
                 B[i][jj]=bcminus(B[i][jj])
             
          
@@ -183,7 +183,7 @@ global A
        
    
    col2=nplus1
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
        if neqzero(A[k][j]):
          col2=j
          break
@@ -202,11 +202,11 @@ global A
    
    if neqzero(q):
 #print "Row k . Row k - q &times Row i<br>\n"
-      for(j="1"le(j,n)j=bcadd(j,"1"))
+      for j in xrange(n):
           temp=bcmul(q,A[i][j])
           A[k][j]=bcsub(A[k][j],temp)
       
-      for(j="1"le(j,m)j=bcadd(j,"1"))
+      for j in xrange(m):
           temp=bcmul(q,B[i][j])
           B[k][j]=bcsub(B[k][j],temp)
       
@@ -237,18 +237,18 @@ global D
    
    kminus1=bcsub(k,"1")
    #print "Row k <. Row kminus1<br>\n"
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
        temp=A[k][j]
        A[k][j]=A[kminus1][j]
        A[kminus1][j]=temp
    
-   for(j="1"le(j,m)j=bcadd(j,"1"))
+   for j in xrange(m):
        temp=B[k][j]
        B[k][j]=B[kminus1][j]
        B[kminus1][j]=temp
    
    kminus2=bcsub(k,"2")
-   for(j="1"le(j,kminus2)j=bcadd(j,"1"))
+   for j in xrange(kminus2):
        temp=L[k][j]
        L[k][j]=L[kminus1][j]
        L[kminus1][j]=temp
@@ -278,7 +278,7 @@ def  zero_row_test(matrix,n,i):
   entry. If there is one and the first occurs in column j, then j
   is returned. Otherwise 0 is returned+ 
   """
-    for(j="1"le(j,n)j=bcadd(j,"1"))
+    for j in xrange(n):
        if neqzero(matrix[i][j]):
          return(j)
        
@@ -295,13 +295,13 @@ global hnf
 global unimodular_matrix
 global rank
     mplus1=bcadd(m,"1")
-    for(i="1"le(i,mplus1)i=bcadd(i,"1"))
-        for(j="1"le(j,n)j=bcadd(j,"1"))
+    for i in xrange(mplus1):
+        for j in xrange(n):
                G[i][j]=Ab[i][j]
         
     
     nplus1=bcadd(n,"1")
-    for(i="1"le(i,m)i=bcadd(i,"1"))
+    for i in xrange(m):
         G[i][nplus1]="0"
     
     G[mplus1][nplus1]="1"
@@ -324,7 +324,7 @@ global rank
         
     
     flag1="0"
-    for(j="1"le(j,n)j=bcadd(j,"1"))
+    for j in xrange(n):
         if neqzero(hnf[rank][j]):
            flag1="1"
            break
@@ -334,7 +334,7 @@ global rank
     #Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
     if eq(flag,"0") and eq(hnf[rank][nplus1],"1") and eq(flag1,"0"):
         print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
-        for(j="1"le(j,m)j=bcadd(j,"1"))
+        for j in xrange(m):
           y[j]=bcminus(unimodular_matrix[rank][j])
         
         print "AX=B has a solution: Y = "
@@ -346,9 +346,9 @@ global rank
            return
         else:
            lim=bcsub(mplus1,rank)
-           for(i="1"le(i,lim)i=bcadd(i,"1"))
+           for i in xrange(lim):
                rankplusi=bcadd(rank,i)
-               for(j="1"le(j,m)j=bcadd(j,"1"))
+               for j in xrange(m):
                    basis[i][j]=unimodular_matrix[rankplusi][j]
                
            
@@ -370,7 +370,7 @@ global rank
     
     # joining basis and y
     limplus1=bcadd(lim,"1")
-    for(j="1"le(j,m)j=bcadd(j,"1"))
+    for j in xrange(m):
         basis[limplus1][j]=y[j]
     
     shortest_distance_axb(basis,limplus1,m)
@@ -397,7 +397,7 @@ global lcv
     #printmat1(A,m,n)
     #print "<br>\n"
     nplus1=bcadd(n,"1")
-    #for(j="1"le(j,n)j=bcadd(j,"1"))
+    #for j in xrange(n):
     # Am[j]=A[m][j]
   #
     #print "P = A[m] =  "print[A[m],n]print "<br>\n"
@@ -410,8 +410,8 @@ global lcv
     #else:
        #print "&#8466 is the lattice spanned by the first row of A<br>\n"
     #
-    for(i="1"le(i,mminus1)i=bcadd(i,"1"))  # AA consists of the first m-1 rows of A
-        for(j="1"le(j,n)j=bcadd(j,"1"))
+    for i in xrange(mminus1):  # AA consists of the first m-1 rows of A
+        for j in xrange(n):
             AA[i][j]=A[i][j]
         
     
@@ -423,14 +423,14 @@ global lcv
     QQnum=transpose(Qnum,m,m)
     QQden=transpose(Qden,m,m)
     m=bcsub(m,"1")
-    for(i="1"le(i,m)i=bcadd(i,"1"))# the N vector
+    for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
     
 
     Cnum="0"
     Cden="1"
-    for(i="1"le(i,m)i=bcadd(i,"1"))
+    for i in xrange(m):
         multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
         multr(multnum,multden,Qnum[i][i],Qden[i][i])
         addr(Cnum,Cden,multnum,multden)
@@ -464,7 +464,7 @@ global lcv
                #  print "lcv[count]="print[lcv,n]
                #  print "<br>\n"
                    coord[count]=x
-                   for(k="1"le(k,n)k=bcadd(k,"1"))
+                   for k in xrange(n):
                        temp=A[mplus1][k]
                        multiplier_vector[count][k]=bcsub(temp,lcv[k])
                    
@@ -502,7 +502,7 @@ global lcv
              if i > m:
                     print "Here are the solution vectors with length squared &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
-                    for(k="1"le(k,count)k=bcadd(k,"1"))
+                    for k in xrange(count):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
                            print[multiplier_vector[k],n]
@@ -516,7 +516,7 @@ global lcv
                     print "Also<br>\n"
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
-                    for(k="1"le(k,count)k=bcadd(k,"1"))
+                    for k in xrange(count):
                         if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"

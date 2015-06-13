@@ -835,9 +835,9 @@ def bcadd3(a,b,c):
 def  printmat1(matrix,m,n):
 """  prints a matrix as a table with entries right justified  """
    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
-   for(i="1"le(i,m)i=bcadd(i,"1"))
+   for i in xrange(m):
        print "<TR>"
-       for(j="1"le(j,n)j=bcadd(j,"1"))
+       for j in xrange(n):
            k=matrix[i][j]
           print "<TD ALIGN=\"RIGHT\">k</TD>"
        
@@ -879,8 +879,8 @@ def printmatrix2(matrix,m,n):
     return
 
  def unit_matrix(m):
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            if eq(i,j):
               P[i][j]="1"
            else:
@@ -893,8 +893,8 @@ def printmatrix2(matrix,m,n):
 
 def transpose(A,m,n):
 #global transposed
-     for(j="1"le(j,n)j=bcadd(j,"1"))
-         for(i="1"le(i,m)i=bcadd(i,"1"))
+     for j in xrange(n):
+         for i in xrange(m):
              transposed[j][i]=A[i][j]
          
      
@@ -902,8 +902,8 @@ def transpose(A,m,n):
 
 
 def transpose1(&A,&m,&n):
-     for(j="1"le(j,n)j=bcadd(j,"1"))
-         for(i="1"le(i,m)i=bcadd(i,"1"))
+     for j in xrange(n):
+         for i in xrange(m):
              transposed[j][i]=A[i][j]
          
      
@@ -920,7 +920,7 @@ global new_row_size
     s=bcsub(q,p)
     s=bcadd(s,"1")
     new_row_size=s
-    for(i="1"le(i,s)i=bcadd(i,"1"))
+    for i in xrange(s):
         z=bcadd(i,r)
         B[i]=A[z]
     
@@ -934,9 +934,9 @@ global new_col_size
     s=bcsub(q,p)
     s=bcadd(s,"1")
     new_col_size=s
-    for(j="1"le(j,s)j=bcadd(j,"1"))
+    for j in xrange(s):
         z=bcadd(j,r)
-        for(i="1"le(i,rows)i=bcadd(i,"1"))
+        for i in xrange(rows):
             B[i][j]=A[i][z]
         
     
@@ -954,7 +954,7 @@ global new_col_size
 
 # replaces row i of A by q times row j, updating A
 def rowiminusqrowj(&A,n,i,q,j):
-    for(k="1"le(k,n)k=bcadd(k,"1"))
+    for k in xrange(n):
        t=bcmul(A[j][k],q)
        A[i][k]=bcsub(A[i][k],t)
     
@@ -963,7 +963,7 @@ def rowiminusqrowj(&A,n,i,q,j):
 
 # replaces column i of A by q times column j, updating A
 def coliminusqcolj(&A,m,i,q,j):
-    for(k="1"le(k,m)k=bcadd(k,"1"))
+    for k in xrange(m):
        t=bcmul(A[k][j],q)
        A[k][i]=bcsub(A[k][i],t)
     
@@ -1001,7 +1001,7 @@ def swap_cols(&P,m,j,k):
 
 def dotproduct(a,b,n):
    sum="0"
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
        temp=bcmul(a[j],b[j])
        sum=bcadd(sum,temp)
    
@@ -1009,10 +1009,10 @@ def dotproduct(a,b,n):
 
 
 def multmat(A,B,m,n,p):
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(k="1"le(k,p)k=bcadd(k,"1"))
+   for i in xrange(m):
+       for k in xrange(p):
            sum="0"
-           for(j="1"le(j,n)j=bcadd(j,"1"))
+           for j in xrange(n):
                t=bcmul(A[i][j],B[j][k])
                sum=bcadd(sum,t)
            
@@ -1024,8 +1024,8 @@ def multmat(A,B,m,n,p):
 
 # i.a[i] is a permutation of 1,..,m. A is m x m. The rows of A arr permuted+ 
 def matrixperm(&A,a,m):
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            B[i]=A[a[i]]
        
    
@@ -1037,8 +1037,8 @@ def equalmat(A,B,rowsA,colsA,rowsB,colsB):
    if neq(rowsA,rowsB) || neq(colsA,colsB):
       return("0")
    
-   for(i="1"le(i,rowsA)i=bcadd(i,"1"))
-       for(j="1"le(j,colsA)j=bcadd(j,"1"))
+   for i in xrange(rowsA):
+       for j in xrange(colsA):
            if neq(A[i][j],B[i][j]):
               return("0")
            
@@ -1143,7 +1143,7 @@ def printlc(A,X,m):
  if ezero(s):
     return("0")
  
- for(i="1"le(i,m)i=bcadd(i,"1"))
+ for i in xrange(m):
      t=X[i]
      if ezero(t):
         continue
@@ -1182,9 +1182,9 @@ def printlc(A,X,m):
 # lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+ 
 def lcasvector(A,X,m,n):
 global lcv
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
       sum="0"
-      for(i="1"le(i,m)i=bcadd(i,"1"))
+      for i in xrange(m):
          t=bcmul(X[i],A[i][j])
          sum=bcadd(sum,t)
       
@@ -1193,7 +1193,7 @@ global lcv
    return
 
  def minusa(&a,n):
-   for(j="1"le(j,n)j=bcadd(j,"1"))
+   for j in xrange(n):
        a[j]=bcminus(a[j])
    
    return
@@ -1201,8 +1201,8 @@ global lcv
 
 # This returns 1 if A is the zero matrix, otherwise returns 0+ 
  def test_zeromat(A,m,n):
-      for(i="1"le(i,m)i=bcadd(i,"1"))
-          for(j="1"le(j,n)j=bcadd(j,"1"))
+      for i in xrange(m):
+          for j in xrange(n):
               if neqzero(A[i][j]):
                  return("0")
               

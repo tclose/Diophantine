@@ -45,8 +45,8 @@ def cholesky(A,m): # A is positive definite mxm
 
 
 def gram(A,m,n):
-   for(i="1"le(i,m)i=bcadd(i,"1"))
-       for(j="1"le(j,m)j=bcadd(j,"1"))
+   for i in xrange(m):
+       for j in xrange(m):
            B[i][j]=dotproduct(A[i],A[j],n)
        
    
@@ -101,7 +101,7 @@ global lcv
     printmat1(A,m,n)
     print "<br>\n"
     nplus1=bcadd(n,"1")
-    #for(j="1"le(j,n)j=bcadd(j,"1"))
+    #for j in xrange(n):
     # Am[j]=A[m][j]
   #
     print "P = A[m] =  "print[A[m],n]print "<br>\n"
@@ -114,8 +114,8 @@ global lcv
     else:
        print "&#8466 is the lattice spanned by the first row of A<br>\n"
     
-    for(i="1"le(i,mminus1)i=bcadd(i,"1"))  # AA consists of the first m-1 rows of A
-        for(j="1"le(j,n)j=bcadd(j,"1"))
+    for i in xrange(mminus1):  # AA consists of the first m-1 rows of A
+        for j in xrange(n):
             AA[i][j]=A[i][j]
         
     
@@ -127,14 +127,14 @@ global lcv
     QQnum=transpose(snum,m,m)
     QQden=transpose(sden,m,m)
     m=bcsub(m,"1")
-    for(i="1"le(i,m)i=bcadd(i,"1"))# the N vector
+    for i in xrange(m):# the N vector
         Nnum[i]=Qnum[i][mplus1]
         Nden[i]=Qden[i][mplus1]
     
 
     Cnum="0"
     Cden="1"
-    for(i="1"le(i,m)i=bcadd(i,"1"))
+    for i in xrange(m):
         multr(Nnum[i],Nden[i],Nnum[i],Nden[i])
         multr(multnum,multden,Qnum[i][i],Qden[i][i])
         addr(Cnum,Cden,multnum,multden)
@@ -168,7 +168,7 @@ global lcv
                #  print "lcv[count]="print[lcv,n]
                #  print "<br>\n"
                    coord[count]=x
-                   for(k="1"le(k,n)k=bcadd(k,"1"))
+                   for k in xrange(n):
                        temp=A[mplus1][k]
                        multiplier_vector[count][k]=bcsub(temp,lcv[k])
                    
@@ -206,7 +206,7 @@ global lcv
              if i > m:
                     print "Here are the X[k] &isin &#8466, P - X[k], ||P-X[k]||<sup>2</sup> such that ||P-X[k]||<sup>2</sup> &le lengthj<br>\n"
                     print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
-                    for(k="1"le(k,count)k=bcadd(k,"1"))
+                    for k in xrange(count):
                            print "<TR>"
                   #       print "<TD ALIGN=\"RIGHT\">"
                   #       minusa(coord[k],m) 
@@ -233,7 +233,7 @@ global lcv
                     print "Also<br>\n"
                     min_length=mina(lengtharray,count)
                     print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
-                    for(k="1"le(k,count)k=bcadd(k,"1"))
+                    for k in xrange(count):
                         if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
@@ -259,7 +259,7 @@ global lcv
 
 def lengthsquared(a,n):
    sum="0"
-   for(i="1"le(i,n)i=bcadd(i,"1"))
+   for i in xrange(n):
       temp=bcmul(a[i],a[i])
       sum=bcadd(sum,temp)
    
@@ -269,7 +269,7 @@ def lengthsquared(a,n):
 # returns 0 if all of a[i] are zero, otherwise 1+ 
 def zero[a,n]:
   flag="0"
-  for(i="1"le(i,n)i=bcadd(i,"1"))
+  for i in xrange(n):
       if neqzero(a[i]):
         flag="1"
         break

@@ -71,8 +71,8 @@ if t > size:
 	
 	if ezero(flag):
                 ii="0"
-		for(i="1"le(i,rows)i=bcadd(i,"1"))
-		    for(j="1"le(j,cols)j=bcadd(j,"1"))
+		for i in xrange(rows):
+		    for j in xrange(cols):
                         k=bcadd(ii,j)
                         k=bcsub(k,"1")
                         mat[i][j]=a[k]
