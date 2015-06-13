@@ -137,7 +137,7 @@ def sign(a):
 		return(1)
 	
 	if a<0:
-		return("-1")
+		return(-1)
 	
 	return(0)
 
@@ -149,7 +149,7 @@ def signn(a):
 	if a>=0:
 		return(1)
 	else:
-		return("-1")
+		return(-1)
 	
 
 
@@ -192,7 +192,7 @@ global multiplier2
 			if s==1:
 				multiplier1=1
 			else:
-				multiplier1="-1"
+				multiplier1=-1
 			
 			multiplier2=0
 			return(abs(p))
@@ -210,7 +210,7 @@ global multiplier2
 		if s==1:
 			multiplier2=1
 		else:
-			multiplier2="-1"
+			multiplier2=-1
 		
 		multiplier1=0
 		return(b)
@@ -234,7 +234,7 @@ global multiplier2
 		k2=h2
 	
 	multiplier1=k1
-	if s=="-1":
+	if s==-1:
 		k2=0 - k2
 	
 	multiplier2=k2
@@ -267,8 +267,8 @@ def  printpoly(a,n):
 		print "a[0]"
 	else:
 	if neq(a[n],1):
-	    if eq(a[n],"-1"):
-	       print "-"
+	    if eq(a[n],-1):
+	       print -
 	    else:
 		print "a[n]"
 	    
@@ -292,14 +292,14 @@ def  printpoly(a,n):
 		       	  print "+1"
 		   
 	        
-		if eq(a[i],"-1"):
+		if eq(a[i],-1):
 		   if gtzero(i):
-		       print "-"
+		       print -
 		   else:
-			print "-1"
+			print -1
 		   
 	        
-		if a[i] < "-1":
+		if a[i] < -1:
 		       print "a[i]"
 	        
 		if i > 1:
@@ -319,8 +319,8 @@ def  printpolylambda(a,n):
 		print "a[0]"
 	else:
 	if neq(a[n],1):
-	    if eq(a[n],"-1"):
-	       print "-"
+	    if eq(a[n],-1):
+	       print -
 	    else:
 		print "a[n]"
 	    
@@ -344,14 +344,14 @@ def  printpolylambda(a,n):
 		       	  print "+1"
 		   
 	        
-		if eq(a[i],"-1"):
+		if eq(a[i],-1):
 		   if gtzero(i):
-		       print "-"
+		       print -
 		   else:
-			print "-1"
+			print -1
 		   
 	        
-		if a[i] < "-1":
+		if a[i] < -1:
 		       print "a[i]"
 	        
 		if i > 1:
@@ -696,7 +696,7 @@ def falling_factorial(m,n):
     return(product)
 
 def print_matrix(a,b,c,d):
- print "<TABLE BORDER=\"1\" ALIGN=\"CENTER\"\n"
+ print "<TABLE BORDER=\1\ ALIGN=\"CENTER\"\n"
  print "<TR><TD>a</TD><TD>b</TD></TR>\n"
  print "<TR><TD>c</TD><TD>d</TD></TR>"
  print "</TABLE>"
@@ -834,7 +834,7 @@ def bcadd3(a,b,c):
 
 def  printmat1(matrix,m,n):
     """  prints a matrix as a table with entries right justified  """
-    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
+    print "<TABLE BORDER=\1\ CELLSPACING=\0\>\n"
     for i in xrange(m):
        print "<TR>"
        for j in xrange(n):
@@ -1129,7 +1129,7 @@ def addr(a,b,c,d):
 def comparer(a,b,c,d):
   t=abminuscd(a,d,b,c)
   if ltzero(t):
-     return("-1")
+     return(-1)
   
   if gtzero(t):
      return(1)
@@ -1149,10 +1149,10 @@ def printlc(A,X,m):
         continue
      
      if ezero(flag):
-       if neq(t,1) and neq(t,"-1"):
+       if neq(t,1) and neq(t,-1):
           print "t"print "b[i]"
        
-       if eq(t,"-1"):
+       if eq(t,-1):
           print "-b[i]"
        
        if eq(t,1):
@@ -1168,7 +1168,7 @@ def printlc(A,X,m):
           
        
        if ltzero(t):
-          if eq(t,"-1"):
+          if eq(t,-1):
              print "-b[i]"
           else:
              print "t"print "b[i]"
@@ -1213,20 +1213,20 @@ def bcmul3(a,b,c):
 def pparity(e):
    t=bcmod(e,2)
    if eq(t,1):
-     return("-1")
+     return(-1)
    else:
      return(1)
    
 
 
 def printbinaryform(a,b,c,x,y):
-	if gt(a,1) || lt(a,"-1"):
+	if gt(a,1) || lt(a,-1):
            print"a&#8203x<sup>2</sup>"
         
         if eq(a,1):
            print"x<sup>2</sup>"
         
-        if eq(a,"-1"):
+        if eq(a,-1):
            print"-x<sup>2</sup>"
         
 	if b != 0:
@@ -1236,10 +1236,10 @@ def printbinaryform(a,b,c,x,y):
 	   if eq(b,1):
               print"+xy"
            
-	   if eq(b,"-1"):
+	   if eq(b,-1):
               print"-xy"
            
-           if b < "-1":
+           if b < -1:
               print"b&#8203xy"
            
         
@@ -1247,13 +1247,13 @@ def printbinaryform(a,b,c,x,y):
 	   if c > 1:
               print"+c&#8203y<sup>2</sup>"
            
-	   if c < "-1":
+	   if c < -1:
               print"c&#8203y<sup>2</sup>"
            
            if eq(c,1):
               print"+y<sup>2</sup>"
            
-           if eq(c,"-1"):
+           if eq(c,-1):
               print"-y<sup>2</sup>"
            
         
@@ -1306,7 +1306,7 @@ def printaxplusby(a,x,b,y):
       
    
    if ltzero(b):
-      if eq(b,"-1"):
+      if eq(b,-1):
          print " - y"
       else:
          minusb=-b

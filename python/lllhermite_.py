@@ -46,7 +46,7 @@ def  lllhermite(G,m,n,m1,n1):
 
    flag=flagcol(A,m,n)
    if eq(flag,1):
-      B[m][m]="-1"
+      B[m][m]=-1
       for j in xrange(n):
           A[m][j]=-A[m][j]
       
@@ -501,7 +501,7 @@ global lcv
              i=i + 1
              if i > m:
                     print "Here are the solution vectors with length squared &le lengthj<br>\n"
-                    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
+                    print "<TABLE BORDER=\1\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
                            print "<TR>"
                            print "<TD ALIGN=\"RIGHT\">"
@@ -515,7 +515,7 @@ global lcv
                     print "</TABLE>\n"
                     print "Also<br>\n"
                     min_length=mina(lengtharray,count)
-                    print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
+                    print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
                         if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"

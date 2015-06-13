@@ -205,7 +205,7 @@ global lcv
              i=i + 1
              if i > m:
                     print "Here are the X[k] &isin &#8466, P - X[k], ||P-X[k]||<sup>2</sup> such that ||P-X[k]||<sup>2</sup> &le lengthj<br>\n"
-                    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n"
+                    print "<TABLE BORDER=\1\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
                            print "<TR>"
                   #       print "<TD ALIGN=\"RIGHT\">"
@@ -232,7 +232,7 @@ global lcv
                     print "</TABLE>\n"
                     print "Also<br>\n"
                     min_length=mina(lengtharray,count)
-                    print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n"
+                    print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
                     for k in xrange(count):
                         if eq(multiplier_vector[k][nplus1],min_length):
                            print "<TR>"
