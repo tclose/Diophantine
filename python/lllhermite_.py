@@ -50,7 +50,7 @@ def  lllhermite(G,m,n,m1,n1):
    k=2
    while k <= m:
          reduce2(k,k - 1,m,n,D)
-         minim=minimum(col2,n)
+         minim=min(col2,n)
          temp1=D[k - 2] * D[k]
          temp2=L[k][k - 1] * L[k][k - 1]
          temp3=temp1 + temp2

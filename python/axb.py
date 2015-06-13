@@ -37,7 +37,7 @@ if cols < 1:
 
 matrix=trim(matrix)
 a=split('[ ]+',matrix)
-t=len(a)
+t=num_digits(a)
 if le(t,1):
 	print "number of entries is less than or equal to 1<br>\n"
         print "<a href=\"./axb.html\">Return to main page</a><br>\n"

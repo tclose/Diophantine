@@ -1,43 +1,15 @@
 
-def  abs_mod(a,b):
-"""  This returns r=mod(a,b) if r <= b/2, otherwise r-b. """
-   r=mod(a,b)
-   temp=2 * r
-   if temp > b:
-      r=r - b
-   
-   return r
-
-
 def int(a,b):
-	if b<0:
-	     a=0 - a
-	     b=0 - b
-	
-	c=a / b
-	d=a % b
-	if d==0 || a>0:
-		return c
-	else:
-		return c - 1
-	
-
-
-def mpower(a,b,c):
-	x=mod(a,c)
-	y=b
-	z=1
-	while y:
-		while y % 2==0:
-			y=y / 2
-			x=x * x % c
-		
-		y=y - 1
-		z=z * x % c
-	
-	return z
-
-
+    if b<0:
+         a=0 - a
+         b=0 - b
+    c=a / b
+    d=a % b
+    if d==0 || a>0:
+        return c
+    else:
+        return c - 1
+    
 
 def sign(a):
     """  sign of an integer a  """
@@ -51,43 +23,20 @@ def sign(a):
 	return 0
 
 
-def signn(a):
-    """  signn of an integer a  """
-    """  signn(a)=1,-1, according as a>=0,a<0  """
-	if a>=0:
-		return 1
-	else:
-		return -1
-	
-
-
-def  abs(a):
-    """  absolute value  """
-	if a>=0:
-		return a
-	else:
-		h=0 - a
-		return h
-	
-
-
-
 def gcd(m,n):
     """   b=gcd(m,n) for any integers m and n  """
     """  Euclid's division algorithm is used.  """
     """  We use gcd(m,n)=gcd(|m|,|n|)  """
-	a=abs(m)         """  a=r[0]  """ 
-	if n==0:
-	     return a
-	
-        b=abs(n)         """  b=r[1]  """ 
-        c=mod(a,b)        """  c=r[2]=r[0] mod(r[1])  """
-        while c:
-		a=b
-                b=c
-                c=mod(a,b)    """  c=r[j]=r[j-2] mod(r[j-1])  """
-        
-	return b
+    a=abs(m)  # a=r[0]
+    if n==0:
+         return a
+    b=abs(n)  # b=r[1]
+    c=mod(a,b)  # c=r[2]=r[0] mod(r[1])
+    while c:
+            a=b
+            b=c
+            c=mod(a,b)  # c=r[j]=r[j-2] mod(r[j-1]) 
+    return b
    
 
 def egcd(p,q):
@@ -134,180 +83,33 @@ def egcd(p,q):
 
 
 
-def minimum(x,y):
-    """  min(x,y)  """
-    if y < x:
-        return y
-    else:
-        return x
-	
-
-def maximum(x,y):
-    """  max(x,y)  """
-	if y>x:
-		return y
-	else:
-		return x
-	
-def  printpoly(a,n):
-"""  php program printpoly.php  """
-	if n == 0:
-		print "a[0]"
-	else:
-	if a[n] != 1:
-	    if a[n] == -1:
-	       print -
-	    else:
-		print "a[n]"
-	    
-	
-	if n > 1:
-	   print "x<sup>n</sup>"
-	else:
-           print "x"
-	
-	d=n - 1
-  	for i in xrange(d, 0, -1):
-	    if a[i] != 0:
-		if a[i] > 1:
-		       print "+a[i]"
-	        
-		if a[i] == 1:
-		   if i > 0:
-		       print "+"
-		   
-		   if i == 0:
-		       	  print "+1"
-		   
-	        
-		if a[i] == -1:
-		   if i > 0:
-		       print -
-		   else:
-			print -1
-		   
-	        
-		if a[i] < -1:
-		       print "a[i]"
-	        
-		if i > 1:
-	            print "x<sup>i</sup>"
-		
-		if i == 1:
-		    print "x"
-		
-            
-	
-	
-
-
-def  printpolylambda(a,n):
-"""  php program printpolylambda.php  """
-	if n == 0:
-		print "a[0]"
-	else:
-	if a[n] != 1:
-	    if a[n] == -1:
-	       print -
-	    else:
-		print "a[n]"
-	    
-	
-	if n > 1:
-	   print "&lambda<sup>n</sup>"
-	else:
-           print "&lambda"
-	
-	d=n - 1
-  	for i in xrange(d, 0, -1):
-	    if a[i] != 0:
-		if a[i] > 1:
-		       print "+a[i]"
-	        
-		if a[i] == 1:
-		   if i > 0:
-		       print "+"
-		   
-		   if i == 0:
-		       	  print "+1"
-		   
-	        
-		if a[i] == -1:
-		   if i > 0:
-		       print -
-		   else:
-			print -1
-		   
-	        
-		if a[i] < -1:
-		       print "a[i]"
-	        
-		if i > 1:
-	            print "&lambda<sup>i</sup>"
-		
-		if i == 1:
-		    print "&lambda"
-		
-            
-	
-	
-
-
-"""  If n > 0, len(n) returns the number of base 10 digits of n  """
-
-def len(n):
-	i=0
-	x=abs(n)
-	while x!=0:
-		x=int(x,10)
-		i=i + 1
-	
-	return i
-
-
-"""  ceiling def  """
-function ceiling(a,b):
-	x=int(a,b)
-	if bccomp(b * x,a)==0:
-           return x
-        
-	else:
-           return x + 1
-        
+def num_digits(n):
+    """  If n > 0, len(n) returns the number of base 10 digits of n  """
+    i=0
+    x=abs(n)
+    while x!=0:
+        x=int(x,10)
+        i=i + 1
+    return i
 
 
 def  lcm(a,b):
-"""  lcm(a,b)  """
-	g=gcd(a,b)
-	h=a * b
-	k=h / g
-	return k
+    """  lcm(a,b)  """
+    g=gcd(a,b)
+    h=a * b
+    k=h / g
+    return k
 
 
 def  lcma(array,n):
-"""  lcm(array[0],array[1],...,array[n-1])  """
-	for i in xrange(n):
-          b[i]=array[i]
-	
-	for i in xrange(n - 1):
-		j=i - 1
-		b[i]=lcm(b[i],b[j])
-	
-	j=i - 1
-	return b[j]
-
-
-def  gcda(array,n):
-    """  gcda(array[0],array[1],...,array[n-1])  """
-	for i in xrange(n):
-          b[i]=array[i]
-	
-	for i in xrange(n - 1):
-		j=i - 1
-		b[i]=gcd(b[i],b[j])
-	
-	j=i - 1
-	return b[j]
+    """  lcm(array[0],array[1],...,array[n-1])  """
+    for i in xrange(n):
+        b[i]=array[i]
+    for i in xrange(n - 1):
+        j=i - 1
+        b[i]=lcm(b[i],b[j])
+    j=i - 1
+    return b[j]
 
 
 def cong(m,p,n):
