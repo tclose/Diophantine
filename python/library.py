@@ -34,7 +34,7 @@
   a == b
   a != 0
   ezero(a)
-  gezero(a)
+  a >= 0
   lezero(a)
   ltzero(a)
   a > 0
@@ -552,8 +552,8 @@ def ltzero(a):
    
 
 
-def gezero(a):
-    """  gezero(a) returns 1 if a>=0, 0 otherwise.  """
+def a >= 0:
+    """  a >= 0 returns 1 if a>=0, 0 otherwise.  """
    t=bccomp(a,0)
    if t>=0:
       return(1)
