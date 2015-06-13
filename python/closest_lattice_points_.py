@@ -108,7 +108,7 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=m - 1
+    
     if mminus1 > 1:
        print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     else:

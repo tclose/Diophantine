@@ -54,9 +54,9 @@ def  lllhermite(G,m,n,m1,n1):
    k=2
    nplus1=n + 1
    while k <= m:
-         kminus1=k - 1
+         
          reduce2(k,kminus1,m,n,D)
-         kminus2=k - 2
+         
          minim=minimum(col2,n)
          temp1=D[kminus2] * D[k]
          temp2=L[k][kminus1] * L[k][kminus1]
@@ -235,7 +235,7 @@ global L
 global A
 global D
    
-   kminus1=k - 1
+   
    #print "Row k <. Row kminus1<br>\n"
    for j in xrange(n):
        temp=A[k][j]
@@ -247,7 +247,7 @@ global D
        B[k][j]=B[kminus1][j]
        B[kminus1][j]=temp
    
-   kminus2=k - 2
+   
    for j in xrange(kminus2):
        temp=L[k][j]
        L[k][j]=L[kminus1][j]
@@ -404,7 +404,7 @@ global lcv
    # lengthj=dotproduct(Am,Am,m)
 
     mplus1=m
-    mminus1=m - 1
+    
     #if mminus1 > 1:
        #print "&#8466 is the lattice spanned by the first mminus1 rows of A<br>\n"
     #else:
