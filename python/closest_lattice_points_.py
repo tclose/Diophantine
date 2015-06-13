@@ -17,14 +17,14 @@ def cholesky(A,m): # A is positive definite mxm
   
   for i in xrange(1, m):
      iplus1=bcadd(i,"1")
-     for(j=iplus1le(j,m)j=bcadd(j,"1"))
+     for j in xrange(i, m):
          Qnum[j][i]=Qnum[i][j]
          Qden[j][i]=Qden[i][j]
          ratior(Qnum[i][j],Qden[i][j],Qnum[i][i],Qden[i][i])
          Qnum[i][j]=rationum
          Qden[i][j]=ratioden
      
-     for(k=iplus1le(k,m)k=bcadd(k,"1"))
+     for k in xrange(i, m):
          for(l=kle(l,m)l=bcadd(l,"1"))
                multr(Qnum[k][i],Qden[k][i],Qnum[i][l],Qden[i][l])
                t2num=multnum
@@ -183,7 +183,7 @@ global lcv
                 sumnum="0"
                 sumden="1"
                 iplus1=bcadd(i,"1")
-                for(j=iplus1le(j,m)j=bcadd(j,"1"))
+                for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],"1")
                     addr(sumnum,sumden,multnum,multden)
                     sumnum=addnum

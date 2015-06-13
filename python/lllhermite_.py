@@ -108,12 +108,12 @@ def  lllhermite(G,m,n,m1,n1):
        
    
 #   rankplus1=bcadd(rank,"1")
-#   for(i=rankplus1le(i,m)i=bcadd(i,"1"))
+#   for i in xrange(rank, m):
  #      for j in xrange(n):
   #         hnf[i][j]="0"
    #    
  #  
- #  for(i=rankplus1le(i,m)i=bcadd(i,"1"))
+ #  for i in xrange(rank, m):
   #     for j in xrange(n):
    #        hnf[i][j]="0"
     #   
@@ -138,7 +138,7 @@ def  flagcol(A,m,n):
           break
        
     iplus1=bcadd(i,"1")
-    for(k=iplus1le(k,m)k=bcadd(k,"1"))
+    for k in xrange(i, m):
        if neqzero(A[k][j]:)
            return("0")
 
@@ -254,7 +254,7 @@ global D
        L[kminus1][j]=temp
    
    kplus1=bcadd(k,"1")
-   for(i=kplus1le(i,m)i=bcadd(i,"1"))
+   for i in xrange(k, m):
        temp1=bcmul(L[i][kminus1],D[k])
        temp2=bcmul(L[i][k],L[k][kminus1])
        t=bcsub(temp1,temp2)
@@ -479,7 +479,7 @@ global lcv
                 sumnum="0"
                 sumden="1"
                 iplus1=bcadd(i,"1")
-                for(j=iplus1le(j,m)j=bcadd(j,"1"))
+                for j in xrange(i, m):
                     multr(Qnum[i][j],Qden[i][j],x[j],"1")
                     addr(sumnum,sumden,multnum,multden)
                     sumnum=addnum
