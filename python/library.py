@@ -766,8 +766,6 @@ def aminusbc(a,b,c):
 
 # returns (a/b)/(c/d)
 def rationum, ratioden = ratior(a,b,c,d):
-#  global rationum
-#  global ratioden
   r=a * d
   s=b * c
   g=gcd(r,s)
@@ -779,8 +777,6 @@ def rationum, ratioden = ratior(a,b,c,d):
 
 # returns (a/b)(c/d)
 def multnum, multden = multr(a,b,c,d):
-#  global multnum
-#  global multden
   r=a * c
   s=b * d
   g=gcd(r,s)
@@ -788,8 +784,6 @@ def multnum, multden = multr(a,b,c,d):
 
 
 def subnum, subden = subr(a,b,c,d):
-#  global subnum
-#  global subden
   r=a * d
   s=b * c
   t=r - s
@@ -799,8 +793,6 @@ def subnum, subden = subr(a,b,c,d):
 
 
 def addnum, addden = addr(a,b,c,d):
-#  global addnum
-#  global addden
   r=a * d
   s=b * c
   t=r + s
@@ -850,9 +842,9 @@ def printlc(A,X,m):
        return 1
 
 
-# lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+ 
 def lcasvector(A,X,m,n):
-#global lcv
+    """lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+"""
+    #global lcv
    for j in xrange(n):
       sum=0
       for i in xrange(m):
@@ -925,97 +917,9 @@ def printbinaryform(a,b,c,x,y):
            if c == -1:
               print"-y<sup>2</sup>"
 
-
-def bcmul4(a,b,c,d):
-   temp1=a * b
-   temp2=c * d
-   temp=temp1 * temp2
-   return temp
-
-
-def bcmul5(a,b,c,d,e):
-   temp1=bcmul4(a,b,c,d)
-   temp=temp1 * e
-   return temp
-
- 
-def bcadd4(a,b,c,d):
-   temp1=bcadd3(a,b,c)
-   temp=temp1 + d
-   return temp
-
-
-def bcadd5(a,b,c,d,e):
-   temp1=bcadd4(a,b,c,d)
-   temp=temp1 + e
-   return temp
-
-
-def bcadd6(a,b,c,d,e,f):
-   temp1=bcadd5(a,b,c,d,e)
-   temp=temp1 + f
-   return temp
-
-
-def printaxplusby(a,x,b,y):
-   if a == 1:
-      print "x"
-   else:
-      print "-x"
-   else:
-      print "ax"
-   
-   if b > 0:
-      if b == 1:
-         print " + y"
-      else:
-         print " + by"
-      
-   
-   if b < 0:
-      if b == -1:
-         print " - y"
-      else:
-         minusb=-b
-         print " - minusby"
-   return
-
-
-def printxplusa(x,a):
-   print x
-   if a > 0:
-      print " + a"
-   if a < 0:
-      minusa=-a
-      print " - minusa"
-   return
-
-
-def printaxplusbyplusc(a,x,b,y,c):
-   null=printaxplusby(a,x,b,y)
-      if c > 0:
-         print " + c"
-      if c < 0:
-         minusc=-c
-         print " - minusc"
-      return
-
-
 def gcd4(a,b,c,d):
   t=gcd(a,b)
   t=gcd(t,c)
   t=gcd(t,d)
   return t
-
-
-def printdXequalsaxplusbyplusc(d,X,a,x,b,y,c):
-   t=gcd4(d,a,b,c)
-   d=d / t
-   a=a / t
-   b=b / t
-   c=c / t
-   print "dX = "
-   null=printaxplusbyplusc(a,x,b,y,c)
-   return
-
 

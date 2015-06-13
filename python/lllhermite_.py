@@ -41,22 +41,15 @@ def  lllhermite(G,m,n,m1,n1):
    for i in xrange(m):
        for j in xrange(n):
            A[i][j]=G[i][j]
-       
-   
 
    flag=flagcol(A,m,n)
    if flag == 1:
       B[m][m]=-1
       for j in xrange(n):
           A[m][j]=-A[m][j]
-      
-   
    k=2
-
    while k <= m:
-         
          reduce2(k,k - 1,m,n,D)
-         
          minim=minimum(col2,n)
          temp1=D[k - 2] * D[k]
          temp2=L[k][k - 1] * L[k][k - 1]
@@ -68,14 +61,10 @@ def  lllhermite(G,m,n,m1,n1):
             swap2(k,m,n)
             if k > 2:
                k=k - 1
-            
          else:
             for i in xrange(k - 2 - 1, 0, -1):
                 reduce2(k,i,m,n,D)
-            
             k=k + 1
-         
-   
    for i in xrange(m):
        for j in xrange(n):
            hnf[i][j]=A[i][j]
@@ -226,15 +215,11 @@ def minus(j,m,&L):
              L[r][s]=-L[r][s]
            
        
-   
-
-
 def swap2(k,m,n):
 global B
 global L
 global A
 global D
-   
    
    #print "Row k <. Row k - 1<br>\n"
    for j in xrange(n):
