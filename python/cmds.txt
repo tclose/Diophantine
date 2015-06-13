@@ -1,2 +1,3 @@
 for f in *.py; do sed  -i '' -e 's/if(gt(\([^)]*\),\([^)]*\)))/if \1 > \2:/g' lllhermite_.py; done
 for f in *.py; do sed  -i '' -e 's/if(lt(\([^)]*\),\([^)]*\)))/if \1 < \2:/g' lllhermite_.py; done
+for f in *.py; do gsed  -i -re 's/for\((\w+)=1le\(\1,([a-zA-Z0-9]+)\)\1=bcadd\(\1,1\)\)/for \1 in xrange(\2):/g' lllhermite_.py; done

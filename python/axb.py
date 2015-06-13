@@ -1,6 +1,6 @@
-include("check_input.php")
-include("library.php")
-include("lllhermite_.php")
+import check_input
+import library
+import lllhermite_
 global transposed
 
 #print "<pre>" print str(_POST) print "</pre>"

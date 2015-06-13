@@ -6,7 +6,7 @@
   We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+ 
   """
 
-include("closest_lattice_points_.php")
+import closest_lattice_points_
 
 global col1
 global col2
