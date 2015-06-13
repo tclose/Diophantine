@@ -24,20 +24,7 @@
   chinese2(a,b,m,n)
   chinesea(a,m,n)
   inverse(a,m)
-  -a
   powerdd(a,b,dd,n)
-  a <= b
- a >= b
-  a < b
-  a > b
-  a != b
-  a == b
-  a != 0
-  a == 0
-  a >= 0
-  a <= 0
-  a < 0
-  a > 0
   gcd3(a,b,c)
   bezout(a,b)
   bezout1(a,b)
@@ -183,8 +170,6 @@ def gcd(m,n):
    
 
 def egcd(p,q):
-    #global multiplier1
-    #global multiplier2
     if q==0:
         if p!=0:
             s=sign(p)
@@ -408,8 +393,9 @@ def  gcda(array,n):
 	return b[j]
 
 
-"""  The bth power of a, where a is an integer, b a positive integer+ 
-  This performs the same def as bcpow(a,b):
+def cong(m,p,n):
+    "  The bth power of a, where a is an integer, b a positive integer+ 
+       This performs the same def as bcpow(a,b):
 	x=a
 	y=b
 	z=1
@@ -422,120 +408,103 @@ def  gcda(array,n):
 		z=z * x
 	
 	return z
-
-
-    the congruence mx=p(mod n)  """
-
-def cong(m,p,n):
-#global solution
-#global modulus
-#global multiplier1
-	a, multiplier1, multiplier2 = egcd(m,n)
-	temp=p % a
-	if bccomp(temp,0)!=0:
-		return 0
-	
-	b=multiplier1
-	y=n / a
-	p=int(p,a)
-	temp1=b * p
-	solution=mod(temp1,y)
-	modulus=y
-	for(t=0t<at += 1)print " ",z+ty,","
-	print " mod ",n,"\n"
-	return solution, modulus, multiplier
+        the congruence mx=p(mod n)
+    """
+    a, multiplier1, multiplier2 = egcd(m,n)
+    temp=p % a
+    if bccomp(temp,0)!=0:
+            return 0
+    b=multiplier1
+    y=n / a
+    p=int(p,a)
+    temp1=b * p
+    solution=mod(temp1,y)
+    modulus=y
+    for(t=0t<at += 1)print " ",z+ty,","
+    print " mod ",n,"\n"
+    return solution, modulus
 
 
 def  cong1(m,p,n):
     """   the congruence mx=p(mod n) slightly modified version of cong(m,p,n)  """
-#global modulus
-#global multiplier1
-	a, multiplier1, multiplier2 = egcd(m,n)
-	b=multiplier1
-	y=n / a
-	p=int(p,a)
-	temp1=b * p
-	solution=mod(temp1,y)
-	modulus=y
-	return solution, modulus, multiplier
+    a, multiplier1, multiplier2 = egcd(m,n)
+    b=multiplier1
+    y=n / a
+    p=int(p,a)
+    temp1=b * p
+    solution=mod(temp1,y)
+    modulus=y
+    return solution, modulus
 
-
-# the Chinese remainder theorem for the congruences x=a(mod m)
-# and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
-# The construction of O. Ore, American Mathematical Monthly,
-# vol.59,pp.365-370,1952, is implemented+ 
 
 def chinese2(a,b,m,n):
-#global chinese_modulus
-#global chinese_solution
-#global multiplier1
-#global multiplier2
-
-	d, multiplier1, multiplier2 = egcd(m,n)
-	if mod(a - b,d)!=0:
-		return 0
-	
-	x= m / dy=n / d
-	z=m * n / d
-	temp1=b * multiplier1
-	temp1=temp1 * x
-	temp2=a * multiplier2
-	temp2=temp2 * y
-	c=mod(temp1 + temp2,z)
-	chinese_modulus=z
-	chinese_solution=c
-	return 1, chinese_modulus, chinese_solution, multiplier1, multiplier2
+    """
+    the Chinese remainder theorem for the congruences x=a(mod m)
+    and x=b(mod n), m>0, n>0, a and b arbitrary integers+ 
+    The construction of O. Ore, American Mathematical Monthly,
+    vol.59,pp.365-370,1952, is implemented+ 
+    """
+    d, multiplier1, multiplier2 = egcd(m,n)
+    if a - b % d != 0:
+        return 0, None, None
+    x= m / d
+    y=n / d
+    z=m * n / d
+    temp1=b * multiplier1
+    temp1=temp1 * x
+    temp2=a * multiplier2
+    temp2=temp2 * y
+    c=mod(temp1 + temp2,z)
+    chinese_modulus=z
+    chinese_solution=c
+    return 1, chinese_modulus, chinese_solution
 
 def chinesea(a,m,n):
-#global chinese_solution
-#global chinese_modulus
-        chinese_modulus=m[0]
-        chinese_solution=a[0]
-        for i in xrange(n - 1):
-                y=chinese2(a[i],chinese_solution,m[i],chinese_modulus)
-                if y==0:
-                        return 0
-        return 1, chinese_solution, chinese_modulus
+    chinese_modulus=m[0]
+    chinese_solution=a[0]
+    for i in xrange(n - 1):
+        y, chinese_modulus, chinese_solution =chinese2(a[i],chinese_solution,m[i],chinese_modulus)
+        if y==0:
+            return 0
+    return 1, chinese_solution, chinese_modulus
 
 
 def  inverse(a,m):
     """  Inverse of a (mod m)  """
-	t=cong1(a,1,m)
-	return t
+    t, _ =cong1(a,1,m)
+    return t
 
 
 def powerdd(a,b,dd,n):
     """  (a+bsqrtdd)^n=zed1+zed2sqrtdd  """
-#global zed1
-#global zed2
-        x1=a
-        x2=b
-        y=n
-        zed1=1
-        zed2=0
-        while y > 0:
-                while y % 2 == 0:
-                        y=y / 2
-                        temp=x1
-                        temp1=x2 * x2
-                        temp2=x1 * x1
-                        temp3=dd * temp1
-                        x1=temp2 + temp3
-                        temp4=temp * x2
-                        x2=2 * temp4
-                
-                y=y - 1
-                temp=zed1
-                temp1=zed2 * x2
-                temp2=zed1 * x1
-                temp3=dd * temp1
-                zed1=temp2 + temp3
-                temp4=temp * x2
-                temp5=zed2 * x1
-                zed2=temp4 + temp5
-        
-       """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
-        return zed1, zed2
+    #global zed1
+    #global zed2
+    x1=a
+    x2=b
+    y=n
+    zed1=1
+    zed2=0
+    while y > 0:
+        while y % 2 == 0:
+            y=y / 2
+            temp=x1
+            temp1=x2 * x2
+            temp2=x1 * x1
+            temp3=dd * temp1
+            x1=temp2 + temp3
+            temp4=temp * x2
+            x2=2 * temp4
+        y=y - 1
+        temp=zed1
+        temp1=zed2 * x2
+        temp2=zed1 * x1
+        temp3=dd * temp1
+        zed1=temp2 + temp3
+        temp4=temp * x2
+        temp5=zed2 * x1
+        zed2=temp4 + temp5
+   """  print "(zed1,zed2)=(zed1,zed2)<br>\n" """
+    return zed1, zed2
 
 def gcd3(a,b,c):
   t=gcd(a,b)
