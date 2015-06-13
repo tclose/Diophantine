@@ -430,7 +430,7 @@ def cong(m,p,n):
 #global solution
 #global modulus
 #global multiplier1
-	a=egcd(m,n)
+	a, multiplier1, multiplier2 = egcd(m,n)
 	temp=p % a
 	if bccomp(temp,0)!=0:
 		return 0
@@ -450,7 +450,7 @@ def  cong1(m,p,n):
     """   the congruence mx=p(mod n) slightly modified version of cong(m,p,n)  """
 #global modulus
 #global multiplier1
-	a=egcd(m,n)
+	a, multiplier1, multiplier2 = egcd(m,n)
 	b=multiplier1
 	y=n / a
 	p=int(p,a)
@@ -471,7 +471,7 @@ def chinese2(a,b,m,n):
 #global multiplier1
 #global multiplier2
 
-	d = egcd(m,n)
+	d, multiplier1, multiplier2 = egcd(m,n)
 	if mod(a - b,d)!=0:
 		return 0
 	
