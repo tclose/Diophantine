@@ -70,7 +70,7 @@ def  lllhermite(G,m,n,m1,n1):
                k=kminus1
             
          else:
-            for(i=kminus2ge(i,"1")i=bcsub(i,"1"))
+            for i in xrange(kminus2 - 1, 0, -1):
                 reduce2(k,i,m,n,D)
             
             k=bcadd(k,"1")
@@ -86,7 +86,7 @@ def  lllhermite(G,m,n,m1,n1):
            unimodular_matrix[i][j]=B[i][j]
        
    
-   for(i=mge(i,"1")i=bcsub(i,"1"))
+   for i in xrange(m - 1, 0, -1):
        test=zero_row_test(A,n,i)
        if ezero(test):
           break
