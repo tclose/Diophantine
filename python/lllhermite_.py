@@ -6,7 +6,7 @@
   We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+ 
   """
 
-import closest_lattice_points_
+import closest_lattice_points
 
 global col1
 global col2
@@ -140,21 +140,21 @@ def  flagcol(A,m,n):
 
     for k in xrange(i, m):
        if A[k][j]: != 0
-           return(0)
+           return 0
 
     if(A[i][j] > 0)# A[i][j] is the only elt in column j and is positive
-      return(0)
+      return 0
     else:# A[i][j] is the only elt in column j and is negative
-      return(1)
+      return 1
 
     #   found:
     #  if i < m:
-    #    return(0)
+    #    return 0
     #else:
     # if A[m][j] < 0:
-     #   return(1)
+     #   return 1
     # else:
-     #   return(0)
+     #   return 0
      #
      #
 
@@ -280,10 +280,10 @@ def  zero_row_test(matrix,n,i):
   """
     for j in xrange(n):
        if matrix[i][j] != 0:
-         return(j)
+         return j
        
     
-    return(0)
+    return 0
 
 
 def  axb(Ab,m,n,m1,n1):

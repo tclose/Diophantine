@@ -50,7 +50,7 @@ def gram(A,m,n):
            B[i][j]=dotproduct(A[i],A[j],n)
        
    
-   return(B)
+   return B
 
 
 # With Z=a/b, U=c/d, returns [sqrt(a/b)+c/d]. First ANSWER = [sqrt(Z)] + [U]. One then 
@@ -65,7 +65,7 @@ global multnum
 global multden
    y=int(c,d)
    if a == 0:
-      return(y)
+      return y
    
    x=a / b
    x=bcsqrt(x)
@@ -78,7 +78,7 @@ global multden
    if le(t,0):
       answer=answer + 1
    
-   return(answer)
+   return answer
 
 
 def shortest_distance(A,m,n):
@@ -263,7 +263,7 @@ def lengthsquared(a,n):
       temp=a[i] * a[i]
       sum=sum + temp
    
-   return(sum)
+   return sum
 
 
 # returns 0 if all of a[i] are zero, otherwise 1+ 
@@ -275,7 +275,7 @@ def zero[a,n]:
         break
       
   
-  return(flag)
+  return flag
 
 
 
