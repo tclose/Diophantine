@@ -3,6 +3,7 @@
 	<name>AXB</name>
 	<comment></comment>
 	<projects>
+		<project>lib9ML</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

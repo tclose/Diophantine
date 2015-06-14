@@ -1,79 +1,61 @@
-<html>
-<body bgcolor="FFFFCCC">
+<!-- <html> -->
+<!-- <body bgcolor="FFFFCCC"> -->
 <?php
-include("check_input.php");
-include("library.php");
-include("lllhermite_.php");
+include ("check_input.php");
+include ("library.php");
+include ("lllhermite_.php");
 global $transposed;
 
-print gcd(364, 84);
-exit;
+// $matrix = "0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
+$matrix = "0 0 1 -1 -1 0 0 0 2 0 0 2 -4 -4 0 0 0 6 0 1 -3 4 3 0 0 0 -7 1 0 -1 2 2 0 0 0 -3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0";
+$a = split ( '[ ]+', $matrix );
+$rows = 7;
+$cols = count ( $a ) / 7;
 
-$rows=7;
-$cols=13;
-$matrix="0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
-$a=split('[ ]+',$matrix);
-$t=count($a);
-if(le($t,"1")){
-	print "number of entries is less than or equal to 1<br>\n";
-        print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-	flush();
-        exit;
+$ii = "0";
+for($i = "1"; le ( $i, $rows ); $i = bcadd ( $i, "1" )) {
+	for($j = "1"; le ( $j, $cols ); $j = bcadd ( $j, "1" )) {
+		$k = bcadd ( $ii, $j );
+		$k = bcsub ( $k, "1" );
+		$mat[$i][$j] = $a[$k];
+	}
+	$ii = bcadd ( $cols, $ii );
 }
-$cols=bcadd($cols,"1");/* Here $cols is the number of columns of the augmented matrix */
-$size=bcmul($rows,$cols);
-if(lt($t,$size)){
-	print "number $t of entries is less than m &times; n = $size<br>\n";
-        print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-	flush();
-        exit;
-}
-if(gt($t,$size)){
-	print "number $t of entries is greater than m &times; n = $size<br>\n";
-        print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-	flush();
-        exit;
-}
+$m = bcsub ( $cols, "1" );
+$t = test_zeromat ( $mat, $rows, $m );
+// echo "Augmented matrix [A|B]=";
+printmat1 ( $mat, $rows, $cols );
+// echo "<br>\n";
+$transposed = transpose ( $mat, $rows, $cols );
+$m1 = "1";
+$n1 = "1";
+$n = $rows;
 
-	$flag="0";
-	for($i="0";lt($i,$t);$i=bcadd($i,"1")){
-		$check=check_decimal($a[$i]);
-		if (ezero($check)){
-			print "<p>\n";
-			flush();
-			$flag="1";
-			break;
-		}
-	}
-	if(ezero($flag)){
-                $ii="0";
-		for($i="1";le($i,$rows);$i=bcadd($i,"1")){
-		    for($j="1";le($j,$cols);$j=bcadd($j,"1")){
-                        $k=bcadd($ii,$j);
-                        $k=bcsub($k,"1");
-                        $mat[$i][$j]=$a[$k];
-                    }
-                    $ii=bcadd($cols,$ii);
-		}
-                $m=bcsub($cols,"1");
-                $t=test_zeromat($mat,$rows,$m);
-                if(eq($t,"1")){
-                   echo "Coeffficient matrix is the zero matrix<br>\n";
-                }else{
-                   echo "Augmented matrix [A|B]=";
-                   printmat1($mat,$rows,$cols);
-                   echo "<br>\n";
-                   $transposed=transpose($mat,$rows,$cols);
-                   $m1="1";
-                   $n1="1";
-                   axb($transposed,$m,$rows,$m1,$n1);
-                   echo "<br>\n";
-                }
-	}
-print "<p>\n";
-flush();
-print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-flush();
-?>
-</body>
-</html>
+// axb ( $transposed, $m, $rows, $m1, $n1 );
+// print flagcol($transposed, $m, $n);
+print reduce2($k, $i, $m, $n, $D)
+// minus($j, $m, $L)
+// swap2($k, $m, $n)
+// zero_row_test($matrix, $n, $i)
+// shortest_distance($A, $m, $n)
+// cholesky($A, $m)
+// gram($A, $m, $n)
+// introot($a, $b, $c, $d)
+// egcd($p, $q)
+// lnearint($a, $b)
+// ratior($a, $b, $c, $d)
+// multr($a, $b, $c, $d)
+// subr($a, $b, $c, $d)
+// addr($a, $b, $c, $d)
+// comparer($a, $b, $c, $d)
+// lcasvector($A, $X, $m, $n)
+// exit ();
+
+// echo "<br>\n";
+// print "<p>\n";
+// flush ();
+// print "<a href=\"./axb.html\">Return to main page</a><br>\n";
+flush ();
+// ?>
+<!-- </body> -->
+<!-- </html> -->

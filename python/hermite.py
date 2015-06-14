@@ -35,18 +35,23 @@ We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
 from copy import deepcopy
 from fractions import gcd
 import numpy
+from nineml import units as un
 
 
-def axb(Ab, m, n, m1, n1):
+def diophantine(compound, reference_dims, m1=1, n1=1):
     """
-    A is m x n, b is m x 1, solving AX=b, X is n x 1+
-    Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
+    Finds the minimal combination of reference dimensions to make the compound
+    dimension
     """
-    G = deepcopy(Ab)
-    for i in xrange(m):
-        G[i, n + 1] = 0
-    G[m + 1, n + 1] = 1
-    hnf, unimodular_matrix, rank = lllhermite(G, m1, n1)
+    A = numpy.array([list(d) for d in reference_dims])
+    b = numpy.array([list(compound)])
+    m, n = A.shape
+    Ab = numpy.concatenate((A, b))
+    G = numpy.concatenate((Ab, numpy.zeros((m + 1, 1))), axis=1)
+    G[-1, -1] = 1
+    # A is m x n, b is m x 1, solving AX=b, X is n x 1+
+    # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
+    hnf, unimodular_matrix, rank = lllhermite(G, m1=m1, n1=n1)
     flag = 0
     for i in xrange(rank - 1):
         if hnf[i][n + 1] != 0:
@@ -76,7 +81,7 @@ def axb(Ab, m, n, m1, n1):
     return shortest_distance_axb(basis, lim + 1, m)
 
 
-def lllhermite(G, m1, n1):
+def lllhermite(G, m1=1, n1=1):
     """  G is a nonzero matrix with at least two rows.  """
     m = G.shape[0]
     n = G.shape[1]
@@ -84,20 +89,15 @@ def lllhermite(G, m1, n1):
     L = numpy.zeros((m, m))  # Lower triangular matrix
     D = numpy.ones(m + 1)
     A = deepcopy(G)
-    flag = flagcol(A, m, n)
-    if flag == 1:
+    if first_nonzero_is_negative(A):
         B[m, m] = -1
         A[m, :] *= -1
     k = 2
     while k <= m:
         col1, col2 = reduce2(A, B, L, k, k - 1, m, n, D)
         minim = min(col2, n)
-        temp1 = D[k - 2] * D[k]
-        temp2 = L[k, k - 1] * L[k, k - 1]
-        temp3 = temp1 + temp2
-        u = n1 * temp3
-        temp1 = D[k - 1] * D[k - 1]
-        v = m1 * temp1
+        u = n1 * (D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1])
+        v = m1 * D[k - 1] * D[k - 1]
         if col1 <= minim or (col1 == col2 and col1 == n + 1 and u < v):
             swap2(A, B, L, D, k, m, n)
             if k > 2:
@@ -124,7 +124,7 @@ def lllhermite(G, m1, n1):
     return hnf, unimodular_matrix, rank
 
 
-def flagcol(A):
+def first_nonzero_is_negative(A):
     """
     returns 0 if the first nonzero column j of A contains more than one nonzero
     entry, or contains only one nonzero entry and which is positive+ returns 1
@@ -134,12 +134,9 @@ def flagcol(A):
     # Get the first nonzero column
     nonzero_col = A[:, numpy.min(numpy.nonzero(numpy.sum(A, axis=0) == 0))]
     # Get the nonzero elements
-    nonzero_elems = numpy.nonzero(nonzero_col)
+    nonzero_elems = numpy.nonzero(nonzero_col)[0]
     # If there is only one and it is negative return 1 else 0
-    if len(nonzero_elems) == 1 and nonzero_elems[0] < 0:
-        return 1
-    else:
-        return 0
+    return len(nonzero_elems) == 1 and nonzero_elems[0] < 0
 
 
 def reduce2(A, B, L, k, i, m, n, D):
@@ -458,3 +455,13 @@ def lcasvector(A, X):
     for j in xrange(n):
         lcv[j] = X.dot(A[:, j])
     return lcv
+
+
+if __name__ == '__main__':
+    reference_dims = [un.current, un.time, un.voltage,
+                      un.specificCapacitance,
+                      un.conductanceDensity, un.luminous_intensity,
+                      un.temperature, un.substance]
+    compound = (un.voltage * un.temperature) / un.specificCapacitance
+    diophantine(compound, reference_dims)
+    
