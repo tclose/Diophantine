@@ -1,9 +1,37 @@
-"""  lllhermite
-  Input: integer mxn matrix A, nonzero, at least two rows+
-  Output: small unimodular matrix B and HNF(A), such that BA=HNF(A)+
-  The Havas, Majewski, Matthews LLL method is used+
-  We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
+# The MIT License (MIT)
+#
+# Copyright (c) 2015 Thomas G. Close
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# Original written in PHP by Keith Matthews (webmaster@number-theory.org)
+#
+# Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
 """
+hermite.py
+
+Input: integer mxn matrix A, nonzero, at least two rows+
+Output: small unimodular matrix B and HNF(A), such that BA=HNF(A)+
+The Havas, Majewski, Matthews LLL method is used+
+We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
+"""
+
 # global col1
 # global col2
 # global n + 1
@@ -14,12 +42,13 @@
 # global hnf
 # global unimodular_matrix
 # global rank
+import numpy.linalg
 
 
 def axb(Ab, m, n, m1, n1):
-    """  A is m x n, b is m x 1, solving AX=b, X is n x 1+
-      Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
-                                                     [b^t]1]
+    """
+    A is m x n, b is m x 1, solving AX=b, X is n x 1+
+    Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
     """
     # global hnf
     # global unimodular_matrix
@@ -307,11 +336,11 @@ def shortest_distance_axb(A, m, n):
             AA[i][j] = A[i][j]
     G = gram(A, m, n)
     lengthj = G[m][m]
-    cholesky(G, m)
+    numpy.linalg(G, m)
     Qnum = choleskynum
     Qden = choleskyden
-    QQnum = transpose(Qnum, m, m)
-    QQden = transpose(Qden, m, m)
+    QQnum = Qnum.T
+    QQden = Qden.T
     m = m - 1
     for i in xrange(m):  # the N vector
         Nnum[i] = Qnum[i][m + 1]
@@ -435,22 +464,22 @@ def gram(A, m, n):
 
 def introot(a, b, c, d):
     """
-    With Z=a/b, U=c/d, returns [sqrt(a/b)+c/d]. First ANSWER = [sqrt(Z)] + [U].
-    One then tests if Z < ([sqrt(Z)] + 1 -U)^2. If this does not hold, ANSWER
+    With Z=a/b, U=c/d, returns [numpy.sqrt(a/b)+c/d]. First ANSWER = [numpy.sqrt(Z)] + [U].
+    One then tests if Z < ([numpy.sqrt(Z)] + 1 -U)^2. If this does not hold, ANSWER
     += 1+ For use in fincke_pohst()+
     """
     y = int(c, d)
     if a == 0:
         return y
     x = a / b
-    x = sqrt(x)
+    x = numpy.sqrt(x)
     answer = x + y
     subnum, subden = subr(c, d, y, 1)
     subnum, subden = subr(1, 1, subnum, subden)
     addnum, addden = addr(x, 1, subnum, subden)
     multnum, multden = multr(addnum, addden, addnum, addden)
     t = comparer(multnum, multden, a, b)
-    if le(t, 0):
+    if t <= 0:
         answer = answer + 1
     return answer
 
