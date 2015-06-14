@@ -92,19 +92,18 @@ def lllhermite(G, m1=1, n1=1):
     if first_nonzero_is_negative(A):
         B[m, m] = -1
         A[m, :] *= -1
-    k = 2
-    while k <= m:
+    k = 1
+    while k < m:
         col1, col2 = reduce2(A, B, L, k, k - 1, m, n, D)
-        minim = min(col2, n)
         u = n1 * (D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1])
         v = m1 * D[k - 1] * D[k - 1]
-        if col1 <= minim or (col1 == col2 and col1 == n + 1 and u < v):
+        if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
             swap2(A, B, L, D, k, m, n)
-            if k > 2:
+            if k > 1:
                 k = k - 1
         else:
             for i in xrange(k - 2 - 1, 0, -1):
-                reduce2(k, i, m, n, D)
+                reduce2(A, B, L, k, i, m, n, D)
             k = k + 1
     hnf = deepcopy(A)
     unimodular_matrix = deepcopy(B)
@@ -115,12 +114,10 @@ def lllhermite(G, m1=1, n1=1):
     rank = m - i
     for i in xrange(m):
         for j in xrange(n):
-            k = m + 1 - i
-            hnf[i][j] = A[k][j]
+            hnf[i, j] = A[m - i, j]
     for i in xrange(m):
         for j in xrange(m):
-            k = m + 1 - i
-            unimodular_matrix[i][j] = B[k][j]
+            unimodular_matrix[i, j] = B[m - i, j]
     return hnf, unimodular_matrix, rank
 
 
@@ -144,39 +141,30 @@ def reduce2(A, B, L, k, i, m, n, D):
     for j in xrange(n):
         if A[i][j] != 0:
             col1 = j
-        if A[i][col1] < 0:
-            minus(i, m, L)
-            for jj in xrange(n):
-                A[i][jj] = -A[i][jj]
-            for jj in xrange(m):
-                B[i][jj] = -B[i][jj]
+            if A[i][col1] < 0:
+                minus(i, m, L)
+                A[i, :] *= -1.0
+                B[i, :] *= -1.0
         break
     col2 = n + 1
     for j in xrange(n):
-        if A[k][j] != 0:
+        if A[k, j] != 0:
             col2 = j
             break
     if col1 <= n:
-        q = A[k][col1] // A[i][col1]
+        q = A[k, col1] // A[i, col1]
     else:
-        t = abs(L[k][i])
+        t = abs(L[k, i])
         t = 2 * t
         if t > D[i]:
-            q = lnearint(L[k][i], D[i])
+            q = lnearint(L[k, i], D[i])
         else:
             q = 0
     if q != 0:
-        for j in xrange(n):
-            temp = q * A[i][j]
-            A[k][j] = A[k][j] - temp
-        for j in xrange(m):
-            temp = q * B[i][j]
-            B[k][j] = B[k][j] - temp
-        temp = q * D[i]
-        L[k][i] = L[k][i] - temp
-        for j in xrange(i - 1):
-            temp = q * L[i][j]
-            L[k][j] = L[k][j] - temp
+        A[k, :] -= q * A[i, :]
+        B[k, :] -= q * B[i, :]
+        L[k, i] = L[k, i] - q * D[i]
+        L[k, :i] - q * L[i, :i]
     return col1, col2
 
 
@@ -222,7 +210,7 @@ def zero_row_test(matrix, i):
     entry. If there is one and the first occurs in column j, then j
     is returned. Otherwise 0 is returned
     """
-    nonzero_elems = numpy.nonzero(matrix[i, :])
+    nonzero_elems = numpy.nonzero(matrix[i, :])[0]
     if len(nonzero_elems) == 1:
         return nonzero_elems[0]
     else:
