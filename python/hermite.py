@@ -42,7 +42,9 @@ We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
 # global hnf
 # global unimodular_matrix
 # global rank
-import numpy.linalg
+from copy import deepcopy
+from fractions import gcd
+import numpy
 
 
 def axb(Ab, m, n, m1, n1):
@@ -53,6 +55,7 @@ def axb(Ab, m, n, m1, n1):
     # global hnf
     # global unimodular_matrix
     # global rank
+#     G = deepcopy(Ab)
     for i in xrange(m + 1):
         for j in xrange(n):
             G[i][j] = Ab[i][j]
@@ -62,7 +65,7 @@ def axb(Ab, m, n, m1, n1):
 #    print "G="
 #    printmat1(G,m + 1,n + 1)
 #    print "<br>\n"
-    lllhermite(G, m + 1, n + 1, m1, n1)
+    hnf, unimodular_matrix, rank = lllhermite(G, m + 1, n + 1, m1, n1)
 #    print "HNF(G)="
 #    printmat1(hnf,m + 1,n + 1)
 #    print "<br>\n"
@@ -82,8 +85,7 @@ def axb(Ab, m, n, m1, n1):
             break
     if flag == 0 and hnf[rank][n + 1] == 1 and flag1 == 0:
         # print "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n"
-        for j in xrange(m):
-            y[j] = -unimodular_matrix[rank][j]
+        y = -unimodular_matrix[rank, :]
         # print "AX=B has a solution: Y = "
         # print[y,m]
         # print "<br>\n"
@@ -93,44 +95,25 @@ def axb(Ab, m, n, m1, n1):
             return
         else:
             lim = m + 1 - rank
+            basis = []
             for i in xrange(lim):
-                rankplusi = rank + i
-                for j in xrange(m):
-                    basis[i][j] = unimodular_matrix[rankplusi][j]
-            if nullity == 1:
-                print "the row: "
-            else:
-                print "the rows: "
-#             printmat1(basis, lim, m)
-            if nullity == 1:
-                print ("of submatrix R of P forms a Z-basis for the lattice "
-                       "AX=0<br>\n")
-            else:
-                print ("of submatrix R of P form a Z-basis for the lattice "
-                       "AX=0<br>\n")
+                basis.append(unimodular_matrix[rank + i, :])
+            basis = numpy.array(basis)
     else:
-        print "AX=B has no solution in integers<br>\n"
-        return
+        raise Exception("AX=B has no solution in integers<br>\n")
     # joining basis and y
-    for j in xrange(m):
-        basis[lim + 1][j] = y[j]
+    basis = numpy.concatenate(basis, y)
     shortest_distance_axb(basis, lim + 1, m)
     return
 
 
 def lllhermite(G, m, n, m1, n1):
     """  G is a nonzero matrix with at least two rows.  """
-    for i in xrange(m):
-        for j in xrange(m):
-            if i == j:
-                B[i][j] = 1
-            else:
-                B[i][j] = 0
-    for r in xrange(1, m):
-        for s in xrange(r - 1):
-            L[r][s] = 0
-    for i in xrange(m + 1):
-        D[i] = 1
+    m = G.shape[0]
+    n = G.shape[1]
+    B = numpy.eye(m)
+    L = numpy.zeros((m, m))  # Lower triangular matrix
+    D = numpy.ones(m + 1)
     for i in xrange(m):
         for j in xrange(n):
             A[i][j] = G[i][j]
@@ -176,7 +159,7 @@ def lllhermite(G, m, n, m1, n1):
         for j in xrange(m):
             k = m + 1 - i
             unimodular_matrix[i][j] = B[k][j]
-    return
+    return hnf, unimodular_matrix, rank
 
 
 def flagcol(A, m, n):
@@ -228,7 +211,7 @@ def reduce2(k, i, m, n, D):
             col2 = j
             break
     if col1 <= n:
-        q = int(A[k][col1], A[i][col1])
+        q = A[k][col1] // A[i][col1]
     else:
         t = abs(L[k][i])
         t = 2 * t
@@ -303,7 +286,7 @@ def zero_row_test(matrix, n, i):
     return 0
 
 
-def shortest_distance_axb(A, m, n):
+def shortest_distance_axb(AXB):
     # global choleskynum
     # global choleskyden
     # global multnum
@@ -316,254 +299,155 @@ def shortest_distance_axb(A, m, n):
     # global ratioden
     # global lcv
     count = 0
-    min_count = 0
-    # print "matrix A:"
-    # printmat1(A,m,n)
-    # print "<br>\n"
-    # for j in xrange(n):
-    # Am[j]=A[m][j]
-    #
-    # print "P = A[m] =  "print[A[m],n]print "<br>\n"
-    # lengthj=dotproduct(Am,Am,m)
+    m = AXB.shape[0]
+    n = AXB.shape[1]
+    m -= 1  # Not sure about this
+    AA = AXB[:-1, :]  # AA consists of the first m-1 rows of A
+    G = gram(AXB)
+    Qn, Qd = cholesky(G)
     m -= 1
-    # if m - 1 > 1:
-    # print "&#8466 is the lattice spanned by the first m - 1 rows of A<br>\n"
-    # else:
-    # print "&#8466 is the lattice spanned by the first row of A<br>\n"
-    #
-    for i in xrange(m - 1):  # AA consists of the first m-1 rows of A
-        for j in xrange(n):
-            AA[i][j] = A[i][j]
-    G = gram(A, m, n)
-    lengthj = G[m][m]
-    numpy.linalg(G, m)
-    Qnum = choleskynum
-    Qden = choleskyden
-    QQnum = Qnum.T
-    QQden = Qden.T
-    m = m - 1
     for i in xrange(m):  # the N vector
-        Nnum[i] = Qnum[i][m + 1]
-        Nden[i] = Qden[i][m + 1]
-    Cnum = 0
-    Cden = 1
+        Nn[i] = Qn[i][m + 1]
+        Nd[i] = Qd[i][m + 1]
+    Cn = 0
+    Cd = 1
     for i in xrange(m):
-        multnum, multden = multr(Nnum[i], Nden[i], Nnum[i], Nden[i])
-        multnum, multden = multr(multnum, multden, Qnum[i][i], Qden[i][i])
-        addnum, addden = addr(Cnum, Cden, multnum, multden)
-        Cnum = addnum
-        Cden = addden
+        n, d = multr(Nn[i], Nd[i], Nn[i], Nd[i])
+        n, d = multr(n, d, Qn[i][i], Qd[i][i])
+        Cn, Cd = addr(Cn, Cd, n, d)
     i = m
-    Tnum[m] = Cnum
-    Tden[m] = Cden
-    Unum[m] = 0
-    Uden[m] = 1
+    Tn[m] = Cn
+    Td[m] = Cd
+    Un[m] = 0
+    Ud[m] = 1
     while 1:
-        rationum, ratioden = ratior(Tnum[i], Tden[i], Qnum[i][i], Qden[i][i])
-        Znum = rationum
-        Zden = ratioden
-        subnum, subden = subr(Nnum[i], Nden[i], Unum[i], Uden[i])
-        UB[i] = introot(Znum, Zden, subnum, subden)
-        subnum, subden = subr(Unum[i], Uden[i], Nnum[i], Nden[i])
-        temp2 = introot(Znum, Zden, subnum, subden)
-        temp3 = -temp2
-        x[i] = temp3 - 1
-        while 1:
-            x[i] = x[i] + 1
+        Zn, Zd = ratior(Tn[i], Td[i], Qn[i][i], Qd[i][i])
+        n, d = subr(Nn[i], Nd[i], Un[i], Ud[i])
+        UB[i] = introot(Zn, Zd, n, d)
+        n, d = subr(Un[i], Ud[i], Nn[i], Nd[i])
+        x[i] = -introot(Zn, Zd, n, d) - 1
+        while True:
+            x[i] += 1
             if le(x[i], UB[i]):
                 if i == 1:
-                    # s=printlc(A,x,m)
-                    lcasvector(AA, x, m, n)
+                    lcv = lcasvector(AA, x)
                     count = count + 1
-                    #  print "X[count]="print[x,m]
                     lcva[count] = lcv
-                    #  print "lcv[count]="print[lcv,n]
-                    #  print "<br>\n"
                     coord[count] = x
                     for k in xrange(n):
                         temp = A[m + 1][k]
-                        multiplier_vector[count][k] = temp - lcv[k]
-                    l = lengthsquared(multiplier_vector[count], n)
-                    multiplier_vector[count][n + 1] = l
-                    # print
-                    # "P-X[count]="print[multiplier_vector[count],n]print":
-                    # l<br>\n"
-                    lengtharray[count] = l
+                        mulitpliers[count][k] = temp - lcv[k]
+                    l = mulitpliers[count] ** 2  # lengthsquared(mulitpliers[count], n)
+                    mulitpliers[count][n + 1] = l
                     continue
                 else:
                     i = i - 1
                     # now update U[i]
-                    sumnum = 0
-                    sumden = 1
+                    Un[i], Ud[i] = 0, 1
                     for j in xrange(i, m):
-                        multnum, multden = multr(Qnum[i][j], Qden[i][j], x[j],
-                                                 1)
-                        addnum, addden = addr(sumnum, sumden, multnum, multden)
-                        sumnum = addnum
-                        sumden = addden
-                    Unum[i] = sumnum
-                    Uden[i] = sumden
+                        n, d = multr(Qn[i][j], Qd[i][j], x[j], 1)
+                        Un[i], Ud[i] = addr(Un[i], Ud[i], n, d)
                     # now update T[i]
-                    addnum, addden = addr(x[i + 1], 1, Unum[i + 1],
-                                          Uden[i + 1])
-                    subnum, subden = subr(addnum, addden, Nnum[i + 1],
-                                          Nden[i + 1])
-                    multnum, multden = multr(subnum, subden, subnum, subden)
-                    multnum, multden = multr(Qnum[i + 1][i + 1],
-                                             Qden[i + 1][i + 1], multnum,
-                                             multden)
-                    subnum, subden = subr(Tnum[i + 1], Tden[i + 1], multnum,
-                                          multden)
-                    Tnum[i] = subnum
-                    Tden[i] = subden
+                    n, d = addr(x[i + 1], 1, Un[i + 1], Ud[i + 1])
+                    n, d = subr(n, d, Nn[i + 1], Nd[i + 1])
+                    n, d = multr(n, d, n, d)
+                    n, d = multr(Qn[i + 1][i + 1], Qd[i + 1][i + 1], n, d)
+                    Tn[i], Td[i] = subr(Tn[i + 1], Td[i + 1], n, d)
                     break
             else:
                 i = i + 1
                 if i > m:
-                    print ("Here are the solution vectors with length squared "
-                           "&le lengthj<br>\n")
-                    print "<TABLE BORDER=\1\ CELLSPACING=\0\>\n"
-                    for k in xrange(count):
-                        print "<TR>"
-                        print "<TD ALIGN=\"RIGHT\">"
-                        print[multiplier_vector[k], n]
-                        print "</TD>"
-                        print "<TD>"
-                        print " lengtharray[k]"
-                        print "</TD>"
-                        print "</TR>\n"
-                    print "</TABLE>\n"
-                    print "Also<br>\n"
-                    min_length = mina(lengtharray, count)
-                    print "<TABLE BORDER=\0\ CELLSPACING=\0\>\n"
-                    for k in xrange(count):
-                        if multiplier_vector[k][n + 1] == min_length:
-                            print "<TR>"
-                            print "<TD ALIGN=\"RIGHT\">"
-                            print[multiplier_vector[k], n]
-                            print "</TD>"
-                            print "</TR>\n"
-                            min_count = min_count + 1
-                    print "</TABLE>\n"
-                    if min_count == 1:
-                        print (" is the shortest solution vector, length "
-                               "squared min_length<br>\n")
-                    else:
-                        print (" are the shortest solution vectors, length "
-                               "squared min_length<br>\n")
-                    return
+                    return mulitpliers
                 continue
 
 
-def gram(A, m, n):
+def cholesky(A):
+    """
+    # A is positive definite mxm
+    """
+    assert A.dim == 2 and A.shape[0] == A.shape[1]
+    m = A.shape[0]
+    N = deepcopy(A)
+    D = numpy.ones(A.shape)
+    for i in xrange(1, m):
+        for j in xrange(i, m):
+            N[j][i] = N[i][j]
+            D[j][i] = D[i][j]
+            N[i][j], D[i][j] = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
+    for k in xrange(i, m):
+        for l in xrange(k - 1, m):
+            n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
+            N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
+    return N, D
+
+
+def gram(A):
+    """
+    Need to check for row and column operations
+    """
+    m = A.shape[0]
+    assert m == A.shape[1]
+    B = numpy.empty(m)
     for i in xrange(m):
         for j in xrange(m):
-            B[i][j] = dotproduct(A[i], A[j], n)
+            B[i][j] = A[i].dot(A[j])  # dotproduct(A[i], A[j], n)
     return B
 
 
 def introot(a, b, c, d):
     """
-    With Z=a/b, U=c/d, returns [numpy.sqrt(a/b)+c/d]. First ANSWER = [numpy.sqrt(Z)] + [U].
-    One then tests if Z < ([numpy.sqrt(Z)] + 1 -U)^2. If this does not hold, ANSWER
-    += 1+ For use in fincke_pohst()+
+    With Z=a/b, U=c/d, returns [numpy.sqrt(a/b)+c/d]. First ANSWER =
+    [numpy.sqrt(Z)] + [U]. One then tests if Z < ([numpy.sqrt(Z)] + 1 -U)^2. If
+    this does not hold, ANSWER += 1+ For use in fincke_pohst()+
     """
-    y = int(c, d)
+    y = c // d
     if a == 0:
         return y
     x = a / b
     x = numpy.sqrt(x)
     answer = x + y
-    subnum, subden = subr(c, d, y, 1)
-    subnum, subden = subr(1, 1, subnum, subden)
-    addnum, addden = addr(x, 1, subnum, subden)
-    multnum, multden = multr(addnum, addden, addnum, addden)
-    t = comparer(multnum, multden, a, b)
+    n, d = subr(c, d, y, 1)
+    n, d = subr(1, 1, n, d)
+    n, d = addr(x, 1, n, d)
+    n, d = multr(n, d, n, d)
+    t = comparer(n, d, a, b)
     if t <= 0:
         answer = answer + 1
     return answer
 
 
-def lengthsquared(a, n):
-    sm = 0
-    for i in xrange(n):
-        temp = a[i] * a[i]
-        sm = sm + temp
-    return sm
-
-
-def int(a, b):
-    if b < 0:
-        a = 0 - a
-        b = 0 - b
-    c = a / b
-    d = a % b
-    if d == 0 or a > 0:
-        return c
-    else:
-        return c - 1
-
-
-def sign(a):
-    """  sign of an integer a  """
-    """  sign(a)=1,-1,0, according as a>0,a<0,a=0  """
-    if a > 0:
-        return 1
-    if a < 0:
-        return -1
-    return 0
-
-
-def gcd(m, n):
-    """   b=gcd(m,n) for any integers m and n  """
-    """  Euclid's division algorithm is used.  """
-    """  We use gcd(m,n)=gcd(|m|,|n|)  """
-    a = abs(m)  # a=r[0]
-    if n == 0:
-        return a
-    b = abs(n)  # b=r[1]
-    c = mod(a, b)  # c=r[2]=r[0] mod(r[1])
-    while c:
-        a = b
-        b = c
-        c = mod(a, b)  # c=r[j]=r[j-2] mod(r[j-1])
-    return b
-
-
 def egcd(p, q):
     if q == 0:
         if p != 0:
-            s = sign(p)
+            s = numpy.sign(p)
             if s == 1:
-                multiplier1 = 1
+                k1 = 1
             else:
-                multiplier1 = -1
-            return abs(p), multiplier1, 0
+                k1 = -1
+            return abs(p), k1, 0
         else:
             return 0, 0, 0
     a = p
     b = abs(q)
     c = a % b
-    s = sign(q)
+    s = numpy.sign(q)
     if c == 0:
         if s == 1:
-            multiplier2 = 1
+            k2 = 1
         else:
-            multiplier2 = -1
-        return b, 0, multiplier2
+            k2 = -1
+        return b, 0, k2
     l1 = 1
     k1 = 0
     l2 = 0
     k2 = 1
     while c != 0:
-        q = int(a, b)
+        q = a // b
         a = b
         b = c
         c = a % b
-        temp1 = q * k1
-        temp2 = q * k2
-        h1 = l1 - temp1
-        h2 = l2 - temp2
+        h1 = l1 - q * k1
+        h2 = l2 - q * k2
         l1 = k1
         l2 = k2
         k1 = h1
@@ -573,22 +457,12 @@ def egcd(p, q):
     return b, k1, k2
 
 
-def num_digits(n):
-    """  If n > 0, len(n) returns the number of base 10 digits of n  """
-    i = 0
-    x = abs(n)
-    while x != 0:
-        x = int(x, 10)
-        i = i + 1
-    return i
-
-
 def lnearint(a, b):
     """
     left nearest integer
     returns y+1/2 if a/b=y+1/2, y integral+
     """
-    y = int(a, b)
+    y = a // b
     if b < 0:
         a = -a
         b = -b
@@ -600,37 +474,13 @@ def lnearint(a, b):
     return y
 
 
-def mina(a, n):
-    x = a[1]
-    for i in xrange(1, n):
-        if a[i] < x:
-            x = a[i]
-    return x
-
-
-def dotproduct(a, b, n):
-    sm = 0
-    for j in xrange(n):
-        temp = a[j] * b[j]
-        sm = sm + temp
-    return sm
-
-
-def abminuscd(a, b, c, d):
-    s = a * b
-    t = c * d
-    u = s - t
-    return u
-
-
 def ratior(a, b, c, d):
     """ returns (a/b)/(c/d)"""
     r = a * d
     s = b * c
     g = gcd(r, s)
     if s < 0:
-        r = -r
-        s = -s
+        g = -g
     return r / g, s / g
 
 
@@ -643,18 +493,14 @@ def multr(a, b, c, d):
 
 
 def subr(a, b, c, d):
-    r = a * d
-    s = b * c
-    t = r - s
+    t = a * d - b * c
     u = b * d
     g = gcd(t, u)
     return t / g, u / g
 
 
 def addr(a, b, c, d):
-    r = a * d
-    s = b * c
-    t = r + s
+    t = a * d + b * c
     u = b * d
     g = gcd(t, u)
     return t / g, u / g
@@ -662,76 +508,15 @@ def addr(a, b, c, d):
 
 def comparer(a, b, c, d):
     """Assumes b>0 and d>0.  Returns -1, 0 or 1 according as a/b <,=,> c/d+ """
-    t = abminuscd(a, d, b, c)
-    if t < 0:
-        return -1
-    if t > 0:
-        return 1
-    return 0
+    assert b > 0 and d > 0
+    return numpy.sign(a * d - b * c)
 
 
-def lcasvector(A, X, m, n):
+def lcasvector(A, X):
     """lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+"""
     # global lcv
+    n = A.shape[0]
+    lcv = numpy.empty(n)
     for j in xrange(n):
-        sm = 0
-        for i in xrange(m):
-            t = X[i] * A[i][j]
-            sm = sm + t
-        lcv[j] = sm
+        lcv[j] = X.dot(A[:, j])
     return lcv
-
-
-def minusa(a, n):
-    for j in xrange(n):
-        a[j] = -a[j]
-    return
-
-
-def test_zeromat(A, m, n):
-    """ This returns 1 if A is the zero matrix, otherwise returns 0+ """
-    for i in xrange(m):
-        for j in xrange(n):
-            if A[i][j] != 0:
-                return 0
-    return 1
-
-
-def cholesky(A, m):
-    """
-    # A is positive definite mxm
-    """
-    # global rationum
-    # global ratioden
-    # global multnum
-    # global multden
-    # global subnum
-    # global subden
-    # global choleskynum
-    # global choleskyden
-    Qnum = A
-    for i in xrange(m):
-        for j in xrange(m):
-            Qden[i][j] = 1
-    for i in xrange(1, m):
-        for j in xrange(i, m):
-            Qnum[j][i] = Qnum[i][j]
-            Qden[j][i] = Qden[i][j]
-            rationum, ratioden = ratior(Qnum[i][j], Qden[i][j], Qnum[i][i],
-                                        Qden[i][i])
-            Qnum[i][j] = rationum
-            Qden[i][j] = ratioden
-    for k in xrange(i, m):
-        for l in xrange(k - 1, m):
-            multnum, multden = multr(Qnum[k][i], Qden[k][i], Qnum[i][l],
-                                     Qden[i][l])
-            t2num = multnum
-            t2den = multden
-            subnum, subden = subr(Qnum[k][l], Qden[k][l], t2num, t2den)
-            Qnum[k][l] = subnum
-            Qden[k][l] = subden
-    for i in xrange(m):
-        for j in xrange(m):
-            choleskynum[i][j] = Qnum[i][j]
-            choleskyden[i][j] = Qden[i][j]
-    return
