@@ -6,39 +6,9 @@ include("library.php");
 include("lllhermite_.php");
 global $transposed;
 
-//echo "<pre>"; print_r($_POST); echo "</pre>";
-
-//$rows=$_POST['rows'];
-//$cols=$_POST['cols'];
-$rows=trim($rows);
-$cols=trim($cols);
-$check1=check_decimal($rows);
-$check2=check_decimal($cols);
-if ($check1=="0" || $check2=="0"){
-        print "<p>\n";
-        exit;
-}
-if(gt($rows,"50")){
-  print "row dimension is &gt; 50<br>\n";
-  print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-  exit;
-}
-if(gt($cols,"50")){
-  print "column dimension is &gt; 50<br>\n";
-  print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-  exit;
-}
-if(lt($rows,"1")){
-  print "row dimension is &lt; 1<br>\n";
-  print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-  exit;
-}
-if(lt($cols,"1")){
-  print "column dimension is &lt; 1<br>\n";
-  print "<a href=\"./axb.html\">Return to main page</a><br>\n";
-  exit;
-}
-$matrix=trim($matrix);
+$rows=7;
+$cols=13;
+$matrix="0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
 $a=split('[ ]+',$matrix);
 $t=count($a);
 if(le($t,"1")){
