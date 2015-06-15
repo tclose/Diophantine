@@ -85,6 +85,14 @@ $d = split ( '[ ]+', "-5 1 3 -2 1");
 
 
 function printnp($matrix,$m,$n){
+	$neg = 0;
+	for($i="1";$i<=$m;$i=bcadd($i,"1")){
+		for($j="1";$j<=$n;$j=bcadd($j,"1")){
+			if($matrix[$i][$j] < 0){
+				$neg = 1;
+			}
+		}
+	}
 	for($i="1";$i<=$m;$i=bcadd($i,"1")){
 		if ($i == 1){
 			print "[[";
@@ -92,10 +100,13 @@ function printnp($matrix,$m,$n){
 			print " [";
 		}	
 		for($j="1";$j<=$n;$j=bcadd($j,"1")){
-			print $matrix[$i][$j] ;
-			if($j != $n){
-				print ", ";
+			if($j != "1"){
+				print " ";
 			}
+			if($matrix[$i][$j] >= 0 && $neg){
+				print " ";
+			}			
+			print $matrix[$i][$j] ;
 		}
 		if ($i == $m){
 			print "]]\n";
@@ -103,6 +114,15 @@ function printnp($matrix,$m,$n){
 			print "]\n";
 		}
 	}
+}
+
+function printnparray($a,$n){
+	echo "[";
+	for($i="1";lt($i,$n);$i=bcadd($i,"1")){
+		print "$a[$i] ";
+	}
+	print "$a[$n]]";
+	return;
 }
 
 
@@ -116,24 +136,41 @@ function print_all($m, $n, $m1, $n1) {
 	print "B: \n";
 	printnp($B, $m, $m);
 	print "L: \n";
+	$neg = 0;
+	for($i="2";$i<=$m;$i=bcadd($i,"1")){
+		for($j="1";$j<$i;$j=bcadd($j,"1")){
+			if($L[$i][$j] < 0){
+				$neg = 1;
+			}
+		}
+	}
 	print "[[";
 	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
+		if($s != "1"){
+			print " ";
+			if($neg){
+				print " ";
+			}
+		}		
 		print "0";
-		if($s != $m){
-			print ", ";
-		}
 	}	
 	print "\n";
 	for($r="2";le($r,$m);$r=bcadd($r,"1")){
-		print "[";
+		print " [";
 		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
-			print $L[$r][$s] . ", ";
+			if($s != "1"){
+				print " ";
+			}
+			if($L[$r][$s] >= 0 && $neg){
+				print " ";
+			}			
+			print $L[$r][$s];
 		}
 		for ($s=$r;le($s, $m); $s=bcadd($s,"1")){
-			print "0";
-			if($s != $m){
-				print ", ";
+			if($neg){
+				print " ";
 			}
+			print " 0";
 		}
 		if ($r == $m){
 			print "]]\n";
@@ -142,7 +179,7 @@ function print_all($m, $n, $m1, $n1) {
 		}
 	}
 	print "D: \n";
-	printarray($D, $m);
+	printnparray($D, $m);
 	print "\n";
 }
 
@@ -168,7 +205,7 @@ $arrays[2] = "-1 -2 3 -1 4 0 -4 -3 4 -2 -3 2 -2 4 -4 3 3 2 0 -4 -1 2 4 0 4 0 2 0
 $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1 -2 -4 0 2 0 -4 -3 - 3 1 2 0 -3 1 -1 -1 -1 3 1 1 4 -3 -3 0 2 0 1 -4 1 -3 0 -1 0 1 0 0 0 -2 -2 4 0 4 1 2 0";
 $arrays[4] = "4 -3 0 3 0 3 4 -4 0 -3 -4 4 -3 -4 -3 -3 2 0 -1 -1 0 3 4 -1 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 -3 0 1 -3 -1 1 0 4 3 2 2 1 -1 0 -2 2 -2 2 4 0 3 0 4 -2 -4 4 4";
 
-for($iii = "0"; lt ( $iii, "5" ); $iii = bcadd ( $iii, "1" )) {
+for($iii = "0"; lt ( $iii, "1" ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;

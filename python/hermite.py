@@ -137,9 +137,9 @@ def first_nonzero_is_negative(A):
     return len(nonzero_elems) == 1 and nonzero_elems[0] < 0
 
 
-def reduce2(A, B, L, k, i, m, n, D):
-    col1 = n + 1
-    for j in xrange(n):
+def reduce2(A, B, L, k, i, D):
+    col1 = A.shape[1] + 1
+    for j in xrange(A.shape[1]):
         if A[i][j] != 0:
             col1 = j
             if A[i][col1] < 0:
@@ -147,12 +147,12 @@ def reduce2(A, B, L, k, i, m, n, D):
                 A[i, :] *= -1.0
                 B[i, :] *= -1.0
         break
-    col2 = n + 1
-    for j in xrange(n):
+    col2 = A.shape[1] + 1
+    for j in xrange(A.shape[1]):
         if A[k, j] != 0:
             col2 = j
             break
-    if col1 <= n:
+    if col1 <= A.shape[1]:
         q = A[k, col1] // A[i, col1]
     else:
         t = abs(L[k, i])
@@ -485,7 +485,7 @@ arrays = [
 
 def print_all(A, B, L, D):
     print 'A: '
-    print numpy.array(A, dtype=int)
+    print numpy.array(A[:, :-1], dtype=int)
     print 'B: '
     print numpy.array(B, dtype=int)
     print 'L: '
@@ -493,15 +493,19 @@ def print_all(A, B, L, D):
     print 'D: '
     print numpy.array(D, dtype=int)
 
-for i, arr in enumerate(arrays):
+for arr in arrays[:1]:
 
     Ab = arr.T
     G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
     G[-1, -1] = 1
     A, B, L, D = lllhermite(G, m1=1, n1=1)
     print_all(A, B, L, D)
-    print "swap2($k, $m, $n): "
-    swap_rows(3, A, B, L, D)
+    k = 3
+    i = k - 1
+#     print "swap2($k, $m, $n): "
+#     swap_rows(k, A, B, L, D)
+#     print_all(A, B, L, D)
+    print "reduce2(k, i, m, n, D): {}, {}".format(*reduce2(A, B, L, k, i, D))
     print_all(A, B, L, D)
 #     print "reduce2(k, i, m, n, D): " + reduce2(k, i, m, n, D)
 #     print "minus(j, m, L): " + minus(j, m, L)
