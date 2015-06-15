@@ -8,7 +8,7 @@ global $transposed;
 
 // $matrix = "0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
 $matrix = "0 0 1 -1 -1 0 0 0 2 0 0 2 -4 -4 0 0 0 6 0 1 -3 4 3 0 0 0 -7 1 0 -1 2 2 0 0 0 -3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0";
-$a = split ( '[ ]+', $matrix );
+$a = explode (" " , $matrix );
 $rows = 7;
 $cols = count ( $a ) / 7;
 $ii = "0";
@@ -31,10 +31,10 @@ $m1 = "1";
 $n1 = "1";
 $n = $rows;
 
-$a = split('[ ]+', "-2 -1 9 1 2");
-$b = split('[ ]+', "4 2 -5 7 -6");
-$c = split('[ ]+', "8 -1 11 -1 5");
-$d = split('[ ]+', "-5 1 3 -2 1");
+$a = split("[ ]+", "-2 -1 9 1 2");
+$b = split("[ ]+", "4 2 -5 7 -6");
+$c = split("[ ]+", "8 -1 11 -1 5");
+$d = split("[ ]+", "-5 1 3 -2 1");
 
 // // Scalar functions
 // for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
@@ -61,27 +61,27 @@ $d = split('[ ]+', "-5 1 3 -2 1");
 
 // 
 
-// Scalar functions
-for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
-	//  	print $a[$i];
-	//  	print $b[$i];
-	//  	print $c[$i];
-	//  	print $d[$i];
-	print "-------------- i = $i --------------\n";
-	print "introot($a[$i], $b[$i], $c[$i], $d[$i]): " . introot(abs($a[$i]), abs($b[$i]), $c[$i], $d[$i]) . "\n";
-	$out = egcd($a[$i], $b[$i]);
-	print "egcd($a[$i], $b[$i]): " . $out . ", " . $multiplier1 . ", " . $multiplier2 . "\n";
-	print "lnearint($a[$i], $b[$i]): " . lnearint($a[$i], $b[$i]) . "\n";
-	ratior($a[$i], $b[$i], $c[$i], $d[$i]);
-	print "ratior($a[$i], $b[$i], $c[$i], $d[$i]): " . $rationum . ", " . $ratioden . "\n";
-	multr($a[$i], $b[$i], $c[$i], $d[$i]);
-	print "multr($a[$i], $b[$i], $c[$i], $d[$i]): " . $multnum . ", " . $multden . "\n";
-	subr($a[$i], $b[$i], $c[$i], $d[$i]);
-	print "subr($a[$i], $b[$i], $c[$i], $d[$i]): " . $subnum . ", " . $subden . "\n";
-	addr($a[$i], $b[$i], $c[$i], $d[$i]);
-	print "addr($a[$i], $b[$i], $c[$i], $d[$i]): " . $addnum . ", " . $addden . "\n";
-	print "comparer($a[$i], $b[$i], $c[$i], $d[$i]): " . comparer($a[$i], abs($b[$i]), $c[$i], abs($d[$i])) . "\n";
-}
+// // Scalar functions
+// for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
+// 	//  	print $a[$i];
+// 	//  	print $b[$i];
+// 	//  	print $c[$i];
+// 	//  	print $d[$i];
+// 	print "-------------- i = $i --------------\n";
+// 	print "introot($a[$i], $b[$i], $c[$i], $d[$i]): " . introot(abs($a[$i]), abs($b[$i]), $c[$i], $d[$i]) . "\n";
+// 	$out = egcd($a[$i], $b[$i]);
+// 	print "egcd($a[$i], $b[$i]): " . $out . ", " . $multiplier1 . ", " . $multiplier2 . "\n";
+// 	print "lnearint($a[$i], $b[$i]): " . lnearint($a[$i], $b[$i]) . "\n";
+// 	ratior($a[$i], $b[$i], $c[$i], $d[$i]);
+// 	print "ratior($a[$i], $b[$i], $c[$i], $d[$i]): " . $rationum . ", " . $ratioden . "\n";
+// 	multr($a[$i], $b[$i], $c[$i], $d[$i]);
+// 	print "multr($a[$i], $b[$i], $c[$i], $d[$i]): " . $multnum . ", " . $multden . "\n";
+// 	subr($a[$i], $b[$i], $c[$i], $d[$i]);
+// 	print "subr($a[$i], $b[$i], $c[$i], $d[$i]): " . $subnum . ", " . $subden . "\n";
+// 	addr($a[$i], $b[$i], $c[$i], $d[$i]);
+// 	print "addr($a[$i], $b[$i], $c[$i], $d[$i]): " . $addnum . ", " . $addden . "\n";
+// 	print "comparer($a[$i], $b[$i], $c[$i], $d[$i]): " . comparer($a[$i], abs($b[$i]), $c[$i], abs($d[$i])) . "\n";
+// }
 
 
 global $col1;
@@ -97,6 +97,7 @@ global $rank;
 global $lcv;
 global $choleskynum;
 global $choleskyden;
+global $G;
 
 $arrays[0] = "-3 -2 -4 -3 -1 0 -3 0 1 3 3 -4 3 -1 3 -2 -4 -2 -1 0 2 1 0 -2 -4 3 3 -4 0 0 4 4 3 -4 2 4 1 0 -3 -2 1 2 2 1 -2 0 2 0 -3 -1 4 0 -2 -1 0 4 4 2 0 0 -4 1 -4 4 -4 0 -2 3 4 4";
 $arrays[1] = "-1 0 0 -3 -3 -3 4 0 1 4 0 -2 -2 4 2 -4 0 -3 -4 2 -2 3 1 -4 2 -1 1 -4 0 1 4 -3 -2 2 -1 1 -4 -2 4 1 -3 -2 -1 -3 0 -4 1 -3 3 1 -4 -1 0 -3 0 0 3 3 -4 0 1 1 -1 -3 2 2 -3 3 2 2";
@@ -105,7 +106,7 @@ $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1
 $arrays[4] = "4 -3 0 3 0 3 4 -4 0 -3 -4 4 -3 -4 -3 -3 2 0 -1 -1 0 3 4 -1 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 -3 0 1 -3 -1 1 0 4 3 2 2 1 -1 0 -2 2 -2 2 4 0 3 0 4 -2 -4 4 4";
 
 for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
-	$a = split ( '[ ]+', $arrays[$i] );
+	$a = split("[ ]+", $arrays[$i] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;
 	$ii = "0";
@@ -121,32 +122,35 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 	$m = bcsub ( $cols, "1" );
 	$t = test_zeromat ( $mat, $rows, $m );
 	$n = $rows;
+	print $m . "\n";
+	print $n . "\n";
 	// echo "Augmented matrix [A|B]=";
 	// printmat1 ( $mat, $rows, $cols );
 	// echo "<br>\n";
-	$transposed = transpose ( $mat, $rows, $cols );
-
-	print "flagcol($transposed, $m, $n): " . flagcol($transposed, $m, $n);
-	axb ( $transposed, $m, $rows, $m1, $n1 );
+	$transposed = transpose ( $mat, $rows, $cols );	
+	axb_header ( $transposed, $m, $rows, $m1, $n1 );
+	print "G: \n";
+	printmatrix($G, $m, $n);
 	lllhermite($G, $m, $n, $m1, $n1);
-	print "A: ";
+	print "A: \n";
 	printmatrix($A, $m, $n);	
-	print "B: ";
+	print "B: \n";
 	printmatrix($B, $m, $m);
-	print "L: ";
+	print "L: \n";
 	printmatrix($L, $m, $m);
-	print "D: ";
+	print "D: \n";
 	printmatrix($D, $m, 1);	
+	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n);	
 // 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank;
 	swap2($k, $m, $n);
 	print "swap2($k, $m, $n): ";
-	print "A: ";
+	print "A: \n";
 	printmatrix($A, $m, $n);	
-	print "B: ";
+	print "B: \n";
 	printmatrix($B, $m, $m);
-	print "L: ";
+	print "L: \n";
 	printmatrix($L, $m, $m);
-	print "D: ";
+	print "D: \n";
 	printmatrix($D, $m, 1);
 	
 // 	reduce2($k, $i, $m, $n, $D);

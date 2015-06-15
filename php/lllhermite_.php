@@ -8,6 +8,24 @@
 
 include("closest_lattice_points_.php");
 
+function axb_header($Ab,$m,$n,$m1,$n1){
+	global $hnf;
+	global $unimodular_matrix;
+	global $rank;
+	$mplus1=bcadd($m,"1");
+	for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
+		for($j="1";le($j,$n);$j=bcadd($j,"1")){
+			$G[$i][$j]=$Ab[$i][$j];
+		}
+	}
+	$nplus1=bcadd($n,"1");
+	for($i="1";le($i,$m);$i=bcadd($i,"1")){
+		$G[$i][$nplus1]="0";
+	}
+	$G[$mplus1][$nplus1]="1";
+// 	printmat1($G,$mplus1,$nplus1);
+	return;
+}
 
 /* A is m x n, b is m x 1, solving AX=b, X is n x 1.
  * Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
@@ -31,7 +49,6 @@ function axb($Ab,$m,$n,$m1,$n1){
 	echo "G=";
 	printmat1($G,$mplus1,$nplus1);
 	echo "<br>\n";
-	return
 	lllhermite($G,$mplus1,$nplus1,$m1,$n1);
 	echo "HNF(G)=";
 	printmat1($hnf,$mplus1,$nplus1);
@@ -138,7 +155,7 @@ global $rank;
        }
    }
 
-   return 
+   return ;
    
    $flag=flagcol($A,$m,$n);
    if(eq($flag,"1")){
@@ -241,6 +258,7 @@ function flagcol($A,$m,$n){
            return("0");
        }
    }
+   print $m . ' '. $i . ' ' . $j;
    if(gtzero($A[$i][$j])){// A[i][j] is the only elt in column j and is positive
       return("0");
    }else{// A[i][j] is the only elt in column j and is negative
