@@ -451,5 +451,26 @@ if __name__ == '__main__':
                       un.conductanceDensity, un.luminous_intensity,
                       un.temperature, un.substance]
     compound = (un.voltage * un.temperature) / un.specificCapacitance
-    diophantine(compound, reference_dims)
-    
+#     diophantine(compound, reference_dims)
+
+    a = [-2, -1, 9, 1, 2]
+    b = [4, 2, -5, 7, -6]
+    c = [8, -1, 11, -1, 5]
+    d = [-5, 1, 3, -2, 1]
+
+    for i in xrange(5):
+        print "-------------- i = " + str(i) + "--------------"
+        print "introot(a[i], b[i], c[i], d[i]): " + str(introot(a[i], b[i],
+                                                                c[i], d[i]))
+        print "egcd(a[i], b[i]): " + str(egcd(a[i], b[i]))
+        print "lnearint(a[i], b[i]): " + str(lnearint(a[i], b[i]))
+        print "ratior(a[i], b[i], c[i], d[i]): " + str(ratior(a[i], b[i],
+                                                              c[i], d[i]))
+        print "multr(a[i], b[i], c[i], d[i]): " + str(multr(a[i], b[i], c[i],
+                                                            d[i]))
+        print "subr(a[i], b[i], c[i], d[i]): " + str(subr(a[i], b[i], c[i],
+                                                          d[i]))
+        print "addr(a[i], b[i], c[i], d[i]): " + str(addr(a[i], b[i], c[i],
+                                                          d[i]))
+        print "comparer(a[i], b[i], c[i], d[i]): " + str(comparer(a[i], b[i],
+                                                                  c[i], d[i]))
