@@ -84,21 +84,62 @@ $d = split ( '[ ]+', "-5 1 3 -2 1");
 // }
 
 
+function printnp($matrix,$m,$n){
+	for($i="1";$i<=$m;$i=bcadd($i,"1")){
+		if ($i == 1){
+			print "[[";
+		}else{
+			print " [";
+		}	
+		for($j="1";$j<=$n;$j=bcadd($j,"1")){
+			print $matrix[$i][$j] ;
+			if($j != $n){
+				print ", ";
+			}
+		}
+		if ($i == $m){
+			print "]]\n";
+		}else {
+			print "]\n";
+		}
+	}
+}
+
+
 function print_all($m, $n, $m1, $n1) {
 	global $B;
 	global $L;
 	global $A;
 	global $D;
 	print "A: \n";
-	printmatrix($A, $m, $n);
+	printnp($A, $m, $n);
 	print "B: \n";
-	printmatrix($B, $m, $m);
+	printnp($B, $m, $m);
 	print "L: \n";
-	for($r="2";le($r,$m);$r=bcadd($r,"1")){
-		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
-			print $L[$r][$s] . " ";
+	print "[[";
+	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
+		print "0";
+		if($s != $m){
+			print ", ";
 		}
-		print "\n";
+	}	
+	print "\n";
+	for($r="2";le($r,$m);$r=bcadd($r,"1")){
+		print "[";
+		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
+			print $L[$r][$s] . ", ";
+		}
+		for ($s=$r;le($s, $m); $s=bcadd($s,"1")){
+			print "0";
+			if($s != $m){
+				print ", ";
+			}
+		}
+		if ($r == $m){
+			print "]]\n";
+		}else {
+			print "]\n";
+		}
 	}
 	print "D: \n";
 	printarray($D, $m);
@@ -127,8 +168,8 @@ $arrays[2] = "-1 -2 3 -1 4 0 -4 -3 4 -2 -3 2 -2 4 -4 3 3 2 0 -4 -1 2 4 0 4 0 2 0
 $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1 -2 -4 0 2 0 -4 -3 - 3 1 2 0 -3 1 -1 -1 -1 3 1 1 4 -3 -3 0 2 0 1 -4 1 -3 0 -1 0 1 0 0 0 -2 -2 4 0 4 1 2 0";
 $arrays[4] = "4 -3 0 3 0 3 4 -4 0 -3 -4 4 -3 -4 -3 -3 2 0 -1 -1 0 3 4 -1 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 -3 0 1 -3 -1 1 0 4 3 2 2 1 -1 0 -2 2 -2 2 4 0 3 0 4 -2 -4 4 4";
 
-for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
-	$a = split ( '[ ]+', $arrays[$i] );
+for($iii = "0"; lt ( $iii, "5" ); $iii = bcadd ( $iii, "1" )) {
+	$a = split ( '[ ]+', $arrays[$iii] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;
 	$ii = "0";
@@ -159,14 +200,16 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 	lllhermite($G, $m, $n, $m1, $n1);	
 // 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank . "\n";
 	print_all($m, $n, $m1, $n1);
-	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";	
-	swap2(4, $m, $n);
-	print "swap2($k, $m, $n): " . "\n";
-	print_all($m, $n, $m1, $n1);
+// 	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";
+	$k = 4;
+	$i = $k - 1;	
+// 	swap2(4, $m, $n);
+// 	print "swap2($k, $m, $n): " . "\n";
+// 	print_all($m, $n, $m1, $n1);
 	
-	
-// 	reduce2($k, $i, $m, $n, $D);
-// 	print "reduce2($k, $i, $m, $n, $D): " . $col1 . ", " . $col2;
+	reduce2($k, $i, $m, $n, $D);
+	print "reduce2($k, $i, $m, $n, D): " . $col1 . ", " . $col2 . "\n";
+	print_all($m, $n, $m1, $n1);	
 // 	minus($j, $m, $L);
 // 	print "minus($j, $m, $L): " . $L;
 
