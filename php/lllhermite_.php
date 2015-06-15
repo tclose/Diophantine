@@ -12,6 +12,9 @@ function axb_header($Ab,$m,$n,$m1,$n1){
 	global $hnf;
 	global $unimodular_matrix;
 	global $rank;
+	global $G;
+	global $mplus1;
+	global $nplus1;
 	$mplus1=bcadd($m,"1");
 	for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
 		for($j="1";le($j,$n);$j=bcadd($j,"1")){
@@ -155,7 +158,7 @@ global $rank;
        }
    }
 
-   return ;
+   return;
    
    $flag=flagcol($A,$m,$n);
    if(eq($flag,"1")){

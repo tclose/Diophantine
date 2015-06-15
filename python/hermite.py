@@ -47,7 +47,7 @@ def diophantine(compound, reference_dims, m1=1, n1=1):
     b = numpy.array([list(compound)])
     m, n = A.shape
     Ab = numpy.concatenate((A, b))
-    G = numpy.concatenate((Ab, numpy.zeros((m + 1, 1))), axis=1)
+    G = numpy.concatenate((Ab, numpy.zeros((m, 1))), axis=1)
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
@@ -89,6 +89,7 @@ def lllhermite(G, m1=1, n1=1):
     L = numpy.zeros((m, m))  # Lower triangular matrix
     D = numpy.ones(m + 1)
     A = deepcopy(G)
+    return A, B, L, D
     if first_nonzero_is_negative(A):
         B[m, m] = -1
         A[m, :] *= -1
@@ -98,7 +99,7 @@ def lllhermite(G, m1=1, n1=1):
         u = n1 * (D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1])
         v = m1 * D[k - 1] * D[k - 1]
         if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
-            swap2(A, B, L, D, k, m, n)
+            swap_rows(k, A, B, L, D)
             if k > 1:
                 k = k - 1
         else:
@@ -175,31 +176,15 @@ def minus(j, m, L):
                 L[r][s] = -L[r][s]
 
 
-def swap2(A, B, L, D, k, m, n):
-    for j in xrange(n):
-        temp = A[k][j]
-        A[k][j] = A[k - 1][j]
-        A[k - 1][j] = temp
-    for j in xrange(m):
-        temp = B[k][j]
-        B[k][j] = B[k - 1][j]
-        B[k - 1][j] = temp
-    for j in xrange(k - 2):
-        temp = L[k][j]
-        L[k][j] = L[k - 1][j]
-        L[k - 1][j] = temp
-    for i in xrange(k, m):
-        temp1 = L[i][k - 1] * D[k]
-        temp2 = L[i][k] * L[k][k - 1]
-        t = temp1 - temp2
-        temp1 = L[i][k - 1] * L[k][k - 1]
-        temp2 = L[i][k] * D[k - 2]
-        temp3 = temp1 + temp2
-        L[i][k - 1] = temp3 / D[k - 1]
-        L[i][k] = t / D[k - 1]
-    temp1 = D[k - 2] * D[k]
-    temp2 = L[k][k - 1] * L[k][k - 1]
-    t = temp1 + temp2
+def swap_rows(k, A, B, L, D):
+    A[(k - 1, k), :] = A[(k, k - 1), :]
+    B[(k - 1, k), :] = B[(k, k - 1), :]
+    L[(k - 1, k), :] = L[(k, k - 1), :]
+    t = L[k:, k - 1] * D[k] - L[k:, k] * L[k, k - 1]
+    L[k:, k - 1] = (L[k:, k - 1] * L[k, k - 1] +
+                    L[k:, k] * D[k - 2]) / D[k - 1]
+    L[k:, k] = t / D[k - 1]
+    t = D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1]
     D[k - 1] = t / D[k - 1]
     return
 
@@ -499,9 +484,35 @@ arrays = [
         [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])]
 
+
+def print_all(A, B, L, D):
+    print 'A: '
+    print A
+    print 'B: '
+    print B
+    print 'L: '
+    print L
+    print 'D: '
+    print D
+
 for i, arr in enumerate(arrays):
-    print 'arrays[${}] = "{}";'.format(
-        i, " ".join([str(e) for e in arr.ravel()]))
+
+    Ab = arr.T
+    G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
+    G[-1, -1] = 1
+    A, B, L, D = lllhermite(G, m1=1, n1=1)
+    print_all(A, B, L, D)
+    print "swap2($k, $m, $n): "
+    swap_rows(3, A, B, L, D)
+    print_all(A, B, L, D)
+#     print "reduce2(k, i, m, n, D): " + reduce2(k, i, m, n, D)
+#     print "minus(j, m, L): " + minus(j, m, L)
+#     print "swap2(k, m, n): " + swap_rows(k, m, n)
+#     print "zero_row_test(matrix, n, i): " + zero_row_test(matrix, n, i)
+#     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
+#     print "cholesky(A, m): " + cholesky(A, m)
+#     print "gram(A, m, n): " + gram(A, m, n)
+#     print "lcasvector(A, X, m, n): " + lcasvector(A, X, m, n)
 
 #     a = [-2, -1, 9, 1, 2]
 #     b = [4, 2, -5, 7, -6]
@@ -527,13 +538,3 @@ for i, arr in enumerate(arrays):
 #         print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
 #             comparer(a[i], abs(b[i]), c[i], abs(d[i])))
 
-
-for i in xrange(5):
-    print "reduce2(k, i, m, n, D): " + reduce2(k, i, m, n, D)
-    print "minus(j, m, L): " + minus(j, m, L)
-    print "swap2(k, m, n): " + swap2(k, m, n)
-    print "zero_row_test(matrix, n, i): " + zero_row_test(matrix, n, i)
-    print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
-    print "cholesky(A, m): " + cholesky(A, m)
-    print "gram(A, m, n): " + gram(A, m, n)
-    print "lcasvector(A, X, m, n): " + lcasvector(A, X, m, n)

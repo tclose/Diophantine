@@ -84,6 +84,28 @@ $d = split ( '[ ]+', "-5 1 3 -2 1");
 // }
 
 
+function print_all($m, $n, $m1, $n1) {
+	global $B;
+	global $L;
+	global $A;
+	global $D;
+	print "A: \n";
+	printmatrix($A, $m, $n);
+	print "B: \n";
+	printmatrix($B, $m, $m);
+	print "L: \n";
+	for($r="2";le($r,$m);$r=bcadd($r,"1")){
+		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
+			print $L[$r][$s] . " ";
+		}
+		print "\n";
+	}
+	print "D: \n";
+	printarray($D, $m);
+	print "\n";
+}
+
+
 global $col1;
 global $col2;
 global $nplus1;
@@ -122,10 +144,6 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 	$m = bcsub ( $cols, "1" );
 	$t = test_zeromat ( $mat, $rows, $m );
 	$n = $rows;
-	print $m . "\n";
-	print $n . "\n";
-	print $rows . "\n";
-	print $cols . "\n";
 	// echo "Augmented matrix [A|B]=";
 	// printmat1 ( $mat, $rows, $cols );
 	// echo "<br>\n";
@@ -137,33 +155,15 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 // 		}
 // 	}
  	$transposed = transpose ( $mat, $rows, $cols );
- 	printmatrix($transposed, $cols, $rows);
-	print $transposed[1][1];
-	exit;
-	axb_header ( $transposed, $m, $rows, $m1, $n1 );
-	print "G: \n";
-	printmatrix($G, $m, $n);
-	lllhermite($G, $m, $n, $m1, $n1);
-	print "A: \n";
-	printmatrix($A, $m, $n);	
-	print "B: \n";
-	printmatrix($B, $m, $m);
-	print "L: \n";
-	printmatrix($L, $m, $m);
-	print "D: \n";
-	printmatrix($D, $m, 1);	
-	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n);	
-// 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank;
-	swap2($k, $m, $n);
-	print "swap2($k, $m, $n): ";
-	print "A: \n";
-	printmatrix($A, $m, $n);	
-	print "B: \n";
-	printmatrix($B, $m, $m);
-	print "L: \n";
-	printmatrix($L, $m, $m);
-	print "D: \n";
-	printmatrix($D, $m, 1);
+	axb_header ( $transposed, $m, $n, $m1, $n1 );
+	lllhermite($G, $m, $n, $m1, $n1);	
+// 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank . "\n";
+	print_all($m, $n, $m1, $n1);
+	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";	
+	swap2(4, $m, $n);
+	print "swap2($k, $m, $n): " . "\n";
+	print_all($m, $n, $m1, $n1);
+	
 	
 // 	reduce2($k, $i, $m, $n, $D);
 // 	print "reduce2($k, $i, $m, $n, $D): " . $col1 . ", " . $col2;
