@@ -894,7 +894,7 @@ function printmatrix2($matrix,$m,$n){
  }
 
 function transpose($A,$m,$n){
-//global $transposed;
+//  global $transposed;
      for($j="1";le($j,$n);$j=bcadd($j,"1")){
          for($i="1";le($i,$m);$i=bcadd($i,"1")){
              $transposed[$j][$i]=$A[$i][$j];

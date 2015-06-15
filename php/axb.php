@@ -8,7 +8,7 @@ global $transposed;
 
 // $matrix = "0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
 $matrix = "0 0 1 -1 -1 0 0 0 2 0 0 2 -4 -4 0 0 0 6 0 1 -3 4 3 0 0 0 -7 1 0 -1 2 2 0 0 0 -3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0";
-$a = explode (" " , $matrix );
+$a = split ( '[ ]+', $matrix );
 $rows = 7;
 $cols = count ( $a ) / 7;
 $ii = "0";
@@ -31,10 +31,10 @@ $m1 = "1";
 $n1 = "1";
 $n = $rows;
 
-$a = split("[ ]+", "-2 -1 9 1 2");
-$b = split("[ ]+", "4 2 -5 7 -6");
-$c = split("[ ]+", "8 -1 11 -1 5");
-$d = split("[ ]+", "-5 1 3 -2 1");
+$a = split ( '[ ]+', "-2 -1 9 1 2");
+$b = split ( '[ ]+', "4 2 -5 7 -6");
+$c = split ( '[ ]+', "8 -1 11 -1 5");
+$d = split ( '[ ]+', "-5 1 3 -2 1");
 
 // // Scalar functions
 // for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
@@ -106,7 +106,7 @@ $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1
 $arrays[4] = "4 -3 0 3 0 3 4 -4 0 -3 -4 4 -3 -4 -3 -3 2 0 -1 -1 0 3 4 -1 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 -3 0 1 -3 -1 1 0 4 3 2 2 1 -1 0 -2 2 -2 2 4 0 3 0 4 -2 -4 4 4";
 
 for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
-	$a = split("[ ]+", $arrays[$i] );
+	$a = split ( '[ ]+', $arrays[$i] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;
 	$ii = "0";
@@ -124,10 +124,22 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 	$n = $rows;
 	print $m . "\n";
 	print $n . "\n";
+	print $rows . "\n";
+	print $cols . "\n";
 	// echo "Augmented matrix [A|B]=";
 	// printmat1 ( $mat, $rows, $cols );
 	// echo "<br>\n";
-	$transposed = transpose ( $mat, $rows, $cols );	
+// 	printmatrix($mat, $rows, $cols);
+// 	for($i = "1"; le ( $i, $rows ); $i = bcadd ( $i, "1" )) {
+// 		for($j = "1"; le ( $j, $cols ); $j = bcadd ( $j, "1" )) {
+// 			$transposed[$j][$i] = $mat[$i][$j];
+// 			print $transposed[$j][$i];			
+// 		}
+// 	}
+ 	$transposed = transpose ( $mat, $rows, $cols );
+ 	printmatrix($transposed, $cols, $rows);
+	print $transposed[1][1];
+	exit;
 	axb_header ( $transposed, $m, $rows, $m1, $n1 );
 	print "G: \n";
 	printmatrix($G, $m, $n);
