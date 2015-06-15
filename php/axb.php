@@ -43,9 +43,9 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 //  	print $c[$i];
 //  	print $d[$i];
   print "-------------- i = $i --------------\n";
- 	print "introot($a[$i], $b[$i], $c[$i], $d[$i]): " . introot($a[$i], $b[$i], $c[$i], $d[$i]) . "\n";
- 	egcd($a[$i], $b[$i]); 	
-	print "egcd($a[$i], $b[$i]): " . $multiplier1 . ", " . $multiplier2 . "\n";
+ 	print "introot($a[$i], $b[$i], $c[$i], $d[$i]): " . introot(abs($a[$i]), abs($b[$i]), $c[$i], $d[$i]) . "\n";
+ 	$out = egcd($a[$i], $b[$i]); 	
+	print "egcd($a[$i], $b[$i]): " . $out . ", " . $multiplier1 . ", " . $multiplier2 . "\n";
 	print "lnearint($a[$i], $b[$i]): " . lnearint($a[$i], $b[$i]) . "\n";
 	ratior($a[$i], $b[$i], $c[$i], $d[$i]);
 	print "ratior($a[$i], $b[$i], $c[$i], $d[$i]): " . $rationum . ", " . $ratioden . "\n";
@@ -55,7 +55,7 @@ for($i = "0"; lt ( $i, "5" ); $i = bcadd ( $i, "1" )) {
 	print "subr($a[$i], $b[$i], $c[$i], $d[$i]): " . $subnum . ", " . $subden . "\n";
 	addr($a[$i], $b[$i], $c[$i], $d[$i]);
 	print "addr($a[$i], $b[$i], $c[$i], $d[$i]): " . $addnum . ", " . $addden . "\n";
-	print "comparer($a[$i], $b[$i], $c[$i], $d[$i]): " . comparer($a[$i], $b[$i], $c[$i], $d[$i]) . "\n";
+	print "comparer($a[$i], $b[$i], $c[$i], $d[$i]): " . comparer($a[$i], abs($b[$i]), $c[$i], abs($d[$i])) . "\n";
 }
 
 

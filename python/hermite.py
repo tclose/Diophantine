@@ -327,6 +327,7 @@ def introot(a, b, c, d):
     if a == 0:
         return y
     x = a / b
+    assert x >= 0
     x = numpy.sqrt(x)
     answer = x + y
     n, d = subr(c, d, y, 1)
@@ -336,7 +337,9 @@ def introot(a, b, c, d):
     t = comparer(n, d, a, b)
     if t <= 0:
         answer = answer + 1
-    return answer
+    int_answer = int(answer)
+    assert int_answer == answer
+    return int_answer
 
 
 def egcd(p, q):
@@ -401,7 +404,7 @@ def ratior(a, b, c, d):
     """ returns (a/b)/(c/d)"""
     r = a * d
     s = b * c
-    g = gcd(r, s)
+    g = abs(gcd(r, s))
     if s < 0:
         g = -g
     return r / g, s / g
@@ -411,21 +414,21 @@ def multr(a, b, c, d):
     # returns (a/b)(c/d)
     r = a * c
     s = b * d
-    g = gcd(r, s)
+    g = abs(gcd(r, s))
     return r / g, s / g
 
 
 def subr(a, b, c, d):
     t = a * d - b * c
     u = b * d
-    g = gcd(t, u)
+    g = abs(gcd(t, u))
     return t / g, u / g
 
 
 def addr(a, b, c, d):
     t = a * d + b * c
     u = b * d
-    g = gcd(t, u)
+    g = abs(gcd(t, u))
     return t / g, u / g
 
 
@@ -459,18 +462,20 @@ if __name__ == '__main__':
     d = [-5, 1, 3, -2, 1]
 
     for i in xrange(5):
-        print "-------------- i = " + str(i) + "--------------"
-        print "introot(a[i], b[i], c[i], d[i]): " + str(introot(a[i], b[i],
-                                                                c[i], d[i]))
-        print "egcd(a[i], b[i]): " + str(egcd(a[i], b[i]))
-        print "lnearint(a[i], b[i]): " + str(lnearint(a[i], b[i]))
-        print "ratior(a[i], b[i], c[i], d[i]): " + str(ratior(a[i], b[i],
-                                                              c[i], d[i]))
-        print "multr(a[i], b[i], c[i], d[i]): " + str(multr(a[i], b[i], c[i],
-                                                            d[i]))
-        print "subr(a[i], b[i], c[i], d[i]): " + str(subr(a[i], b[i], c[i],
-                                                          d[i]))
-        print "addr(a[i], b[i], c[i], d[i]): " + str(addr(a[i], b[i], c[i],
-                                                          d[i]))
-        print "comparer(a[i], b[i], c[i], d[i]): " + str(comparer(a[i], b[i],
-                                                                  c[i], d[i]))
+        print "-------------- i = " + str(i) + " --------------"
+        print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+            introot(abs(a[i]), abs(b[i]), c[i], d[i]))
+        print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
+            *egcd(a[i], b[i]))
+        print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
+            lnearint(a[i], b[i]))
+        print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+            *ratior(a[i], b[i], c[i], d[i]))
+        print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+            *multr(a[i], b[i], c[i], d[i]))
+        print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+            *subr(a[i], b[i], c[i], d[i]))
+        print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+            *addr(a[i], b[i], c[i], d[i]))
+        print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+            comparer(a[i], abs(b[i]), c[i], abs(d[i])))
