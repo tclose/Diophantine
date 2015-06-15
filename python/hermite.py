@@ -456,26 +456,84 @@ if __name__ == '__main__':
     compound = (un.voltage * un.temperature) / un.specificCapacitance
 #     diophantine(compound, reference_dims)
 
-    a = [-2, -1, 9, 1, 2]
-    b = [4, 2, -5, 7, -6]
-    c = [8, -1, 11, -1, 5]
-    d = [-5, 1, 3, -2, 1]
 
-    for i in xrange(5):
-        print "-------------- i = " + str(i) + " --------------"
-        print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-            introot(abs(a[i]), abs(b[i]), c[i], d[i]))
-        print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
-            *egcd(a[i], b[i]))
-        print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
-            lnearint(a[i], b[i]))
-        print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-            *ratior(a[i], b[i], c[i], d[i]))
-        print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-            *multr(a[i], b[i], c[i], d[i]))
-        print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-            *subr(a[i], b[i], c[i], d[i]))
-        print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-            *addr(a[i], b[i], c[i], d[i]))
-        print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-            comparer(a[i], abs(b[i]), c[i], abs(d[i])))
+arrays = [
+    numpy.array([
+        [-3, -2, -4, -3, -1, 0, -3, 0, 1, 3],
+        [3, -4, 3, -1, 3, -2, -4, -2, -1, 0],
+        [2, 1, 0, -2, -4, 3, 3, -4, 0, 0],
+        [4, 4, 3, -4, 2, 4, 1, 0, -3, -2],
+        [1, 2, 2, 1, -2, 0, 2, 0, -3, -1],
+        [4, 0, -2, -1, 0, 4, 4, 2, 0, 0],
+        [-4, 1, -4, 4, -4, 0, -2, 3, 4, 4]]),
+    numpy.array([
+        [-1, 0, 0, -3, -3, -3, 4, 0, 1, 4],
+        [0, -2, -2, 4, 2, -4, 0, -3, -4, 2],
+        [-2, 3, 1, -4, 2, -1, 1, -4, 0, 1],
+        [4, -3, -2, 2, -1, 1, -4, -2, 4, 1],
+        [-3, -2, -1, -3, 0, -4, 1, -3, 3, 1],
+        [-4, -1, 0, -3, 0, 0, 3, 3, -4, 0],
+        [1, 1, -1, -3, 2, 2, -3, 3, 2, 2]]),
+    numpy.array([
+        [-1, -2, 3, 0, 4, 0, -4, -3, 4, -2],
+        [-3, 2, -2, 0, -4, 3, 3, 2, 0, -4],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [-1, -1, 0, 0, -1, -1, 3, -3, 4, 2],
+        [3, -1, 2, 0, -4, -3, -1, -1, 2, 3],
+        [-4, 0, -1, 0, 4, 0, 1, -4, -2, 0],
+        [4, 2, 3, 0, 0, -2, 2, -2, -4, 1]]),
+    numpy.array([
+        [-3, 3, 4, -1, 0, -4, -1, -4, 2, -2],
+        [1, 2, 3, -1, -3, 3, -3, -2, 1, -2],
+        [-4, 2, 2, -2, -3, -1, -2, -4, 0, 2],
+        [0, -4, -3, -3, 1, 2, 0, -3, 1, -1],
+        [-1, -1, 3, 1, 1, 4, -3, -3, 0, 2],
+        [0, 1, -4, 1, -3, 0, -1, 0, 1, 0],
+        [0, 0, -2, -2, 4, 0, 4, 1, 2, 0]]),
+    numpy.array([
+        [4, -3, 0, 0, 0, 3, 4, -4, 0, -3],
+        [-4, 4, -3, 0, -3, -3, 2, 0, -1, -1],
+        [0, 3, 4, 0, 2, -2, 2, 2, 0, 3],
+        [-3, 1, 0, 0, 2, 0, 0, -3, 1, 1],
+        [0, -4, -3, 0, 0, 1, -3, -1, 1, 0],
+        [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])]
+
+for i, arr in enumerate(arrays):
+    print 'arrays[${}] = "{}";'.format(
+        i, " ".join([str(e) for e in arr.ravel()]))
+
+#     a = [-2, -1, 9, 1, 2]
+#     b = [4, 2, -5, 7, -6]
+#     c = [8, -1, 11, -1, 5]
+#     d = [-5, 1, 3, -2, 1]
+# 
+#     for i in xrange(5):
+#         print "-------------- i = " + str(i) + " --------------"
+#         print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+#             introot(abs(a[i]), abs(b[i]), c[i], d[i]))
+#         print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
+#             *egcd(a[i], b[i]))
+#         print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
+#             lnearint(a[i], b[i]))
+#         print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+#             *ratior(a[i], b[i], c[i], d[i]))
+#         print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+#             *multr(a[i], b[i], c[i], d[i]))
+#         print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+#             *subr(a[i], b[i], c[i], d[i]))
+#         print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+#             *addr(a[i], b[i], c[i], d[i]))
+#         print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+#             comparer(a[i], abs(b[i]), c[i], abs(d[i])))
+
+
+for i in xrange(5):
+    print "reduce2(k, i, m, n, D): " + reduce2(k, i, m, n, D)
+    print "minus(j, m, L): " + minus(j, m, L)
+    print "swap2(k, m, n): " + swap2(k, m, n)
+    print "zero_row_test(matrix, n, i): " + zero_row_test(matrix, n, i)
+    print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
+    print "cholesky(A, m): " + cholesky(A, m)
+    print "gram(A, m, n): " + gram(A, m, n)
+    print "lcasvector(A, X, m, n): " + lcasvector(A, X, m, n)

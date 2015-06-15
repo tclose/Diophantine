@@ -8,6 +8,100 @@
 
 include("closest_lattice_points_.php");
 
+
+/* A is m x n, b is m x 1, solving AX=b, X is n x 1.
+ * Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
+ *                                                    [b^t]1]
+ */
+function axb($Ab,$m,$n,$m1,$n1){
+	global $hnf;
+	global $unimodular_matrix;
+	global $rank;
+	$mplus1=bcadd($m,"1");
+	for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
+		for($j="1";le($j,$n);$j=bcadd($j,"1")){
+			$G[$i][$j]=$Ab[$i][$j];
+		}
+	}
+	$nplus1=bcadd($n,"1");
+	for($i="1";le($i,$m);$i=bcadd($i,"1")){
+		$G[$i][$nplus1]="0";
+	}
+	$G[$mplus1][$nplus1]="1";
+	echo "G=";
+	printmat1($G,$mplus1,$nplus1);
+	echo "<br>\n";
+	return
+	lllhermite($G,$mplus1,$nplus1,$m1,$n1);
+	echo "HNF(G)=";
+	printmat1($hnf,$mplus1,$nplus1);
+	echo "<br>\n";
+	echo "P =";
+	printmat1($unimodular_matrix,$mplus1,$mplus1);
+	echo "is a unimodular matrix such that PG = HNF(G)";
+	echo "<br>\n";
+	$flag="0";
+	for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
+		if(neqzero($hnf[$i][$nplus1])){
+			$flag="1";
+			break;
+		}
+	}
+	$flag1="0";
+	for($j="1";le($j,$n);$j=bcadd($j,"1")){
+		if(neqzero($hnf[$rank][$j])){
+			$flag1="1";
+			break;
+		}
+	}
+	//$t=$hnf[$rank][$nplus1]; this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
+	//Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
+	if(eq($flag,"0") && eq($hnf[$rank][$nplus1],"1") && eq($flag1,"0")){
+		echo "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n";
+		for($j="1";le($j,$m);$j=bcadd($j,"1")){
+			$y[$j]=bcminus($unimodular_matrix[$rank][$j]);
+		}
+		echo "AX=B has a solution: Y = ";
+		printarray($y,$m);
+		echo "<br>\n";
+		$nullity=bcsub($mplus1,$rank);
+		if(ezero($nullity)){
+			echo "AX=B has a unique solution in integers<br>\n";
+			return;
+		}else{
+			$lim=bcsub($mplus1,$rank);
+			for($i="1";le($i,$lim);$i=bcadd($i,"1")){
+				$rankplusi=bcadd($rank,$i);
+				for($j="1";le($j,$m);$j=bcadd($j,"1")){
+					$basis[$i][$j]=$unimodular_matrix[$rankplusi][$j];
+				}
+			}
+			if(eq($nullity,"1")){
+				echo "the row: ";
+			}else{
+				echo "the rows: ";
+			}
+			printmat1($basis,$lim,$m);
+			if(eq($nullity,"1")){
+				echo "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n";
+			}else{
+				echo "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n";
+			}
+		}
+	}else{
+		print "AX=B has no solution in integers<br>\n";
+		return;
+	}
+	// joining $basis and $y
+	$limplus1=bcadd($lim,"1");
+	for($j="1";le($j,$m);$j=bcadd($j,"1")){
+		$basis[$limplus1][$j]=$y[$j];
+	}
+	shortest_distance_axb($basis,$limplus1,$m);
+	return;
+}
+
+
 /* G is a nonzero matrix with at least two rows. */
 function lllhermite($G,$m,$n,$m1,$n1){
 global $col1;
@@ -44,6 +138,8 @@ global $rank;
        }
    }
 
+   return 
+   
    $flag=flagcol($A,$m,$n);
    if(eq($flag,"1")){
       $B[$m][$m]="-1";
@@ -290,96 +386,6 @@ function zero_row_test($matrix,$n,$i){
     return("0");
 }
 
-/* A is m x n, b is m x 1, solving AX=b, X is n x 1.
- * Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0]
- *                                                    [b^t]1]
- */
-function axb($Ab,$m,$n,$m1,$n1){
-global $hnf;
-global $unimodular_matrix;
-global $rank;
-    $mplus1=bcadd($m,"1");
-    for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
-        for($j="1";le($j,$n);$j=bcadd($j,"1")){
-               $G[$i][$j]=$Ab[$i][$j];
-        }
-    }
-    $nplus1=bcadd($n,"1");
-    for($i="1";le($i,$m);$i=bcadd($i,"1")){
-        $G[$i][$nplus1]="0";
-    }
-    $G[$mplus1][$nplus1]="1";
-    echo "G=";
-    printmat1($G,$mplus1,$nplus1);
-    echo "<br>\n";
-    lllhermite($G,$mplus1,$nplus1,$m1,$n1);
-    echo "HNF(G)=";
-    printmat1($hnf,$mplus1,$nplus1);
-    echo "<br>\n";
-    echo "P =";
-    printmat1($unimodular_matrix,$mplus1,$mplus1);
-    echo "is a unimodular matrix such that PG = HNF(G)";
-    echo "<br>\n";
-    $flag="0";
-    for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
-        if(neqzero($hnf[$i][$nplus1])){
-           $flag="1";
-           break;
-        }
-    }
-    $flag1="0";
-    for($j="1";le($j,$n);$j=bcadd($j,"1")){
-        if(neqzero($hnf[$rank][$j])){
-           $flag1="1";
-           break;
-        }
-    }
-    //$t=$hnf[$rank][$nplus1]; this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
-    //Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
-    if(eq($flag,"0") && eq($hnf[$rank][$nplus1],"1") && eq($flag1,"0")){
-        echo "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n";
-        for($j="1";le($j,$m);$j=bcadd($j,"1")){
-          $y[$j]=bcminus($unimodular_matrix[$rank][$j]);
-        }
-        echo "AX=B has a solution: Y = ";
-        printarray($y,$m);
-        echo "<br>\n";
-        $nullity=bcsub($mplus1,$rank);
-        if(ezero($nullity)){
-           echo "AX=B has a unique solution in integers<br>\n";
-           return;
-        }else{
-           $lim=bcsub($mplus1,$rank);
-           for($i="1";le($i,$lim);$i=bcadd($i,"1")){
-               $rankplusi=bcadd($rank,$i);
-               for($j="1";le($j,$m);$j=bcadd($j,"1")){
-                   $basis[$i][$j]=$unimodular_matrix[$rankplusi][$j];
-               }
-           }
-           if(eq($nullity,"1")){
-              echo "the row: ";
-           }else{
-              echo "the rows: ";
-           }
-           printmat1($basis,$lim,$m);
-           if(eq($nullity,"1")){
-              echo "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n";
-           }else{
-              echo "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n";
-           }
-        }
-    }else{
-       print "AX=B has no solution in integers<br>\n";
-       return;
-    }
-    // joining $basis and $y
-    $limplus1=bcadd($lim,"1");
-    for($j="1";le($j,$m);$j=bcadd($j,"1")){
-        $basis[$limplus1][$j]=$y[$j];
-    }
-    shortest_distance_axb($basis,$limplus1,$m);
-    return;
-}
 
 function shortest_distance_axb($A,$m,$n){
 global $choleskynum;
