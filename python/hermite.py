@@ -146,12 +146,12 @@ def reduce_matrix(A, B, L, k, i, D):
             A[i, :] *= -1.0
             B[i, :] *= -1.0
     else:
-        col1 = A.shape[1]
+        col1 = A.shape[1] - 1
     nonzero_k_elems = numpy.nonzero(A[k])[0]
     if len(nonzero_k_elems):
         col2 = nonzero_k_elems[0]
     else:
-        col2 = A.shape[1]
+        col2 = A.shape[1] - 1
     if col1 < A.shape[1]:
         q = A[k, col1] // A[i, col1]
     else:
@@ -482,6 +482,11 @@ arrays = [
         [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=int)]
 
+# for i, arr in enumerate(arrays):
+#     print '$arrays[{}] = "{}";'.format(
+#         i, " ".join([str(e) for e in arr.ravel()]))
+# quit()
+
 
 def print_all(A, B, L, D):
     print 'A: '
@@ -493,7 +498,7 @@ def print_all(A, B, L, D):
     print 'D: '
     print numpy.array(D, dtype=int)
 
-offset = 2
+offset = 0
 if offset:
     end = offset + 1
 else:
