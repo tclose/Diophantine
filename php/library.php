@@ -1184,6 +1184,10 @@ function printlc($A,$X,$m){
 // lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n.
 function lcasvector($A,$X,$m,$n){
 global $lcv;
+// 		printarray($X, $m);
+// 		print "\n";
+// 		printmatrix($A, $m, $n);
+// 		print "\n";
    for($j="1";le($j,$n);$j=bcadd($j,"1")){
       $sum="0";
       for($i="1";le($i,$m);$i=bcadd($i,"1")){

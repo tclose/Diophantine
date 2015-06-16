@@ -117,7 +117,7 @@ function printnp($matrix,$m,$n){
 			}
 			if($matrix[$i][$j] >= 0 && $neg){
 				print " ";
-			}			
+			}
 			print $matrix[$i][$j] ;
 		}
 		if ($i == $m){
@@ -129,11 +129,34 @@ function printnp($matrix,$m,$n){
 }
 
 function printnparray($a,$start,$finish){
+	$neg = 0;
+	$maxlen = 0;
+	for($i=$start;$i<$finish;$i=bcadd($i,"1")){
+		if($a[$i] < 0){
+			$neg = 1;
+		}
+		if(len($a[$i])>$maxlen){
+			$maxlen = len($a[$i]);
+		}
+	}
 	echo "[";
 	for($i=$start;lt($i,$finish);$i=bcadd($i,"1")){
-		print "$a[$i] ";
+		if($i!=$start){
+			print " ";
+		}
+		if($a[$i] >= 0 && $neg){
+			print " ";
+		}
+		$l = len($a[$i]);
+		if($l==0){
+			$l = 1;
+		}
+		for($space=0;$space<($maxlen - $l);$space++){
+			print " ";
+		}
+		print "$a[$i]";
 	}
-	print "$a[$finish]]";
+	print "]\n";
 	return;
 }
 
@@ -192,7 +215,6 @@ function print_all($m, $n, $m1, $n1) {
 	}
 	print "D: \n";
 	printnparray($D, 0, $m);
-	print "\n";
 }
 
 
@@ -217,15 +239,23 @@ $arrays[2] = "-1 -2 3 0 4 0 -4 -3 4 -2 -3 2 -2 0 -4 3 3 2 0 -4 0 0 0 0 0 0 0 0 0
 $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1 -2 -4 0 2 0 -4 -3 -3 1 2 0 -3 1 -1 -1 -1 3 1 1 4 -3 -3 0 2 0 1 -4 1 -3 0 -1 0 1 0 0 0 -2 -2 4 0 4 1 2 0";
 $arrays[4] = "4 -3 0 0 0 3 4 -4 0 -3 -4 4 -3 0 -3 -3 2 0 -1 -1 0 3 4 0 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 0 0 1 -3 -1 1 0 4 3 2 0 1 -1 0 -2 2 -2 0 0 0 0 0 0 0 0 0 0";
 
+$xs[0] = "-99 3 4 1 0 -3 0 1 4 -2";
+$xs[1] = "-99 0 4 4 3 2 4 0 1 4";
+$xs[2] = "-99 0 -4 0 1 -4 4 4 -2 3";
+$xs[3] = "-99 1 2 -3 3 -4 1 -3 -3 -4";
+$xs[4] = "-99 0 -4 -1 -2 -4 0 4 3 -4";
+
 $offset=0;
 if($offset>0){
 	$end = $offset + 1;
 }else{
 	$end = 5;
 }
+// $end = 1;
 
 for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
+	$x = split ( '[ ]+', $xs[$iii] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;
 	$ii = "0";
@@ -241,6 +271,7 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$m = bcsub ( $cols, "1" );
 	$t = test_zeromat ( $mat, $rows, $m );
 	$n = $rows;
+	
 	// echo "Augmented matrix [A|B]=";
 	// printmat1 ( $mat, $rows, $cols );
 	// echo "<br>\n";
@@ -274,11 +305,12 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	print "minus($j, $m, L):\n";
 // 	print_all($mplus1, $nplus1, $m1, $n1);	
 // 	print "zero_row_test(A, $n, $k): " . zero_row_test($A, $n, $k) . "\n";
-	$X = gram($A, $mplus1, $nplus1);
-	print "gram(A, $mplus1, $nplus1):\n";
-	printnp($X, $mplus1, $mplus1);
-//  lcasvector($A, $X, $m, $n);
-// 	print "lcasvector($A, $X, $m, $n): ";
+// 	$X = gram($A, $mplus1, $nplus1);
+// 	print "gram(A, $mplus1, $nplus1):\n";
+// 	printnp($X, $mplus1, $mplus1);
+ 	lcasvector($A, $x, $m, $n);
+	print "lcasvector(A, x, m, nplus1): ";
+	printnparray($lcv, 1, $nplus1);
 // 	cholesky($A, $m);
 // 	print "cholesky($A, $m): ";
 //  shortest_distance($A, $m, $n);

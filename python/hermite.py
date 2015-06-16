@@ -420,14 +420,16 @@ def comparer(a, b, c, d):
     return numpy.sign(a * d - b * c)
 
 
-def lcasvector(A, X):
+def lcasvector(A, x):
     """lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+"""
     # global lcv
-    n = A.shape[0]
+#     print x
+#     print A
+    n = A.shape[1]
     lcv = numpy.empty(n)
     for j in xrange(n):
-        lcv[j] = X.dot(A[:, j])
-    return lcv
+        lcv[j] = x.dot(A[:, j])
+    return numpy.array(lcv, dtype=int)
 
 
 if __name__ == '__main__':
@@ -481,9 +483,22 @@ arrays = [
         [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=int)]
 
+xs = [
+    numpy.array([3, 4, 1, 0, -3, 0, 1, 4, -2], dtype=int),
+    numpy.array([0, 4, 4, 3, 2, 4, 0, 1, 4], dtype=int),
+    numpy.array([0, -4, 0, 1, -4, 4, 4, -2, 3], dtype=int),
+    numpy.array([1, 2, -3, 3, -4, 1, -3, -3, -4], dtype=int),
+    numpy.array([0, -4, -1, -2, -4, 0, 4, 3, -4], dtype=int)]
+
+
 # for i, arr in enumerate(arrays):
 #     print '$arrays[{}] = "{}";'.format(
 #         i, " ".join([str(e) for e in arr.ravel()]))
+# quit()
+
+# for i, x in enumerate(xs):
+#     print '$xs[{}] = "{}";'.format(
+#         i, " ".join([str(e) for e in x]))
 # quit()
 
 
@@ -502,7 +517,8 @@ if offset:
     end = offset + 1
 else:
     end = 5
-for count, arr in enumerate(arrays[offset:end]):
+# end = 1
+for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     print "\n\n-------- {} ----------".format(count + offset)
     Ab = arr.T
     G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
@@ -523,10 +539,10 @@ for count, arr in enumerate(arrays[offset:end]):
 #     print "minus(j, m, L): "
 #     print_all(A, B, L, D)
 #     print "zero_row_test(matrix, n, i): {}".format(zero_row_test(A, k))
-    X = gram(A)
-    print "gram(A, m, n): "
-    print X
-#     print "lcasvector(A, X, m, n): " + lcasvector(A, X, m, n)
+#     X = gram(A)
+#     print "gram(A, m, n): "
+#     print X
+    print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
 #     print "cholesky(A, m): " + cholesky(A, m)
 #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 
@@ -534,7 +550,7 @@ for count, arr in enumerate(arrays[offset:end]):
 #     b = [4, 2, -5, 7, -6]
 #     c = [8, -1, 11, -1, 5]
 #     d = [-5, 1, 3, -2, 1]
-# 
+#
 #     for i in xrange(5):
 #         print "-------------- i = " + str(i) + " --------------"
 #         print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
