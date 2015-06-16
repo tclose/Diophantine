@@ -4,6 +4,7 @@
 include ("check_input.php");
 include ("library.php");
 include ("lllhermite_.php");
+error_reporting(E_ALL ^ E_DEPRECATED);
 global $transposed;
 
 // $matrix = "0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
@@ -116,12 +117,12 @@ function printnp($matrix,$m,$n){
 	}
 }
 
-function printnparray($a,$n){
+function printnparray($a,$start,$finish){
 	echo "[";
-	for($i="1";lt($i,$n);$i=bcadd($i,"1")){
+	for($i=$start;lt($i,$finish);$i=bcadd($i,"1")){
 		print "$a[$i] ";
 	}
-	print "$a[$n]]";
+	print "$a[$finish]]";
 	return;
 }
 
@@ -148,13 +149,13 @@ function print_all($m, $n, $m1, $n1) {
 	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
 		if($s != "1"){
 			print " ";
-			if($neg){
-				print " ";
-			}
 		}		
+		if($neg){
+			print " ";
+		}
 		print "0";
-	}	
-	print "\n";
+	}
+	print "]\n";
 	for($r="2";le($r,$m);$r=bcadd($r,"1")){
 		print " [";
 		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
@@ -179,7 +180,7 @@ function print_all($m, $n, $m1, $n1) {
 		}
 	}
 	print "D: \n";
-	printnparray($D, $m);
+	printnparray($D, 0, $m);
 	print "\n";
 }
 
@@ -205,7 +206,14 @@ $arrays[2] = "-1 -2 3 -1 4 0 -4 -3 4 -2 -3 2 -2 4 -4 3 3 2 0 -4 -1 2 4 0 4 0 2 0
 $arrays[3] = "-3 3 4 -1 0 -4 -1 -4 2 -2 1 2 3 -1 -3 3 -3 -2 1 -2 -4 2 2 -2 -3 -1 -2 -4 0 2 0 -4 -3 - 3 1 2 0 -3 1 -1 -1 -1 3 1 1 4 -3 -3 0 2 0 1 -4 1 -3 0 -1 0 1 0 0 0 -2 -2 4 0 4 1 2 0";
 $arrays[4] = "4 -3 0 3 0 3 4 -4 0 -3 -4 4 -3 -4 -3 -3 2 0 -1 -1 0 3 4 -1 2 -2 2 2 0 3 -3 1 0 0 2 0 0 -3 1 1 0 -4 -3 -3 0 1 -3 -1 1 0 4 3 2 2 1 -1 0 -2 2 -2 2 4 0 3 0 4 -2 -4 4 4";
 
-for($iii = "0"; lt ( $iii, "1" ); $iii = bcadd ( $iii, "1" )) {
+$offset=2;
+if($offset>0){
+	$end = $offset + 1;
+}else{
+	$end = 5;
+}
+
+for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
 	$rows = 7;
 	$cols = count ( $a ) / 7;
@@ -232,11 +240,14 @@ for($iii = "0"; lt ( $iii, "1" ); $iii = bcadd ( $iii, "1" )) {
 // 			print $transposed[$j][$i];			
 // 		}
 // 	}
+	print "\n\n-------- $iii ---------\n";
  	$transposed = transpose ( $mat, $rows, $cols );
 	axb_header ( $transposed, $m, $n, $m1, $n1 );
-	lllhermite($G, $m, $n, $m1, $n1);	
+	$mplus1 = $m + 1;
+	$nplus1 = $n + 1;
+	lllhermite($G, $mplus1, $nplus1, $m1, $n1);	
 // 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank . "\n";
-	print_all($m, $n, $m1, $n1);
+	print_all($mplus1, $nplus1, $m1, $n1);
 // 	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";
 	$k = 4;
 	$i = $k - 1;	
@@ -244,9 +255,9 @@ for($iii = "0"; lt ( $iii, "1" ); $iii = bcadd ( $iii, "1" )) {
 // 	print "swap2($k, $m, $n): " . "\n";
 // 	print_all($m, $n, $m1, $n1);
 	
-	reduce2($k, $i, $m, $n, $D);
-	print "reduce2($k, $i, $m, $n, D): " . $col1 . ", " . $col2 . "\n";
-	print_all($m, $n, $m1, $n1);	
+	reduce2($k, $i, $mplus1, $nplus1, $D);
+	print "reduce2($k, $i, $mplus1, $nplus1, D): " . $col1 . ", " . $col2 . "\n";
+	print_all($mplus1, $nplus1, $m1, $n1);	
 // 	minus($j, $m, $L);
 // 	print "minus($j, $m, $L): " . $L;
 

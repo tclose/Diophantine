@@ -299,7 +299,10 @@ global $A;
             for($jj="1";le($jj,$m);$jj=bcadd($jj,"1")){
                 $B[$i][$jj]=bcminus($B[$i][$jj]);
             }
+            print "col1 negate\n";
          }
+         $ww = $A[$i][$j];
+				 print "col1 break $j: $ww\n";
          break;
        }
    }
@@ -307,21 +310,27 @@ global $A;
    for($j="1";le($j,$n);$j=bcadd($j,"1")){
        if(neqzero($A[$k][$j])){
          $col2=$j;
+         $ww = $A[$i][$j];
+         print "col2 break $j: $ww\n";
          break;
        }
    }
    if(le($col1,$n)){
       $q=int($A[$k][$col1],$A[$i][$col1]);
+      print "col1 <= 0\n";
    }else{
       $t=bcabs($L[$k][$i]);
       $t=bcmul("2",$t);
       if(gt($t,$D[$i])){
         $q=lnearint($L[$k][$i],$D[$i]);
+        print "t > D[$i] >= 0\n";
       }else{
+      	print "t > D[$i] == 0\n";
         $q="0";
       }
    }
    if(neqzero($q)){
+   	  print "q != 0\n";
 //echo "Row $k -> Row $k - $q &times; Row $i<br>\n";
       for($j="1";le($j,$n);$j=bcadd($j,"1")){
           $temp=bcmul($q,$A[$i][$j]);

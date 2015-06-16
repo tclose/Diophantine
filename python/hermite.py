@@ -95,7 +95,7 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        col1, col2 = reduce2(A, B, L, k, k - 1, m, n, D)
+        col1, col2 = reduce_matrix(A, B, L, k, k - 1, m, n, D)
         u = n1 * (D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1])
         v = m1 * D[k - 1] * D[k - 1]
         if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
@@ -104,7 +104,7 @@ def lllhermite(G, m1=1, n1=1):
                 k = k - 1
         else:
             for i in xrange(k - 2 - 1, 0, -1):
-                reduce2(A, B, L, k, i, m, n, D)
+                reduce_matrix(A, B, L, k, i, m, n, D)
             k = k + 1
     hnf = deepcopy(A)
     unimodular_matrix = deepcopy(B)
@@ -137,22 +137,22 @@ def first_nonzero_is_negative(A):
     return len(nonzero_elems) == 1 and nonzero_elems[0] < 0
 
 
-def reduce2(A, B, L, k, i, D):
-    col1 = A.shape[1] + 1
-    for j in xrange(A.shape[1]):
-        if A[i][j] != 0:
-            col1 = j
-            if A[i][col1] < 0:
-                minus(i, L)
-                A[i, :] *= -1.0
-                B[i, :] *= -1.0
-        break
-    col2 = A.shape[1] + 1
-    for j in xrange(A.shape[1]):
-        if A[k, j] != 0:
-            col2 = j
-            break
-    if col1 <= A.shape[1]:
+def reduce_matrix(A, B, L, k, i, D):
+    nonzero_i_elems = numpy.nonzero(A[i])[0]
+    if len(nonzero_i_elems):
+        col1 = nonzero_i_elems[0]
+        if A[i, col1] < 0:
+            minus(i, L)
+            A[i, :] *= -1.0
+            B[i, :] *= -1.0
+    else:
+        col1 = A.shape[1]
+    nonzero_k_elems = numpy.nonzero(A[k])[0]
+    if len(nonzero_k_elems):
+        col2 = nonzero_k_elems[0]
+    else:
+        col2 = A.shape[1]
+    if col1 < A.shape[1]:
         q = A[k, col1] // A[i, col1]
     else:
         t = abs(L[k, i])
@@ -485,7 +485,7 @@ arrays = [
 
 def print_all(A, B, L, D):
     print 'A: '
-    print numpy.array(A[:, :-1], dtype=int)
+    print numpy.array(A, dtype=int)
     print 'B: '
     print numpy.array(B, dtype=int)
     print 'L: '
@@ -493,8 +493,13 @@ def print_all(A, B, L, D):
     print 'D: '
     print numpy.array(D, dtype=int)
 
-for arr in arrays[:1]:
-
+offset = 2
+if offset:
+    end = offset + 1
+else:
+    end = 5
+for count, arr in enumerate(arrays[offset:end]):
+    print "\n\n-------- {} ----------".format(count + offset)
     Ab = arr.T
     G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
     G[-1, -1] = 1
@@ -505,9 +510,10 @@ for arr in arrays[:1]:
 #     print "swap2($k, $m, $n): "
 #     swap_rows(k, A, B, L, D)
 #     print_all(A, B, L, D)
-    print "reduce2(k, i, m, n, D): {}, {}".format(*reduce2(A, B, L, k, i, D))
+    col1, col2 = reduce_matrix(A, B, L, k, i, D)
+    print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
+        k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
     print_all(A, B, L, D)
-#     print "reduce2(k, i, m, n, D): " + reduce2(k, i, m, n, D)
 #     print "minus(j, m, L): " + minus(j, m, L)
 #     print "swap2(k, m, n): " + swap_rows(k, m, n)
 #     print "zero_row_test(matrix, n, i): " + zero_row_test(matrix, n, i)
