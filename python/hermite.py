@@ -193,11 +193,11 @@ def zero_row_test(matrix, i):
     entry. If there is one and the first occurs in column j, then j
     is returned. Otherwise 0 is returned
     """
-    nonzero_elems = numpy.nonzero(matrix[i, :])[0]
-    if len(nonzero_elems) == 1:
+    nonzero_elems = numpy.nonzero(matrix[i])[0]
+    if len(nonzero_elems):
         return nonzero_elems[0]
     else:
-        return 0
+        return -1
 
 
 def shortest_distance_axb(A):
@@ -512,16 +512,18 @@ for count, arr in enumerate(arrays[offset:end]):
     print_all(A, B, L, D)
     k = 3
     i = k - 1
+    j = 3
 #     print "swap2($k, $m, $n): "
 #     swap_rows(k, A, B, L, D)
 #     print_all(A, B, L, D)
-    col1, col2 = reduce_matrix(A, B, L, k, i, D)
-    print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
-        k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
-    print_all(A, B, L, D)
-#     print "minus(j, m, L): " + minus(j, m, L)
-#     print "swap2(k, m, n): " + swap_rows(k, m, n)
-#     print "zero_row_test(matrix, n, i): " + zero_row_test(matrix, n, i)
+#     col1, col2 = reduce_matrix(A, B, L, k, i, D)
+#     print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
+#         k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
+#     print_all(A, B, L, D)
+#     minus(j, A[:A.shape[1], :])
+#     print "minus(j, m, L): "
+#     print_all(A, B, L, D)
+    print "zero_row_test(matrix, n, i): {}".format(zero_row_test(A, k))
 #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 #     print "cholesky(A, m): " + cholesky(A, m)
 #     print "gram(A, m, n): " + gram(A, m, n)

@@ -250,19 +250,19 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	print_all($mplus1, $nplus1, $m1, $n1);
 // 	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";
 	$k = 4;
-	$i = $k - 1;	
+	$i = $k - 1;
+	$j = 4;
 // 	swap2(4, $m, $n);
 // 	print "swap2($k, $m, $n): " . "\n";
 // 	print_all($m, $n, $m1, $n1);
 	
-	reduce2($k, $i, $mplus1, $nplus1, $D);
-	print "reduce2($k, $i, $mplus1, $nplus1, D): " . $col1 . ", " . $col2 . "\n";
-	print_all($mplus1, $nplus1, $m1, $n1);	
-// 	minus($j, $m, $L);
-// 	print "minus($j, $m, $L): " . $L;
-
-// 	zero_row_test($matrix, $n, $i);
-// 	print "zero_row_test($matrix, $n, $i): ";
+// 	reduce2($k, $i, $mplus1, $nplus1, $D);
+// 	print "reduce2($k, $i, $mplus1, $nplus1, D): " . $col1 . ", " . $col2 . "\n";
+// 	print_all($mplus1, $nplus1, $m1, $n1);	
+// 	minus($j, $n, $A);
+// 	print "minus($j, $m, L):\n";
+// 	print_all($mplus1, $nplus1, $m1, $n1);	
+	print "zero_row_test(A, $n, $k): " . zero_row_test($A, $n, $k) . "\n";
 // 	shortest_distance($A, $m, $n);
 // 	print "shortest_distance($A, $m, $n): ";
 // 	cholesky($A, $m);
