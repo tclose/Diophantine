@@ -87,10 +87,14 @@ $d = split ( '[ ]+', "-5 1 3 -2 1");
 
 function printnp($matrix,$m,$n){
 	$neg = 0;
+	$maxlen = 0;
 	for($i="1";$i<=$m;$i=bcadd($i,"1")){
 		for($j="1";$j<=$n;$j=bcadd($j,"1")){
 			if($matrix[$i][$j] < 0){
 				$neg = 1;
+			}
+			if(len($matrix[$i][$j])>$maxlen){
+				$maxlen = len($matrix[$i][$j]);
 			}
 		}
 	}
@@ -102,6 +106,13 @@ function printnp($matrix,$m,$n){
 		}	
 		for($j="1";$j<=$n;$j=bcadd($j,"1")){
 			if($j != "1"){
+				print " ";
+			}
+			$l = len($matrix[$i][$j]);
+			if($l==0){
+				$l = 1;
+			}
+			for($space=0;$space<($maxlen - $l);$space++){
 				print " ";
 			}
 			if($matrix[$i][$j] >= 0 && $neg){
@@ -262,15 +273,16 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	minus($j, $n, $A);
 // 	print "minus($j, $m, L):\n";
 // 	print_all($mplus1, $nplus1, $m1, $n1);	
-	print "zero_row_test(A, $n, $k): " . zero_row_test($A, $n, $k) . "\n";
-// 	shortest_distance($A, $m, $n);
-// 	print "shortest_distance($A, $m, $n): ";
+// 	print "zero_row_test(A, $n, $k): " . zero_row_test($A, $n, $k) . "\n";
+	$X = gram($A, $mplus1, $nplus1);
+	print "gram(A, $mplus1, $nplus1):\n";
+	printnp($X, $mplus1, $mplus1);
+//  lcasvector($A, $X, $m, $n);
+// 	print "lcasvector($A, $X, $m, $n): ";
 // 	cholesky($A, $m);
 // 	print "cholesky($A, $m): ";
-// 	gram($A, $m, $n);
-// 	print "gram($A, $m, $n): ";
-// 	lcasvector($A, $X, $m, $n);
-// 	print "lcasvector($A, $X, $m, $n): ";
+//  shortest_distance($A, $m, $n);
+// 	print "shortest_distance($A, $m, $n): ";
 }
 
 

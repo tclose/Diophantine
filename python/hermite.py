@@ -292,12 +292,11 @@ def gram(A):
     Need to check for row and column operations
     """
     m = A.shape[0]
-    assert m == A.shape[1]
-    B = numpy.empty(m)
+    B = numpy.empty((m, m))
     for i in xrange(m):
         for j in xrange(m):
             B[i][j] = A[i].dot(A[j])  # dotproduct(A[i], A[j], n)
-    return B
+    return numpy.array(B, dtype=int)
 
 
 def introot(a, b, c, d):
@@ -523,11 +522,13 @@ for count, arr in enumerate(arrays[offset:end]):
 #     minus(j, A[:A.shape[1], :])
 #     print "minus(j, m, L): "
 #     print_all(A, B, L, D)
-    print "zero_row_test(matrix, n, i): {}".format(zero_row_test(A, k))
-#     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
-#     print "cholesky(A, m): " + cholesky(A, m)
-#     print "gram(A, m, n): " + gram(A, m, n)
+#     print "zero_row_test(matrix, n, i): {}".format(zero_row_test(A, k))
+    X = gram(A)
+    print "gram(A, m, n): "
+    print X
 #     print "lcasvector(A, X, m, n): " + lcasvector(A, X, m, n)
+#     print "cholesky(A, m): " + cholesky(A, m)
+#     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 
 #     a = [-2, -1, 9, 1, 2]
 #     b = [4, 2, -5, 7, -6]
