@@ -173,6 +173,7 @@ global $D;
 global $hnf;
 global $unimodular_matrix;
 global $rank;
+global $print_count;
 
    for($i="1";le($i,$m);$i=bcadd($i,"1")){
        for($j="1";le($j,$m);$j=bcadd($j,"1")){
@@ -207,6 +208,9 @@ global $rank;
    $k="2";
    $nplus1=bcadd($n,"1");
    while(le($k,$m)){
+   			 if ($print_count > 295){
+   			 	print "here\n";
+   			 }
    			 print "k=" . ($k - 1) . ", m=$m\n";
          $kminus1=bcsub($k,"1");
          reduce2($k,$kminus1,$m,$n,$D);

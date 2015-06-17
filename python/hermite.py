@@ -30,17 +30,21 @@ from nineml import units as un
 global print_count
 print_count = 0
 
+numpy.seterr(over='raise')
+# import warnings
+# warnings.filterwarnings('error')
+
 
 def diophantine(compound, reference_dims, m1=1, n1=1):
     """
     Finds the minimal combination of reference dimensions to make the compound
     dimension
     """
-    A = numpy.array([list(d) for d in reference_dims])
-    b = numpy.array([list(compound)])
+    A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
+    b = numpy.array([list(compound)], dtype=numpy.int64)
     m, n = A.shape
     Ab = numpy.concatenate((A, b))
-    G = numpy.concatenate((Ab, numpy.zeros((m, 1))), axis=1)
+    G = numpy.concatenate((Ab, numpy.zeros((m, 1), dtype=numpy.int64)), axis=1)
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
@@ -66,7 +70,7 @@ def diophantine(compound, reference_dims, m1=1, n1=1):
             basis = []
             for i in xrange(lim):
                 basis.append(unimodular_matrix[rank + i, :])
-            basis = numpy.array(basis)
+            basis = numpy.array(basis, dtype=numpy.int64)
     else:
         raise Exception("AX=B has no solution in integers<br>\n")
     # joining basis and y
@@ -90,12 +94,14 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
+        local_print_count = print_count
         print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
         print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
         print_all(A, B, L, D)
-        u = n1 * (D[k - 1] * D[k + 1] + L[k, k - 1] * L[k, k - 1])
-        v = m1 * D[k] * D[k]
+        u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
+                  int(L[k, k - 1]) * int(L[k, k - 1]))
+        v = m1 * int(D[k]) * int(D[k])
         print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
             swap_rows(k, A, B, L, D)
@@ -128,10 +134,10 @@ def lllhermite(G, m1=1, n1=1):
 
 def initialise_working_matrices(G):
     """  G is a nonzero matrix with at least two rows.  """
-    B = numpy.eye(G.shape[0], dtype=int)
-    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=int)  # Lower triang matrix
-    D = numpy.ones(G.shape[0] + 1, dtype=int)
-    A = numpy.array(G, dtype=int)
+    B = numpy.eye(G.shape[0], dtype=numpy.int64)
+    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=numpy.int64)  # Lower triang matrix
+    D = numpy.ones(G.shape[0] + 1, dtype=numpy.int64)
+    A = numpy.array(G, dtype=numpy.int64)
     return A, B, L, D
 
 
@@ -142,7 +148,8 @@ def first_nonzero_is_negative(A):
     if the first nonzero column j of A contains only one nonzero entry, which
     is negative+ This assumes A is a nonzero matrix with at least two rows+
     """
-    nonzero_columns = numpy.nonzero(numpy.sum(A, axis=0) != 0)[0]
+    nonzero_columns = numpy.nonzero(
+        numpy.sum(A, axis=0, dtype=numpy.int64) != 0)[0]
     assert len(nonzero_columns)
     # Get the first nonzero column
     nonzero_col = A[:, numpy.min(nonzero_columns)]
@@ -161,12 +168,12 @@ def reduce_matrix(A, B, L, k, i, D):
             A[i, :] *= -1.0
             B[i, :] *= -1.0
     else:
-        col1 = A.shape[1] - 1
+        col1 = A.shape[1]
     nonzero_k_elems = numpy.nonzero(A[k])[0]
     if len(nonzero_k_elems):
         col2 = nonzero_k_elems[0]
     else:
-        col2 = A.shape[1] - 1
+        col2 = A.shape[1]
     if col1 < A.shape[1]:
         q = A[k, col1] // A[i, col1]
     else:
@@ -194,12 +201,13 @@ def swap_rows(k, A, B, L, D):
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
     print_all(A, B, L, D)
-    t = L[(k + 1):, k - 1] * D[k + 1] - L[(k + 1):, k] * L[k, k - 1]
-    L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
-                          L[(k + 1):, k] * D[k - 1]) / D[k]
-    L[(k + 1):, k] = t / D[k]
+    tmp = (L[(k + 1):, k - 1] * (D[k + 1] / D[k]) -
+           L[(k + 1):, k] * (L[k, k - 1] / D[k]))
+    L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * (L[k, k - 1] / D[k]) +
+                          L[(k + 1):, k] * (D[k - 1] / D[k]))
+    L[(k + 1):, k] = tmp
     print_all(A, B, L, D)
-    t = D[k - 1] * D[k + 1] + L[k, k - 1] * L[k, k - 1]
+    t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
     return
 
@@ -292,7 +300,7 @@ def cholesky(A):
     assert numpy.all(numpy.linalg.eigvals(A) > 0)
     m = A.shape[0]
     N = deepcopy(A)
-    D = numpy.ones(A.shape)
+    D = numpy.ones(A.shape, dtype=numpy.int64)
     for i in xrange(1, m):
         for j in xrange(i, m):
             N[j][i] = N[i][j]
@@ -310,11 +318,11 @@ def gram(A):
     Need to check for row and column operations
     """
     m = A.shape[0]
-    B = numpy.empty((m, m))
+    B = numpy.empty((m, m), dtype=numpy.int64)
     for i in xrange(m):
         for j in xrange(m):
             B[i][j] = A[i].dot(A[j])  # dotproduct(A[i], A[j], n)
-    return numpy.array(B, dtype=int)
+    return numpy.array(B, dtype=numpy.int64)
 
 
 def introot(a, b, c, d):
@@ -444,10 +452,10 @@ def lcasvector(A, x):
 #     print x
 #     print A
     n = A.shape[1]
-    lcv = numpy.empty(n)
+    lcv = numpy.empty(n, dtype=numpy.int64)
     for j in xrange(n):
         lcv[j] = x.dot(A[:, j])
-    return numpy.array(lcv, dtype=int)
+    return lcv
 
 
 if __name__ == '__main__':
@@ -467,7 +475,7 @@ arrays = [
         [4, 4, 3, -4, 2, 4, 1, 0, -3, -2],
         [1, 2, 2, 1, -2, 0, 2, 0, -3, -1],
         [4, 0, -2, -1, 0, 4, 4, 2, 0, 0],
-        [-4, 1, -4, 4, -4, 0, -2, 3, 4, 4]], dtype=int),
+        [-4, 1, -4, 4, -4, 0, -2, 3, 4, 4]], dtype=numpy.int64),
     numpy.array([
         [-1, 0, 0, -3, -3, -3, 4, 0, 1, 4],
         [0, -2, -2, 4, 2, -4, 0, -3, -4, 2],
@@ -475,7 +483,7 @@ arrays = [
         [4, -3, -2, 2, -1, 1, -4, -2, 4, 1],
         [-3, -2, -1, -3, 0, -4, 1, -3, 3, 1],
         [-4, -1, 0, -3, 0, 0, 3, 3, -4, 0],
-        [1, 1, -1, -3, 2, 2, -3, 3, 2, 2]], dtype=int),
+        [1, 1, -1, -3, 2, 2, -3, 3, 2, 2]], dtype=numpy.int64),
     numpy.array([
         [-1, -2, 3, 0, 4, 0, -4, -3, 4, -2],
         [-3, 2, -2, 0, -4, 3, 3, 2, 0, -4],
@@ -483,7 +491,7 @@ arrays = [
         [-1, -1, 0, 0, -1, -1, 3, -3, 4, 2],
         [3, -1, 2, 0, -4, -3, -1, -1, 2, 3],
         [-4, 0, -1, 0, 4, 0, 1, -4, -2, 0],
-        [4, 2, 3, 0, 0, -2, 2, -2, -4, 1]], dtype=int),
+        [4, 2, 3, 0, 0, -2, 2, -2, -4, 1]], dtype=numpy.int64),
     numpy.array([
         [-3, 3, 4, -1, 0, -4, -1, -4, 2, -2],
         [1, 2, 3, -1, -3, 3, -3, -2, 1, -2],
@@ -491,7 +499,7 @@ arrays = [
         [0, -4, -3, -3, 1, 2, 0, -3, 1, -1],
         [-1, -1, 3, 1, 1, 4, -3, -3, 0, 2],
         [0, 1, -4, 1, -3, 0, -1, 0, 1, 0],
-        [0, 0, -2, -2, 4, 0, 4, 1, 2, 0]], dtype=int),
+        [0, 0, -2, -2, 4, 0, 4, 1, 2, 0]], dtype=numpy.int64),
     numpy.array([
         [4, -3, 0, 0, 0, 3, 4, -4, 0, -3],
         [-4, 4, -3, 0, -3, -3, 2, 0, -1, -1],
@@ -499,14 +507,14 @@ arrays = [
         [-3, 1, 0, 0, 2, 0, 0, -3, 1, 1],
         [0, -4, -3, 0, 0, 1, -3, -1, 1, 0],
         [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=int)]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=numpy.int64)]
 
 xs = [
-    numpy.array([3, 4, 1, 0, -3, 0, 1, 4, -2], dtype=int),
-    numpy.array([0, 4, 4, 3, 2, 4, 0, 1, 4], dtype=int),
-    numpy.array([0, -4, 0, 1, -4, 4, 4, -2, 3], dtype=int),
-    numpy.array([1, 2, -3, 3, -4, 1, -3, -3, -4], dtype=int),
-    numpy.array([0, -4, -1, -2, -4, 0, 4, 3, -4], dtype=int)]
+    numpy.array([3, 4, 1, 0, -3, 0, 1, 4, -2], dtype=numpy.int64),
+    numpy.array([0, 4, 4, 3, 2, 4, 0, 1, 4], dtype=numpy.int64),
+    numpy.array([0, -4, 0, 1, -4, 4, 4, -2, 3], dtype=numpy.int64),
+    numpy.array([1, 2, -3, 3, -4, 1, -3, -3, -4], dtype=numpy.int64),
+    numpy.array([0, -4, -1, -2, -4, 0, 4, 3, -4], dtype=numpy.int64)]
 
 
 # for i, arr in enumerate(arrays):
@@ -524,13 +532,13 @@ def print_all(A, B, L, D):
     global print_count
     print "------ print {} -----".format(print_count)
     print 'A: '
-    print numpy.array(A, dtype=int)
+    print numpy.array(A, dtype=numpy.int64)
     print 'B: '
-    print numpy.array(B, dtype=int)
+    print numpy.array(B, dtype=numpy.int64)
     print 'L: '
-    print numpy.array(L, dtype=int)
+    print numpy.array(L, dtype=numpy.int64)
     print 'D: '
-    print numpy.array(D, dtype=int)
+    print numpy.array(D, dtype=numpy.int64)
     print_count += 1
 
 
@@ -543,7 +551,8 @@ else:
 for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     print "\n\n-------- {} ----------".format(count + offset)
     Ab = arr.T
-    G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
+    G = numpy.concatenate(
+        (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
     G[-1, -1] = 1
     A, B, L, D = initialise_working_matrices(G)
 #     print_all(A, B, L, D)

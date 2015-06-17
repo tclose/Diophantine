@@ -1399,7 +1399,7 @@ function printnp($matrix,$m,$n){
 		}
 		$column_count = 1;  // Brackets and spaces
 		for($j="1";$j<=$n;$j=bcadd($j,"1")){
-			if ($column_count + $maxlen + 1 > 79){
+			if ($column_count + $maxlen + 1 > 77){
 				print "\n  ";
 				$column_count = $maxlen + 2;
 			} else {
@@ -1449,7 +1449,7 @@ function printnparray($a,$start,$finish){
 	echo "[";
 	$column_count = 1;
 	for($i=$start;lt($i,$finish);$i=bcadd($i,"1")){
-		if ($column_count + $maxlen + 1 > 79){
+		if ($column_count + $maxlen + 1 > 77){
 			print "\n ";
 			$column_count = $maxlen + 1;
 		} else {
@@ -1488,16 +1488,16 @@ function print_all($m, $n, $m1, $n1) {
 	print "B: \n";
 	printnp($B, $m, $m);
 	print "L: \n";
-	for($i=1; i <= $m;$i+=1){
-		for($j=1; j <= $m;$j+=1){
-			if ($j < $j){
+	for($i=1; $i <= $m;$i+=1){
+		for($j=1; $j <= $m;$j+=1){
+			if ($j < $i){
 				$LL[$i][$j] = $L[$i][$j];
 			}else{
 				$LL[$i][$j] = 0;
 			}	
 		}
 	}
-	printnp(LL, $m, $m);
+	printnp($LL, $m, $m);
 // 	$neg = 0;
 // 	$maxlen = 0;
 // 	for($i="2";$i<=$m;$i=bcadd($i,"1")){
