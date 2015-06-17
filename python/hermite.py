@@ -23,19 +23,12 @@
 # Original written in PHP by Keith Matthews (webmaster@number-theory.org)
 #
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
-"""
-hermite.py
-
-Input: integer mxn matrix A, nonzero, at least two rows+
-Output: small unimodular matrix B and HNF(A), such that BA=HNF(A)+
-The Havas, Majewski, Matthews LLL method is used+
-We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
-"""
-
 from copy import deepcopy
 from fractions import gcd
 import numpy
 from nineml import units as un
+global print_count
+print_count = 0
 
 
 def diophantine(compound, reference_dims, m1=1, n1=1):
@@ -82,30 +75,41 @@ def diophantine(compound, reference_dims, m1=1, n1=1):
 
 
 def lllhermite(G, m1=1, n1=1):
-    """  G is a nonzero matrix with at least two rows.  """
+    """
+    Input: integer mxn matrix A, nonzero, at least two rows+
+    Output: small unimodular matrix B and HNF(A), such that BA=HNF(A)+
+    The Havas, Majewski, Matthews LLL method is used+
+    We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
+    """
+    global print_count
     m = G.shape[0]
     n = G.shape[1]
-    B = numpy.eye(m)
-    L = numpy.zeros((m, m))  # Lower triangular matrix
-    D = numpy.ones(m + 1)
-    A = deepcopy(G)
-    return A, B, L, D
+    A, B, L, D = initialise_working_matrices(G)
     if first_nonzero_is_negative(A):
         B[m, m] = -1
         A[m, :] *= -1
     k = 1
     while k < m:
-        col1, col2 = reduce_matrix(A, B, L, k, k - 1, m, n, D)
-        u = n1 * (D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1])
-        v = m1 * D[k - 1] * D[k - 1]
+        print "k={k}, m={m}".format(k=k, m=m)
+        col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
+        print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
+        print_all(A, B, L, D)
+        u = n1 * (D[k - 1] * D[k + 1] + L[k, k - 1] * L[k, k - 1])
+        v = m1 * D[k] * D[k]
+        print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
             swap_rows(k, A, B, L, D)
+            print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
+                print "col1 <= minim && k > 1"
+            else:
+                print "col1 <= minim"
         else:
             for i in xrange(k - 2 - 1, 0, -1):
-                reduce_matrix(A, B, L, k, i, m, n, D)
+                reduce_matrix(A, B, L, k, i, D)
             k = k + 1
+            print "col1 > minim"
     hnf = deepcopy(A)
     unimodular_matrix = deepcopy(B)
     for i in xrange(m - 1, 0, -1):
@@ -122,6 +126,15 @@ def lllhermite(G, m1=1, n1=1):
     return hnf, unimodular_matrix, rank
 
 
+def initialise_working_matrices(G):
+    """  G is a nonzero matrix with at least two rows.  """
+    B = numpy.eye(G.shape[0], dtype=int)
+    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=int)  # Lower triang matrix
+    D = numpy.ones(G.shape[0] + 1, dtype=int)
+    A = numpy.array(G, dtype=int)
+    return A, B, L, D
+
+
 def first_nonzero_is_negative(A):
     """
     returns 0 if the first nonzero column j of A contains more than one nonzero
@@ -129,8 +142,10 @@ def first_nonzero_is_negative(A):
     if the first nonzero column j of A contains only one nonzero entry, which
     is negative+ This assumes A is a nonzero matrix with at least two rows+
     """
+    nonzero_columns = numpy.nonzero(numpy.sum(A, axis=0) != 0)[0]
+    assert len(nonzero_columns)
     # Get the first nonzero column
-    nonzero_col = A[:, numpy.min(numpy.nonzero(numpy.sum(A, axis=0) == 0))]
+    nonzero_col = A[:, numpy.min(nonzero_columns)]
     # Get the nonzero elements
     nonzero_elems = numpy.nonzero(nonzero_col)[0]
     # If there is only one and it is negative return 1 else 0
@@ -157,15 +172,15 @@ def reduce_matrix(A, B, L, k, i, D):
     else:
         t = abs(L[k, i])
         t = 2 * t
-        if t > D[i]:
-            q = lnearint(L[k, i], D[i])
+        if t > D[i + 1]:
+            q = lnearint(L[k, i], D[i + 1])
         else:
             q = 0
     if q != 0:
         A[k, :] -= q * A[i, :]
         B[k, :] -= q * B[i, :]
-        L[k, i] = L[k, i] - q * D[i]
-        L[k, :i] - q * L[i, :i]
+        L[k, i] -= q * D[i + 1]
+        L[k, :i] -= q * L[i, :i]
     return col1, col2
 
 
@@ -177,13 +192,15 @@ def minus(j, L):
 def swap_rows(k, A, B, L, D):
     A[(k - 1, k), :] = A[(k, k - 1), :]
     B[(k - 1, k), :] = B[(k, k - 1), :]
-    L[(k - 1, k), :] = L[(k, k - 1), :]
-    t = L[k:, k - 1] * D[k] - L[k:, k] * L[k, k - 1]
-    L[k:, k - 1] = (L[k:, k - 1] * L[k, k - 1] +
-                    L[k:, k] * D[k - 2]) / D[k - 1]
-    L[k:, k] = t / D[k - 1]
-    t = D[k - 2] * D[k] + L[k, k - 1] * L[k, k - 1]
-    D[k - 1] = t / D[k - 1]
+    L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
+    print_all(A, B, L, D)
+    t = L[(k + 1):, k - 1] * D[k + 1] - L[(k + 1):, k] * L[k, k - 1]
+    L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
+                          L[(k + 1):, k] * D[k - 1]) / D[k]
+    L[(k + 1):, k] = t / D[k]
+    print_all(A, B, L, D)
+    t = D[k - 1] * D[k + 1] + L[k, k - 1] * L[k, k - 1]
+    D[k] = t / D[k]
     return
 
 
@@ -271,7 +288,8 @@ def cholesky(A):
     """
     # A is positive definite mxm
     """
-    assert A.dim == 2 and A.shape[0] == A.shape[1]
+    assert A.ndim == 2 and A.shape[0] == A.shape[1]
+    assert numpy.all(numpy.linalg.eigvals(A) > 0)
     m = A.shape[0]
     N = deepcopy(A)
     D = numpy.ones(A.shape)
@@ -503,6 +521,8 @@ xs = [
 
 
 def print_all(A, B, L, D):
+    global print_count
+    print "------ print {} -----".format(print_count)
     print 'A: '
     print numpy.array(A, dtype=int)
     print 'B: '
@@ -511,6 +531,8 @@ def print_all(A, B, L, D):
     print numpy.array(L, dtype=int)
     print 'D: '
     print numpy.array(D, dtype=int)
+    print_count += 1
+
 
 offset = 0
 if offset:
@@ -523,8 +545,8 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     Ab = arr.T
     G = numpy.concatenate((Ab, numpy.zeros((Ab.shape[0], 1))), axis=1)
     G[-1, -1] = 1
-    A, B, L, D = lllhermite(G, m1=1, n1=1)
-    print_all(A, B, L, D)
+    A, B, L, D = initialise_working_matrices(G)
+#     print_all(A, B, L, D)
     k = 3
     i = k - 1
     j = 3
@@ -542,8 +564,19 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     X = gram(A)
 #     print "gram(A, m, n): "
 #     print X
-    print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
-#     print "cholesky(A, m): " + cholesky(A, m)
+#     print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
+    hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
+    print "lllhermite(G, $mplus1, $nplus1, $m1, $n1): " + str(rank)
+    print "HNF:"
+    print hnf
+    print "Unimodular matrix:"
+    print unimodular_matrix
+#     N, D = cholesky(X)
+#     print "cholesky(X, mplus1): "
+#     print "Cholesky Num:"
+#     print N
+#     print "Cholesky Den:"
+#     print D
 #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 
 #     a = [-2, -1, 9, 1, 2]

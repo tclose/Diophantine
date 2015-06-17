@@ -6,6 +6,10 @@ include ("library.php");
 include ("lllhermite_.php");
 error_reporting(E_ALL ^ E_DEPRECATED);
 global $transposed;
+global $print_count;
+
+$print_count = 0;
+
 
 // $matrix = "0 1 0 0 0 -1 0 -1 -1 1 1 0 0 1 0 2 -2 0 -3 -4 1 -4 -2 3 2 0 0  4 1 -3 0 0 0 4 0 3 3 -3 -3 0 0  -3 0 -1 1 1 0 2 0 2 2 -2 -2 0 0  -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0";
 $matrix = "0 0 1 -1 -1 0 0 0 2 0 0 2 -4 -4 0 0 0 6 0 1 -3 4 3 0 0 0 -7 1 0 -1 2 2 0 0 0 -3 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 1 0 0 0";
@@ -85,139 +89,6 @@ $d = split ( '[ ]+', "-5 1 3 -2 1");
 // }
 
 
-function printnp($matrix,$m,$n){
-	$neg = 0;
-	$maxlen = 0;
-	for($i="1";$i<=$m;$i=bcadd($i,"1")){
-		for($j="1";$j<=$n;$j=bcadd($j,"1")){
-			if($matrix[$i][$j] < 0){
-				$neg = 1;
-			}
-			if(len($matrix[$i][$j])>$maxlen){
-				$maxlen = len($matrix[$i][$j]);
-			}
-		}
-	}
-	for($i="1";$i<=$m;$i=bcadd($i,"1")){
-		if ($i == 1){
-			print "[[";
-		}else{
-			print " [";
-		}	
-		for($j="1";$j<=$n;$j=bcadd($j,"1")){
-			if($j != "1"){
-				print " ";
-			}
-			$l = len($matrix[$i][$j]);
-			if($l==0){
-				$l = 1;
-			}
-			for($space=0;$space<($maxlen - $l);$space++){
-				print " ";
-			}
-			if($matrix[$i][$j] >= 0 && $neg){
-				print " ";
-			}
-			print $matrix[$i][$j] ;
-		}
-		if ($i == $m){
-			print "]]\n";
-		}else {
-			print "]\n";
-		}
-	}
-}
-
-function printnparray($a,$start,$finish){
-	$neg = 0;
-	$maxlen = 0;
-	for($i=$start;$i<$finish;$i=bcadd($i,"1")){
-		if($a[$i] < 0){
-			$neg = 1;
-		}
-		if(len($a[$i])>$maxlen){
-			$maxlen = len($a[$i]);
-		}
-	}
-	echo "[";
-	for($i=$start;lt($i,$finish);$i=bcadd($i,"1")){
-		if($i!=$start){
-			print " ";
-		}
-		if($a[$i] >= 0 && $neg){
-			print " ";
-		}
-		$l = len($a[$i]);
-		if($l==0){
-			$l = 1;
-		}
-		for($space=0;$space<($maxlen - $l);$space++){
-			print " ";
-		}
-		print "$a[$i]";
-	}
-	print "]\n";
-	return;
-}
-
-
-function print_all($m, $n, $m1, $n1) {
-	global $B;
-	global $L;
-	global $A;
-	global $D;
-	print "A: \n";
-	printnp($A, $m, $n);
-	print "B: \n";
-	printnp($B, $m, $m);
-	print "L: \n";
-	$neg = 0;
-	for($i="2";$i<=$m;$i=bcadd($i,"1")){
-		for($j="1";$j<$i;$j=bcadd($j,"1")){
-			if($L[$i][$j] < 0){
-				$neg = 1;
-			}
-		}
-	}
-	print "[[";
-	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
-		if($s != "1"){
-			print " ";
-		}		
-		if($neg){
-			print " ";
-		}
-		print "0";
-	}
-	print "]\n";
-	for($r="2";le($r,$m);$r=bcadd($r,"1")){
-		print " [";
-		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
-			if($s != "1"){
-				print " ";
-			}
-			if($L[$r][$s] >= 0 && $neg){
-				print " ";
-			}			
-			print $L[$r][$s];
-		}
-		for ($s=$r;le($s, $m); $s=bcadd($s,"1")){
-			if($neg){
-				print " ";
-			}
-			print " 0";
-		}
-		if ($r == $m){
-			print "]]\n";
-		}else {
-			print "]\n";
-		}
-	}
-	print "D: \n";
-	printnparray($D, 0, $m);
-}
-
-
 global $col1;
 global $col2;
 global $nplus1;
@@ -251,7 +122,7 @@ if($offset>0){
 }else{
 	$end = 5;
 }
-// $end = 1;
+$end = 1;
 
 for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
@@ -287,9 +158,9 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	axb_header ( $transposed, $m, $n, $m1, $n1 );
 	$mplus1 = $m + 1;
 	$nplus1 = $n + 1;
-	lllhermite($G, $mplus1, $nplus1, $m1, $n1);	
+	lllhermite_header($G, $mplus1, $nplus1, $m1, $n1);	
 // 	print "llhermite: " . $hnf . ", " . $unimodular_matrix . ", " . $rank . "\n";
-	print_all($mplus1, $nplus1, $m1, $n1);
+// 	print_all($mplus1, $nplus1, $m1, $n1);
 // 	print "flagcol(transposed, m, n): " . flagcol($A, $m, $n) . "\n";
 	$k = 4;
 	$i = $k - 1;
@@ -308,11 +179,25 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	$X = gram($A, $mplus1, $nplus1);
 // 	print "gram(A, $mplus1, $nplus1):\n";
 // 	printnp($X, $mplus1, $mplus1);
- 	lcasvector($A, $x, $m, $n);
-	print "lcasvector(A, x, m, nplus1): ";
-	printnparray($lcv, 1, $nplus1);
-// 	cholesky($A, $m);
-// 	print "cholesky($A, $m): ";
+//  	lcasvector($A, $x, $m, $n);
+// 	print "lcasvector(A, x, m, nplus1): ";
+// 	printnparray($lcv, 1, $nplus1);
+	lllhermite($G, $mplus1, $nplus1, $m1, $n1);
+	print "lllhermite(G, $mplus1, $nplus1, $m1, $n1): " . $rank . "\n";
+	print "HNF:\n";
+	printnp($hnf, $m, $n);
+	print "\nUnimodular matrix:\n";
+	printnp($unimodular_matrix, $mplus1, $nplus1);
+	print "\n";
+	print_all($m, $n, $m1, $n1);
+	
+// 	cholesky($X, $mplus1);
+// 	print "cholesky($X, $mplus1): ";
+// 	print "Cholesky Num:\n";
+// 	printnp($choleskynum, $mplus1, $nplus1);
+// 	print "\nCholesky Den:\n";
+// 	printnp($choleskyden, $mplus1, $nplus1);
+// 	print "\n";
 //  shortest_distance($A, $m, $n);
 // 	print "shortest_distance($A, $m, $n): ";
 }

@@ -121,6 +121,45 @@ function axb($Ab,$m,$n,$m1,$n1){
 	return;
 }
 
+/* G is a nonzero matrix with at least two rows. */
+function lllhermite_header($G,$m,$n,$m1,$n1){
+	global $col1;
+	global $col2;
+	global $nplus1;
+	global $B;
+	global $L;
+	global $A;
+	global $D;
+	global $hnf;
+	global $unimodular_matrix;
+	global $rank;
+
+	for($i="1";le($i,$m);$i=bcadd($i,"1")){
+		for($j="1";le($j,$m);$j=bcadd($j,"1")){
+			if(eq($i,$j)){
+				$B[$i][$j]="1";
+			}else{
+				$B[$i][$j]="0";
+			}
+		}
+	}
+	for($r="2";le($r,$m);$r=bcadd($r,"1")){
+		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
+			$L[$r][$s]="0";
+		}
+	}
+	for($i="0";le($i,$m);$i=bcadd($i,"1")){
+		$D[$i]="1";
+	}
+	for($i="1";le($i,$m);$i=bcadd($i,"1")){
+		for($j="1";le($j,$n);$j=bcadd($j,"1")){
+			$A[$i][$j]=$G[$i][$j];
+		}
+	}
+
+	return;
+}
+
 
 /* G is a nonzero matrix with at least two rows. */
 function lllhermite($G,$m,$n,$m1,$n1){
@@ -157,8 +196,6 @@ global $rank;
            $A[$i][$j]=$G[$i][$j];
        }
    }
-
-   return;
    
    $flag=flagcol($A,$m,$n);
    if(eq($flag,"1")){
@@ -170,8 +207,11 @@ global $rank;
    $k="2";
    $nplus1=bcadd($n,"1");
    while(le($k,$m)){
+   			 print "k=" . ($k - 1) . ", m=$m\n";
          $kminus1=bcsub($k,"1");
          reduce2($k,$kminus1,$m,$n,$D);
+         print "col1=" . ($col1 - 1) . ", col2=" . ($col2 - 1) . "\n";
+         print_all($m, $n, $m1, $n1);
          $kminus2=bcsub($k,"2");
          $minim=minimum($col2,$n);
          $temp1=bcmul($D[$kminus2],$D[$k]);
@@ -180,17 +220,24 @@ global $rank;
          $u=bcmul($n1,$temp3);
          $temp1=bcmul($D[$kminus1],$D[$kminus1]);
          $v=bcmul($m1,$temp1);
+         print "u=$u, v=$v\n";
          if(le($col1,$minim) || (eq($col1,$col2) && eq($col1,$nplus1) && lt($u,$v))){
             swap2($k,$m,$n);
+            print_all($m, $n, $m1, $n1);
             if(gt($k,"2")){
                $k=$kminus1;
+               print "col1 <= minim && k > 1";
+            }else{
+            	print "col1 <= minim";
             }
          }else{
             for($i=$kminus2;ge($i,"1");$i=bcsub($i,"1")){
                 reduce2($k,$i,$m,$n,$D);
             }
             $k=bcadd($k,"1");
+            print "col1 > minim";
          }
+         print "\n";
    }
    for($i="1";le($i,$m);$i=bcadd($i,"1")){
        for($j="1";le($j,$n);$j=bcadd($j,"1")){
@@ -385,17 +432,22 @@ global $D;
        $L[$k][$j]=$L[$kminus1][$j];
        $L[$kminus1][$j]=$temp;
    }
+   print_all($m, $n, 1, 1);
    $kplus1=bcadd($k,"1");
+   print "t: ";
    for($i=$kplus1;le($i,$m);$i=bcadd($i,"1")){
        $temp1=bcmul($L[$i][$kminus1],$D[$k]);
        $temp2=bcmul($L[$i][$k],$L[$k][$kminus1]);
        $t=bcsub($temp1,$temp2);
+       print "$t ";
        $temp1=bcmul($L[$i][$kminus1],$L[$k][$kminus1]);
        $temp2=bcmul($L[$i][$k],$D[$kminus2]);
        $temp3=bcadd($temp1,$temp2);
        $L[$i][$kminus1]=bcdiv($temp3,$D[$kminus1]);
        $L[$i][$k]=bcdiv($t,$D[$kminus1]);
    }
+   print "\n";
+   print_all($m, $n, 1, 1);
 
    $temp1=bcmul($D[$kminus2],$D[$k]);
    $temp2=bcmul($L[$k][$kminus1],$L[$k][$kminus1]);
