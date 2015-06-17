@@ -434,19 +434,16 @@ global $D;
    }
    print_all($m, $n, 1, 1);
    $kplus1=bcadd($k,"1");
-   print "t: ";
    for($i=$kplus1;le($i,$m);$i=bcadd($i,"1")){
        $temp1=bcmul($L[$i][$kminus1],$D[$k]);
        $temp2=bcmul($L[$i][$k],$L[$k][$kminus1]);
        $t=bcsub($temp1,$temp2);
-       print "$t ";
        $temp1=bcmul($L[$i][$kminus1],$L[$k][$kminus1]);
        $temp2=bcmul($L[$i][$k],$D[$kminus2]);
        $temp3=bcadd($temp1,$temp2);
        $L[$i][$kminus1]=bcdiv($temp3,$D[$kminus1]);
        $L[$i][$k]=bcdiv($t,$D[$kminus1]);
    }
-   print "\n";
    print_all($m, $n, 1, 1);
 
    $temp1=bcmul($D[$kminus2],$D[$k]);

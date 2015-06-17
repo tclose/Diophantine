@@ -106,7 +106,7 @@ def lllhermite(G, m1=1, n1=1):
             else:
                 print "col1 <= minim"
         else:
-            for i in xrange(k - 2 - 1, 0, -1):
+            for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
             print "col1 > minim"

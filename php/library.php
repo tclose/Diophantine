@@ -1397,28 +1397,36 @@ function printnp($matrix,$m,$n){
 		}else{
 			print " [";
 		}
+		$column_count = 1;  // Brackets and spaces
 		for($j="1";$j<=$n;$j=bcadd($j,"1")){
-			if($j != "1"){
-				print " ";
+			if ($column_count + $maxlen + 1 > 79){
+				print "\n  ";
+				$column_count = $maxlen + 2;
+			} else {
+				$column_count += $maxlen + 1;
+				if($j != "1"){
+					print " ";
+				}				
 			}
 			if($matrix[$i][$j] == 0){
 				$l = 1;
 			}else{
 				$l = len($matrix[$i][$j]);
 			}
-			if ($matrix[$i][$j] >= 0 && neg) {
+			if ($matrix[$i][$j] < 0) {
 			  $l = $l + 1;
 			}
 			for($space=0;$space<($maxlen - $l);$space++){
 				print " ";
 			}
-			print $matrix[$i][$j] ;
+			print $matrix[$i][$j];
 		}
 		if ($i == $m){
 			print "]]\n";
 		}else {
 			print "]\n";
 		}
+		
 	}
 }
 
@@ -1437,19 +1445,27 @@ function printnparray($a,$start,$finish){
 				$neg = 1;
 		}
 	}
+	$maxlen = $maxlen + $neg;
 	echo "[";
+	$column_count = 1;
 	for($i=$start;lt($i,$finish);$i=bcadd($i,"1")){
-		if($i!=$start){
-			print " ";
+		if ($column_count + $maxlen + 1 > 79){
+			print "\n ";
+			$column_count = $maxlen + 1;
+		} else {
+			$column_count += $maxlen + 1;
+			if($i != $start){
+				print " ";
+			}				
 		}
 		if($a[$i] == 0){
 				$l = 1;
-			}else{
-				$l = len($a[$i]);
-			}
-			if ($a[$i] >= 0 && neg) {
-			  $l = $l + 1;
-			}
+		}else{
+			$l = len($a[$i]);
+		}
+		if ($a[$i] < 0) {
+		  $l = $l + 1;
+		}
 		for($space=0;$space<($maxlen - $l);$space++){
 			print " ";
 		}
@@ -1472,69 +1488,82 @@ function print_all($m, $n, $m1, $n1) {
 	print "B: \n";
 	printnp($B, $m, $m);
 	print "L: \n";
-	$neg = 0;
-	$maxlen = 0;
-	for($i="2";$i<=$m;$i=bcadd($i,"1")){
-		for($j="1";$j<$i;$j=bcadd($j,"1")){
-			if(len($L[$i][$j])>$maxlen){
-				$maxlen = len($L[$i][$j]);
-				if($L[$i][$j] < 0){
-					$neg = 1;
-				}else{
-					$neg = 0;
-				}
-			}elseif ((len($L[$i][$j])==$maxlen) && ($L[$i][$j] < 0)){
-				$neg = 1;
-			}
+	for($i=1; i <= $m;$i+=1){
+		for($j=1; j <= $m;$j+=1){
+			if ($j < $j){
+				$LL[$i][$j] = $L[$i][$j];
+			}else{
+				$LL[$i][$j] = 0;
+			}	
 		}
 	}
-	print "[[";
-	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
-		if($s != "1"){
-			print " ";
-		}
-		if($neg){
-			print " ";
-		}
-		for($space=0;$space<($maxlen - 1);$space++){
-			print " ";
-		}
-		print "0";
-	}
-	print "]\n";
-	for($r="2";le($r,$m);$r=bcadd($r,"1")){
-		print " [";
-		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
-			if($s != "1"){
-				print " ";
-			}
-			if($L[$r][$s] >= 0 && $neg){
-				print " ";
-			}
-			$l = len($L[$r][$s]);
-			if($l==0){
-				$l = 1;
-			}
-			for($space=0;$space<($maxlen - $l);$space++){
-				print " ";
-			}
-			print $L[$r][$s];
-		}
-		for ($s=$r;le($s, $m); $s=bcadd($s,"1")){
-			if($neg){
-				print " ";
-			}
-			for($space=0;$space<($maxlen - 1);$space++){
-				print " ";
-			}
-			print " 0";
-		}
-		if ($r == $m){
-			print "]]\n";
-		}else {
-			print "]\n";
-		}
-	}
+	printnp(LL, $m, $m);
+// 	$neg = 0;
+// 	$maxlen = 0;
+// 	for($i="2";$i<=$m;$i=bcadd($i,"1")){
+// 		for($j="1";$j<$i;$j=bcadd($j,"1")){
+// 			if(len($L[$i][$j])>$maxlen){
+// 				$maxlen = len($L[$i][$j]);
+// 				if($L[$i][$j] < 0){
+// 					$neg = 1;
+// 				}else{
+// 					$neg = 0;
+// 				}
+// 			}elseif ((len($L[$i][$j])==$maxlen) && ($L[$i][$j] < 0)){
+// 				$neg = 1;
+// 			}
+// 		}
+// 	}
+// 	$maxlen = $maxlen + $neg;
+// 	print "[[";
+// 	$column_count = 1;
+// 	for ($s="1";le($s, $m); $s=bcadd($s,"1")){
+// 			if ($column_count + $maxlen + 1 > 79){
+// 				print "\n";
+// 				$column_count = $maxlen;
+// 			} else {
+// 				$column_count += $maxlen + 1;
+// 				if($s != "1"){
+// 					print " ";
+// 				}				
+// 			}
+// 		for($space=0;$space<($maxlen - 1);$space++){
+// 			print " ";
+// 		}
+// 		print "0";
+// 	}
+// 	print "]\n";
+// 	for($r="2";le($r,$m);$r=bcadd($r,"1")){
+// 		print " [";
+// 		for($s="1";lt($s,$r);$s=bcadd($s,"1")){
+// 			if($s != "1"){
+// 				print " ";
+// 			}
+// 			if($L[$r][$s] == 0){
+// 					$l = 1;
+// 			}else{
+// 				$l = len($L[$r][$s]);
+// 			}
+// 			if ($L[$r][$s] < 0) {
+// 			  $l = $l + 1;
+// 			}
+// 			for($space=0;$space<($maxlen - $l);$space++){
+// 				print " ";
+// 			}
+// 			print $L[$r][$s];
+// 		}
+// 		for ($s=$r;le($s, $m); $s=bcadd($s,"1")){
+// 			for($space=0;$space<($maxlen - 1);$space++){
+// 				print " ";
+// 			}
+// 			print " 0";
+// 		}
+// 		if ($r == $m){
+// 			print "]]\n";
+// 		}else {
+// 			print "]\n";
+// 		}
+// 	}
 	print "D: \n";
 	printnparray($D, 0, $m + 1);
 	$print_count++;
