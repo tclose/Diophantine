@@ -143,6 +143,9 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$t = test_zeromat ( $mat, $rows, $m );
 	$n = $rows;
 	
+	$m = $m - 3;
+	$n = $n - 3;
+	
 	// echo "Augmented matrix [A|B]=";
 	// printmat1 ( $mat, $rows, $cols );
 	// echo "<br>\n";

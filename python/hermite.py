@@ -103,7 +103,7 @@ def lllhermite(G, m1=1, n1=1):
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
         print "u={u}, v={v}".format(u=u, v=v)
-        if col1 <= min(col2, n) or (col1 == col2 and col1 == n + 1 and u < v):
+        if col1 <= min(col2, n - 1) or (col1 == col2 and col1 == n and u < v):
             swap_rows(k, A, B, L, D)
             print_all(A, B, L, D)
             if k > 1:
@@ -116,19 +116,13 @@ def lllhermite(G, m1=1, n1=1):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
             print "col1 > minim"
-    hnf = deepcopy(A)
-    unimodular_matrix = deepcopy(B)
-    for i in xrange(m - 1, 0, -1):
+    for i in reversed(xrange(m)):
         test = zero_row_test(A, i)
         if test == 0:
             break
     rank = m - i
-    for i in xrange(m):
-        for j in xrange(n):
-            hnf[i, j] = A[m - i, j]
-    for i in xrange(m):
-        for j in xrange(m):
-            unimodular_matrix[i, j] = B[m - i, j]
+    hnf = deepcopy(A[::-1, :])
+    unimodular_matrix = deepcopy(B[::-1, :])
     return hnf, unimodular_matrix, rank
 
 
@@ -201,11 +195,10 @@ def swap_rows(k, A, B, L, D):
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
     print_all(A, B, L, D)
-    tmp = (L[(k + 1):, k - 1] * (D[k + 1] / D[k]) -
-           L[(k + 1):, k] * (L[k, k - 1] / D[k]))
-    L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * (L[k, k - 1] / D[k]) +
-                          L[(k + 1):, k] * (D[k - 1] / D[k]))
-    L[(k + 1):, k] = tmp
+    t = L[(k + 1):, k - 1] * D[k + 1] / D[k] - L[(k + 1):, k] * L[k, k - 1] / D[k]
+    L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
+                          L[(k + 1):, k] * D[k - 1]) / D[k]
+    L[(k + 1):, k] = t
     print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
@@ -550,6 +543,7 @@ else:
 # end = 1
 for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     print "\n\n-------- {} ----------".format(count + offset)
+    arr = arr[:-3, :-3]
     Ab = arr.T
     G = numpy.concatenate(
         (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
