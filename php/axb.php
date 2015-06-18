@@ -122,7 +122,7 @@ if($offset>0){
 }else{
 	$end = 5;
 }
-$end = 1;
+// $end = 1;
 
 for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
@@ -186,13 +186,12 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	print "lcasvector(A, x, m, nplus1): ";
 // 	printnparray($lcv, 1, $nplus1);
 	lllhermite($G, $mplus1, $nplus1, $m1, $n1);
-	print "lllhermite(G, $mplus1, $nplus1, $m1, $n1): " . $rank . "\n";
+	print "lllhermite(G, " . ($m + 1) . ", " . ($n + 1) . ", $m1, $n1): $rank \n";
 	print "HNF:\n";
-	printnp($hnf, $m, $n);
-	print "\nUnimodular matrix:\n";
-	printnp($unimodular_matrix, $mplus1, $nplus1);
-	print "\n";
-	print_all($m, $n, $m1, $n1);
+	printnp($hnf, $m + 1, $n + 1);
+	print "Unimodular matrix:\n";
+	printnp($unimodular_matrix, $m + 1, $m + 1);
+// 	print_all($m, $n, $m1, $n1);
 	
 // 	cholesky($X, $mplus1);
 // 	print "cholesky($X, $mplus1): ";

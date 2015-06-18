@@ -114,20 +114,17 @@ def lllhermite(G, m1=1, n1=1):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
             print "col1 > minim"
-    for i in reversed(xrange(m)):
-        test = zero_row_test(A, i)
-        if test == 0:
-            break
+    rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
     hnf = A[::-1, :]
     unimodular_matrix = B[::-1, :]
-    rank = m - i
     return hnf, unimodular_matrix, rank
 
 
 def initialise_working_matrices(G):
     """  G is a nonzero matrix with at least two rows.  """
     B = numpy.eye(G.shape[0], dtype=numpy.int64)
-    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=numpy.int64)  # Lower triang matrix
+    # Lower triang matrix
+    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=numpy.int64)
     D = numpy.ones(G.shape[0] + 1, dtype=numpy.int64)
     A = numpy.array(G, dtype=numpy.int64)
     return A, B, L, D
@@ -193,27 +190,14 @@ def swap_rows(k, A, B, L, D):
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
     print_all(A, B, L, D)
-    t = L[(k + 1):, k - 1] * D[k + 1] / D[k] - L[(k + 1):, k] * L[k, k - 1] / D[k]
+    t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
+         L[(k + 1):, k] * L[k, k - 1] / D[k])
     L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
                           L[(k + 1):, k] * D[k - 1]) / D[k]
     L[(k + 1):, k] = t
     print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
-    return
-
-
-def zero_row_test(matrix, i):
-    """
-    This tests the i-th row of matrix to see if there is a nonzero
-    entry. If there is one and the first occurs in column j, then j
-    is returned. Otherwise 0 is returned
-    """
-    nonzero_elems = numpy.nonzero(matrix[i])[0]
-    if len(nonzero_elems):
-        return nonzero_elems[0]
-    else:
-        return -1
 
 
 def shortest_distance_axb(A):
@@ -567,7 +551,8 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     print X
 #     print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
-    print "lllhermite(G, $mplus1, $nplus1, $m1, $n1): " + str(rank)
+    print "lllhermite(G, {}, {}, 1, 1): {} ".format(
+        A.shape[0], A.shape[1], rank)
     print "HNF:"
     print hnf
     print "Unimodular matrix:"

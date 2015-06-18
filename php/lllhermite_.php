@@ -208,9 +208,6 @@ global $print_count;
    $k="2";
    $nplus1=bcadd($n,"1");
    while(le($k,$m)){
-   			 if ($print_count > 121){
-   			 	print "here\n";
-   			 }
    			 print "k=" . ($k - 1) . ", m=$m\n";
          $kminus1=bcsub($k,"1");
          reduce2($k,$kminus1,$m,$n,$D);
