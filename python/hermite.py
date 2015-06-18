@@ -85,7 +85,6 @@ def lllhermite(G, m1=1, n1=1):
     The Havas, Majewski, Matthews LLL method is used+
     We usually take alpha=m1/n1, with (m1,n1)=(1,1) to get best results+
     """
-    global print_count
     m = G.shape[0]
     n = G.shape[1]
     A, B, L, D = initialise_working_matrices(G)
@@ -94,7 +93,6 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        local_print_count = print_count
         print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
         print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
@@ -120,9 +118,9 @@ def lllhermite(G, m1=1, n1=1):
         test = zero_row_test(A, i)
         if test == 0:
             break
+    hnf = A[::-1, :]
+    unimodular_matrix = B[::-1, :]
     rank = m - i
-    hnf = deepcopy(A[::-1, :])
-    unimodular_matrix = deepcopy(B[::-1, :])
     return hnf, unimodular_matrix, rank
 
 
