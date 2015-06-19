@@ -21,6 +21,8 @@ function cholesky($A,$m){ // A is positive definite mxm
          $Qnum[$j][$i]=$Qnum[$i][$j];
          $Qden[$j][$i]=$Qden[$i][$j];
          ratior($Qnum[$i][$j],$Qden[$i][$j],$Qnum[$i][$i],$Qden[$i][$i]);
+				 $n = $rationum;
+				 $d = $ratioden;         
          $Qnum[$i][$j]=$rationum;
          $Qden[$i][$j]=$ratioden;
      }

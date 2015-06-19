@@ -185,20 +185,31 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 //  	lcasvector($A, $x, $m, $n);
 // 	print "lcasvector(A, x, m, nplus1): ";
 // 	printnparray($lcv, 1, $nplus1);
-	lllhermite($G, $mplus1, $nplus1, $m1, $n1);
-	print "lllhermite(G, " . ($m + 1) . ", " . ($n + 1) . ", $m1, $n1): $rank \n";
-	print "HNF:\n";
-	printnp($hnf, $m + 1, $n + 1);
-	print "Unimodular matrix:\n";
-	printnp($unimodular_matrix, $m + 1, $m + 1);
+// 	lllhermite($G, $mplus1, $nplus1, $m1, $n1);
+// 	print "lllhermite(G, " . ($m + 1) . ", " . ($n + 1) . ", $m1, $n1): $rank \n";
+// 	print "HNF:\n";
+// 	printnp($hnf, $m + 1, $n + 1);
+// 	print "Unimodular matrix:\n";
+// 	printnp($unimodular_matrix, $m + 1, $m + 1);
 // 	print_all($m, $n, $m1, $n1);
-	
-// 	cholesky($X, $mplus1);
-// 	print "cholesky($X, $mplus1): ";
-// 	print "Cholesky Num:\n";
-// 	printnp($choleskynum, $mplus1, $nplus1);
-// 	print "\nCholesky Den:\n";
-// 	printnp($choleskyden, $mplus1, $nplus1);
+// 		$G = gram($hnf, $rank, $n);	
+		for ($i = 1; $i <= $n; $i++) {
+			for ($j = 1; $j <= $n; $j++) {
+				$PD[$i][$j] = 0;
+				for ($k = 1; $k <= $mplus1; $k++) {
+					$PD[$i][$j] += $mat[$i][$k] * $mat[$j][$k];
+				}
+				$PD[$i][$j] += 1;
+			}
+		}
+		print "PD:\n";
+		printnp($PD, $n, $n);
+  	cholesky($PD, $n);
+	 	print "cholesky(G):\n";
+  	print "N:\n";
+   	printnp($choleskynum, $n, $n);
+	  print "D:\n";
+	  printnp($choleskyden, $n, $n);
 // 	print "\n";
 //  shortest_distance($A, $m, $n);
 // 	print "shortest_distance($A, $m, $n): ";

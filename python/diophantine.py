@@ -35,20 +35,20 @@ numpy.seterr(over='raise')
 # warnings.filterwarnings('error')
 
 
-def diophantine(compound, reference_dims, m1=1, n1=1):
+def solve(A, b):
     """
     Finds the minimal combination of reference dimensions to make the compound
     dimension
     """
-    A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
-    b = numpy.array([list(compound)], dtype=numpy.int64)
+#     A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
+#     b = numpy.array([list(compound)], dtype=numpy.int64)
     m, n = A.shape
     Ab = numpy.concatenate((A, b))
     G = numpy.concatenate((Ab, numpy.zeros((m, 1), dtype=numpy.int64)), axis=1)
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
-    hnf, unimodular_matrix, rank = lllhermite(G, m1=m1, n1=n1)
+    hnf, unimodular_matrix, rank = lllhermite(G)
     flag = 0
     for i in xrange(rank - 1):
         if hnf[i][n + 1] != 0:
@@ -93,28 +93,31 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        print "k={k}, m={m}".format(k=k, m=m)
+        #         print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
-        print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
-        print_all(A, B, L, D)
+#         print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
+#         print_all(A, B, L, D)
         u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
-        print "u={u}, v={v}".format(u=u, v=v)
-        if col1 <= min(col2, n - 1) or (col1 == col2 and col1 == n and u < v):
+#         print "u={u}, v={v}".format(u=u, v=v)
+        if col1 <= min(col2, n - 1) or (col1 == n and col2 == n and u < v):
             swap_rows(k, A, B, L, D)
-            print_all(A, B, L, D)
+#             print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
-                print "col1 <= minim && k > 1"
-            else:
-                print "col1 <= minim"
+#                 print "col1 <= minim && k > 1"
+#             else:
+#                 print "col1 <= minim"
         else:
             for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
-            print "col1 > minim"
-    rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
+#             print "col1 > minim"
+    try:
+        rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
+    except StopIteration:
+        assert False, "A matrix contains only zeros"
     hnf = A[::-1, :]
     unimodular_matrix = B[::-1, :]
     return hnf, unimodular_matrix, rank
@@ -189,13 +192,13 @@ def swap_rows(k, A, B, L, D):
     A[(k - 1, k), :] = A[(k, k - 1), :]
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
-    print_all(A, B, L, D)
+#     print_all(A, B, L, D)
     t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
          L[(k + 1):, k] * L[k, k - 1] / D[k])
     L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
                           L[(k + 1):, k] * D[k - 1]) / D[k]
     L[(k + 1):, k] = t
-    print_all(A, B, L, D)
+#     print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
 
@@ -276,15 +279,16 @@ def cholesky(A):
     m = A.shape[0]
     N = deepcopy(A)
     D = numpy.ones(A.shape, dtype=numpy.int64)
-    for i in xrange(1, m):
-        for j in xrange(i, m):
+    for i in xrange(m - 1):
+        for j in xrange(i + 1, m):
             N[j][i] = N[i][j]
             D[j][i] = D[i][j]
-            N[i][j], D[i][j] = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
-    for k in xrange(i, m):
-        for l in xrange(k - 1, m):
-            n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
-            N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
+            n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])            
+            N[i][j], D[i][j] = n, d
+        for k in xrange(i + 1, m):
+            for l in xrange(k, m):
+                n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
+                N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
     return N, D
 
 
@@ -550,15 +554,23 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     print "gram(A, m, n): "
 #     print X
 #     print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
-    hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
-    print "lllhermite(G, {}, {}, 1, 1): {} ".format(
-        A.shape[0], A.shape[1], rank)
-    print "HNF:"
-    print hnf
-    print "Unimodular matrix:"
-    print unimodular_matrix
-#     N, D = cholesky(X)
-#     print "cholesky(X, mplus1): "
+#     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
+#     print "lllhermite(G, {}, {}, 1, 1): {} ".format(
+#         A.shape[0], A.shape[1], rank)
+#     print "HNF:"
+#     print hnf
+#     print "Unimodular matrix:"
+#     print unimodular_matrix
+#     G = gram(hnf[:rank, :])
+    PD = numpy.dot(arr, arr.T) + 1
+    print "PD:"
+    print PD
+    N, D = cholesky(PD)
+    print "cholesky(G):"
+    print "N:"
+    print N
+    print "D:"
+    print D
 #     print "Cholesky Num:"
 #     print N
 #     print "Cholesky Den:"
