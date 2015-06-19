@@ -218,13 +218,13 @@ def shortest_distance_axb(A):
         n, d = multr(Nn[i], Nd[i], Nn[i], Nd[i])
         n, d = multr(n, d, Qn[i][i], Qd[i][i])
         Cn, Cd = addr(Cn, Cd, n, d)
-    i = m
+    i = m - 1
     Tn = Cn
     Td = Cd
     Un = 0
     Ud = 1
     multipliers = []  # List to hold multipliers
-    xs = []  # List to hold pas values of x
+    x = numpy.empty(m)  # List to hold pas values of x
     while 1:
         # Calculate UB
         Zn, Zd = ratior(Tn, Td, Qn, Qd)
@@ -232,11 +232,11 @@ def shortest_distance_axb(A):
         UB = introot(Zn, Zd, n, d)
         # Calculate x
         n, d = subr(Un, Ud, Nn, Nd)
-        x = -introot(Zn, Zd, n, d) - 1
+        x[i] = -introot(Zn, Zd, n, d) - 1
         while True:
-            x += 1
-            if x <= UB:
-                if i == 1:
+            x[i] += 1
+            if x[i] <= UB:
+                if i == 0:
                     lcv = lcasvector(A[:-1, :], x)
                     multiplier = A[m + 1, :n] - lcv
 #                   lengthsquared(mulitpliers[count], n)
@@ -251,7 +251,7 @@ def shortest_distance_axb(A):
                     prev_Un = Un
                     prev_Ud = Ud
                     Un, Ud = 0, 1
-                    for j in xrange(i, m):
+                    for j in xrange(i + 1, m):
                         # Loops from back of xs
                         n, d = multr(Qn[j], Qd[j], xs[i - j], 1)
                         Un, Ud = addr(Un, Ud, n, d)
@@ -265,7 +265,7 @@ def shortest_distance_axb(A):
                     break
             else:
                 i = i + 1
-                if i > m:
+                if i == m:
                     return multipliers
                 continue
 
@@ -283,7 +283,7 @@ def cholesky(A):
         for j in xrange(i + 1, m):
             N[j][i] = N[i][j]
             D[j][i] = D[i][j]
-            n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])            
+            n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
             N[i][j], D[i][j] = n, d
         for k in xrange(i + 1, m):
             for l in xrange(k, m):
@@ -530,6 +530,7 @@ else:
 for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     print "\n\n-------- {} ----------".format(count + offset)
     arr = arr[:-3, :-3]
+    x = x[:-2]
     Ab = arr.T
     G = numpy.concatenate(
         (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
@@ -539,9 +540,11 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
     k = 3
     i = k - 1
     j = 3
+# Swap
 #     print "swap2($k, $m, $n): "
 #     swap_rows(k, A, B, L, D)
 #     print_all(A, B, L, D)
+# Reduce:
 #     col1, col2 = reduce_matrix(A, B, L, k, i, D)
 #     print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
 #         k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
@@ -549,11 +552,7 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     minus(j, A[:A.shape[1], :])
 #     print "minus(j, m, L): "
 #     print_all(A, B, L, D)
-#     print "zero_row_test(matrix, n, i): {}".format(zero_row_test(A, k))
-#     X = gram(A)
-#     print "gram(A, m, n): "
-#     print X
-#     print "lcasvector(A, X, m, nplus1): {}".format(lcasvector(A[:-1, :-1], x))
+# Hermite:
 #     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
 #     print "lllhermite(G, {}, {}, 1, 1): {} ".format(
 #         A.shape[0], A.shape[1], rank)
@@ -561,19 +560,26 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     print hnf
 #     print "Unimodular matrix:"
 #     print unimodular_matrix
-#     G = gram(hnf[:rank, :])
-    PD = numpy.dot(arr, arr.T) + 1
-    print "PD:"
-    print PD
-    N, D = cholesky(PD)
-    print "cholesky(G):"
-    print "N:"
-    print N
-    print "D:"
-    print D
-#     print "Cholesky Num:"
+#     print arr
+# Gram:
+#     G = gram(arr)
+#     print "G:"
+#     print G
+# LCV:
+    print "A:"
+    print arr.T
+    print "x:"
+    print x
+    print "lcv: " + str(lcasvector(arr.T, x))
+# Cholesky:
+#     PD = numpy.dot(arr, arr.T) + 1
+#     print "PD:"
+#     print PD
+#     N, D = cholesky(PD)
+#     print "cholesky(G):"
+#     print "N:"
 #     print N
-#     print "Cholesky Den:"
+#     print "D:"
 #     print D
 #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 

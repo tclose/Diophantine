@@ -192,24 +192,37 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	print "Unimodular matrix:\n";
 // 	printnp($unimodular_matrix, $m + 1, $m + 1);
 // 	print_all($m, $n, $m1, $n1);
-// 		$G = gram($hnf, $rank, $n);	
-		for ($i = 1; $i <= $n; $i++) {
-			for ($j = 1; $j <= $n; $j++) {
-				$PD[$i][$j] = 0;
-				for ($k = 1; $k <= $mplus1; $k++) {
-					$PD[$i][$j] += $mat[$i][$k] * $mat[$j][$k];
-				}
-				$PD[$i][$j] += 1;
-			}
-		}
-		print "PD:\n";
-		printnp($PD, $n, $n);
-  	cholesky($PD, $n);
-	 	print "cholesky(G):\n";
-  	print "N:\n";
-   	printnp($choleskynum, $n, $n);
-	  print "D:\n";
-	  printnp($choleskyden, $n, $n);
+// Gram
+// 		printnp($mat, $n, $mplus1);
+//  		$G = gram($mat, $n, $mplus1);
+//  		print "gram(mat, $n, $n):\n";
+//  		printnp($G, $n, $n);
+// LCV
+		print "A:\n";
+		printnp($transposed, $mplus1, $n);
+		print "x:\n";
+		printnparray($x, 1, $mplus1 + 1);
+	 	lcasvector($transposed, $x, $mplus1, $n);
+		print "lcv: ";
+		printnparray($lcv, 1, $nplus1);
+		//Cholesky	
+// 		for ($i = 1; $i <= $n; $i++) {
+// 			for ($j = 1; $j <= $n; $j++) {
+// 				$PD[$i][$j] = 0;
+// 				for ($k = 1; $k <= $mplus1; $k++) {
+// 					$PD[$i][$j] += $mat[$i][$k] * $mat[$j][$k];
+// 				}
+// 				$PD[$i][$j] += 1;
+// 			}
+// 		}
+// 		print "PD:\n";
+// 		printnp($PD, $n, $n);
+//   	cholesky($PD, $n);
+// 	 	print "cholesky(G):\n";
+//   	print "N:\n";
+//    	printnp($choleskynum, $n, $n);
+// 	  print "D:\n";
+// 	  printnp($choleskyden, $n, $n);
 // 	print "\n";
 //  shortest_distance($A, $m, $n);
 // 	print "shortest_distance($A, $m, $n): ";
