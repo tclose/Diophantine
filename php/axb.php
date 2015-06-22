@@ -116,13 +116,29 @@ $xs[2] = "-99 0 -4 0 1 -4 4 4 -2 3";
 $xs[3] = "-99 1 2 -3 3 -4 1 -3 -3 -4";
 $xs[4] = "-99 0 -4 -1 -2 -4 0 4 3 -4";
 
+$test_hermite_str = "0.0 1.0 0.0 0.0 0.0 -1.0 0.0 -1.0 -1.0 1.0 1.0 0.0 0.0 1.0 0.0 2.0 -2.0 0.0 -3.0 -4.0 1.0 -4.0 -2.0 3.0 2.0 0.0 0.0 4.0 1.0 -3.0 0.0 0.0 0.0 4.0 0.0 3.0 3.0 -3.0 -3.0 0.0 0.0 -3.0 0.0 -1.0 1.0 1.0 0.0 2.0 0.0 2.0 2.0 -2.0 -2.0 0.0 0.0 -1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0";
+$a = split ( '[ ]+', $test_hermite_str );
+$test_rows = 7;
+$test_cols = count ( $a ) / 7;
+$ii = "0";
+for($i = "1"; le ( $i, $rows ); $i = bcadd ( $i, "1" )) {
+	for($j = "1"; le ( $j, $cols ); $j = bcadd ( $j, "1" )) {
+		$k = bcadd ( $ii, $j );
+		$k = bcsub ( $k, "1" );
+		$test_hermite[$i][$j] = $a[$k];
+	}
+	$ii = bcadd ( $cols, $ii );
+}
+$test_hermite_m = $test_rows;
+$test_hermite_n = $test_cols - 1;
+
 $offset=0;
 if($offset>0){
 	$end = $offset + 1;
 }else{
 	$end = 5;
 }
-// $end = 1;
+$end = 1;
 
 for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 	$a = split ( '[ ]+', $arrays[$iii] );
@@ -198,13 +214,13 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 //  		print "gram(mat, $n, $n):\n";
 //  		printnp($G, $n, $n);
 // LCV
-		print "A:\n";
-		printnp($transposed, $mplus1, $n);
-		print "x:\n";
-		printnparray($x, 1, $mplus1 + 1);
-	 	lcasvector($transposed, $x, $mplus1, $n);
-		print "lcv: ";
-		printnparray($lcv, 1, $nplus1);
+// 		print "A:\n";
+// 		printnp($transposed, $mplus1, $n);
+// 		print "x:\n";
+// 		printnparray($x, 1, $mplus1 + 1);
+// 	 	lcasvector($transposed, $x, $mplus1, $n);
+// 		print "lcv: ";
+// 		printnparray($lcv, 1, $nplus1);
 		//Cholesky	
 // 		for ($i = 1; $i <= $n; $i++) {
 // 			for ($j = 1; $j <= $n; $j++) {
@@ -224,6 +240,10 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	  print "D:\n";
 // 	  printnp($choleskyden, $n, $n);
 // 	print "\n";
+// AXB:
+	print "$test_hermite_m, $test_hermite_n\n";
+	$transposed_hermite = transpose($test_hermite, $test_hermite_m, $test_hermite_n + 1);
+	axb($transposed_hermite,  $test_hermite_m, $test_hermite_n, 1, 1);
 //  shortest_distance($A, $m, $n);
 // 	print "shortest_distance($A, $m, $n): ";
 }

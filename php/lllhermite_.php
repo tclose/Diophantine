@@ -60,6 +60,8 @@ function axb($Ab,$m,$n,$m1,$n1){
 	printmat1($unimodular_matrix,$mplus1,$mplus1);
 	echo "is a unimodular matrix such that PG = HNF(G)";
 	echo "<br>\n";
+	print "HNF:\n";
+	printnp($hnf, $mplus1, $nplus1);
 	$flag="0";
 	for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
 		if(neqzero($hnf[$i][$nplus1])){
@@ -208,11 +210,11 @@ global $print_count;
    $k="2";
    $nplus1=bcadd($n,"1");
    while(le($k,$m)){
-//    			 print "k=" . ($k - 1) . ", m=$m\n";
+   			 print "k=" . ($k - 1) . ", m=$m\n";
          $kminus1=bcsub($k,"1");
          reduce2($k,$kminus1,$m,$n,$D);
-//          print "col1=" . ($col1 - 1) . ", col2=" . ($col2 - 1) . "\n";
-//          print_all($m, $n, $m1, $n1);
+         print "col1=" . ($col1 - 1) . ", col2=" . ($col2 - 1) . "\n";
+         print_all($m, $n, $m1, $n1);
          $kminus2=bcsub($k,"2");
          $minim=minimum($col2,$n);
          $temp1=bcmul($D[$kminus2],$D[$k]);
@@ -221,10 +223,10 @@ global $print_count;
          $u=bcmul($n1,$temp3);
          $temp1=bcmul($D[$kminus1],$D[$kminus1]);
          $v=bcmul($m1,$temp1);
-//          print "u=$u, v=$v\n";
+         print "u=$u, v=$v\n";
          if(le($col1,$minim) || (eq($col1,$col2) && eq($col1,$nplus1) && lt($u,$v))){
             swap2($k,$m,$n);
-//             print_all($m, $n, $m1, $n1);
+             print_all($m, $n, $m1, $n1);
             if(gt($k,"2")){
                $k=$kminus1;
 //                print "col1 <= minim && k > 1";
@@ -433,7 +435,7 @@ global $D;
        $L[$k][$j]=$L[$kminus1][$j];
        $L[$kminus1][$j]=$temp;
    }
-//    print_all($m, $n, 1, 1);
+    print_all($m, $n, 1, 1);
    $kplus1=bcadd($k,"1");
    for($i=$kplus1;le($i,$m);$i=bcadd($i,"1")){
        $temp1=bcmul($L[$i][$kminus1],$D[$k]);
@@ -445,7 +447,7 @@ global $D;
        $L[$i][$kminus1]=bcdiv($temp3,$D[$kminus1]);
        $L[$i][$k]=bcdiv($t,$D[$kminus1]);
    }
-//    print_all($m, $n, 1, 1);
+    print_all($m, $n, 1, 1);
 
    $temp1=bcmul($D[$kminus2],$D[$k]);
    $temp2=bcmul($L[$k][$kminus1],$L[$k][$kminus1]);

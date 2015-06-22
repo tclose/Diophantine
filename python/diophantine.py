@@ -23,6 +23,7 @@
 # Original written in PHP by Keith Matthews (webmaster@number-theory.org)
 #
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
+import os
 from copy import deepcopy
 from fractions import gcd
 import numpy
@@ -43,39 +44,27 @@ def solve(A, b):
 #     A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
 #     b = numpy.array([list(compound)], dtype=numpy.int64)
     m, n = A.shape
-    Ab = numpy.concatenate((A, b))
+    Ab = numpy.concatenate((A, b.reshape(-1, 1)), axis=1)
     G = numpy.concatenate((Ab, numpy.zeros((m, 1), dtype=numpy.int64)), axis=1)
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
     hnf, unimodular_matrix, rank = lllhermite(G)
-    flag = 0
-    for i in xrange(rank - 1):
-        if hnf[i][n + 1] != 0:
-            flag = 1
-            break
-    flag1 = 0
-    for j in xrange(n):
-        if hnf[rank][j] != 0:
-            flag1 = 1
-            break
-    if flag == 0 and hnf[rank][n + 1] == 1 and flag1 == 0:
-        y = -unimodular_matrix[rank, :]
-        nullity = m + 1 - rank
-        if nullity == 0:
-            print "AX=B has a unique solution in integers<br>\n"
-            return y
-        else:
-            lim = m + 1 - rank
-            basis = []
-            for i in xrange(lim):
-                basis.append(unimodular_matrix[rank + i, :])
-            basis = numpy.array(basis, dtype=numpy.int64)
-    else:
-        raise Exception("AX=B has no solution in integers<br>\n")
-    # joining basis and y
-    basis = numpy.concatenate(basis, y)
-    return shortest_distance_axb(basis, lim + 1, m)
+    print "HNF:"
+    print hnf
+    if (not any(hnf[:(rank - 1), n]) or not any(hnf[(rank - 1), :]) or
+            hnf[(rank - 1), n] != 1):
+        raise Exception("AX=B has no solution in integers")
+    x = -unimodular_matrix[rank, :]
+    nullity = m + 1 - rank
+    if nullity:
+        basis = numpy.array(
+            [unimodular_matrix[rank + i, :] for i in xrange(nullity)],
+            dtype=numpy.int64)
+        # joining basis and y
+        basis = numpy.concatenate(basis, x)
+        x = shortest_distance_axb(basis)
+    return x
 
 
 def lllhermite(G, m1=1, n1=1):
@@ -93,27 +82,27 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        #         print "k={k}, m={m}".format(k=k, m=m)
+        print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
-#         print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
-#         print_all(A, B, L, D)
+        print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
+        print_all(A, B, L, D)
         u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
-#         print "u={u}, v={v}".format(u=u, v=v)
+        print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n - 1) or (col1 == n and col2 == n and u < v):
             swap_rows(k, A, B, L, D)
-#             print_all(A, B, L, D)
+            print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
-#                 print "col1 <= minim && k > 1"
-#             else:
-#                 print "col1 <= minim"
+                print "col1 <= minim && k > 1"
+            else:
+                print "col1 <= minim"
         else:
             for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
-#             print "col1 > minim"
+            print "col1 > minim"
     try:
         rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
     except StopIteration:
@@ -566,11 +555,11 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     print "G:"
 #     print G
 # LCV:
-    print "A:"
-    print arr.T
-    print "x:"
-    print x
-    print "lcv: " + str(lcasvector(arr.T, x))
+#     print "A:"
+#     print arr.T
+#     print "x:"
+#     print x
+#     print "lcv: " + str(lcasvector(arr.T, x))
 # Cholesky:
 #     PD = numpy.dot(arr, arr.T) + 1
 #     print "PD:"
@@ -581,6 +570,13 @@ for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
 #     print N
 #     print "D:"
 #     print D
+# Solve:
+    Ab = numpy.loadtxt(os.path.join(os.environ['HOME'], 'Desktop',
+                                     'test_hermite.txt'))
+    print '$test_hermite = "{}";'.format(
+        " ".join([str(e) for e in Ab.ravel()]))
+    x = solve(Ab[:, :-1], Ab[:, -1])
+
 #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
 
 #     a = [-2, -1, 9, 1, 2]
