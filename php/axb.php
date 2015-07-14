@@ -242,6 +242,7 @@ for($iii = $offset; lt ( $iii, $end ); $iii = bcadd ( $iii, "1" )) {
 // 	print "\n";
 // AXB:
 	print "$test_hermite_m, $test_hermite_n\n";
+	printnp(test_hermite, test_hermite_m, test_hermite_n);
 	$transposed_hermite = transpose($test_hermite, $test_hermite_m, $test_hermite_n + 1);
 	axb($transposed_hermite,  $test_hermite_m, $test_hermite_n, 1, 1);
 //  shortest_distance($A, $m, $n);
