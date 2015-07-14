@@ -42,15 +42,8 @@ def solve(A, b):
     Finds the minimal combination of reference dimensions to make the compound
     dimension
     """
-#     A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
-#     b = numpy.array([list(compound)], dtype=numpy.int64)
     A = numpy.asarray(A, dtype=numpy.int64)
     b = numpy.asarray(b, dtype=numpy.int64)
-    print "A:"
-    print A
-    print "b: "
-    print b
-    m, n = A.shape
     G = numpy.zeros((A.shape[1] + 1, A.shape[0] + 1), dtype=numpy.int64)
     G[:-1, :-1] = A.T
     G[-1, :-1] = b
@@ -66,10 +59,11 @@ def solve(A, b):
     print P
     print "Rank: {}".format(rank)
     r = rank - 1  # For convenience
-    if not any(chain(hnf[:r, n], hnf[r, :])) and hnf[r, n] == 1:
-        nullity = m - r
+    if not any(chain(hnf[:r, -1], hnf[r, :-1])) and hnf[r, -1] == 1:
+        nullity = hnf.shape[0] - rank
         if nullity:
-            basis = numpy.concatenate(P[r:, :], -P[rank, :])
+            basis = numpy.concatenate((P[rank:, :-1],
+                                       -P[r, :-1].reshape(1, -1)))
             print "Basis:\n"
             print basis
             x = shortest_distance_axb(basis)
