@@ -50,18 +50,13 @@ function axb($Ab,$m,$n,$m1,$n1){
 	}
 	$G[$mplus1][$nplus1]="1";
 	echo "G=";
-	printmat1($G,$mplus1,$nplus1);
-	echo "<br>\n";
+	printnp($G,$mplus1,$nplus1);
 	lllhermite($G,$mplus1,$nplus1,$m1,$n1);
-	echo "HNF(G)=";
-	printmat1($hnf,$mplus1,$nplus1);
-	echo "<br>\n";
-	echo "P =";
-	printmat1($unimodular_matrix,$mplus1,$mplus1);
-	echo "is a unimodular matrix such that PG = HNF(G)";
-	echo "<br>\n";
-	print "HNF:\n";
-	printnp($hnf, $mplus1, $nplus1);
+	echo "HNF(G):\n";
+	printnp($hnf,$mplus1,$nplus1);
+	echo "P is a unimodular matrix such that PG = HNF(G)";
+	echo "P:\n";
+	printnp($unimodular_matrix,$mplus1,$mplus1);
 	$flag="0";
 	for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
 		if(neqzero($hnf[$i][$nplus1])){
@@ -79,17 +74,13 @@ function axb($Ab,$m,$n,$m1,$n1){
 	//$t=$hnf[$rank][$nplus1]; this was erroneous - fixed 25th October 2011 thanks to an example of Mostafa
 	//Khorramizadeh, Int, J, Computing math. 86, issue 5,2009, 883-896
 	if(eq($flag,"0") && eq($hnf[$rank][$nplus1],"1") && eq($flag1,"0")){
-		echo "<img align=\"middle\" src=\"../jpgs/matrixP.png\"><br>\n";
 		for($j="1";le($j,$m);$j=bcadd($j,"1")){
 			$y[$j]=bcminus($unimodular_matrix[$rank][$j]);
 		}
-		echo "AX=B has a solution: Y = ";
-		printarray($y,$m);
-		echo "<br>\n";
+		printnparray($y,$m, 1);
 		$nullity=bcsub($mplus1,$rank);
 		if(ezero($nullity)){
-			echo "AX=B has a unique solution in integers<br>\n";
-			return;
+			echo "AX=B has a unique solution in integers\n";
 		}else{
 			$lim=bcsub($mplus1,$rank);
 			for($i="1";le($i,$lim);$i=bcadd($i,"1")){
@@ -103,24 +94,25 @@ function axb($Ab,$m,$n,$m1,$n1){
 			}else{
 				echo "the rows: ";
 			}
-			printmat1($basis,$lim,$m);
+			printnp($basis,$lim,$m);
 			if(eq($nullity,"1")){
-				echo "of submatrix R of P forms a Z-basis for the lattice AX=0<br>\n";
+				echo "of submatrix R of P forms a Z-basis for the lattice AX=0\n";
 			}else{
-				echo "of submatrix R of P form a Z-basis for the lattice AX=0<br>\n";
+				echo "of submatrix R of P form a Z-basis for the lattice AX=0\n";
 			}
+			//joining $basis and $y
+			$limplus1=bcadd($lim,"1");
+			for($j="1";le($j,$m);$j=bcadd($j,"1")){
+				$basis[$limplus1][$j]=$y[$j];
+			}
+			echo "Basis:\n";
+			printnp($basis, $limplus1, $m);
+			shortest_distance_axb($basis,$limplus1,$m);
 		}
-	}else{
-		print "AX=B has no solution in integers<br>\n";
-		return;
+	} else {
+		print "AX=B has no solution in integers\n";
 	}
-	// joining $basis and $y
-	$limplus1=bcadd($lim,"1");
-	for($j="1";le($j,$m);$j=bcadd($j,"1")){
-		$basis[$limplus1][$j]=$y[$j];
-	}
-	shortest_distance_axb($basis,$limplus1,$m);
-	return;
+  return;
 }
 
 /* G is a nonzero matrix with at least two rows. */

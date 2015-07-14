@@ -28,6 +28,7 @@ from copy import deepcopy
 from fractions import gcd
 import numpy
 from nineml import units as un
+from itertools import chain
 global print_count
 print_count = 0
 
@@ -43,27 +44,37 @@ def solve(A, b):
     """
 #     A = numpy.array([list(d) for d in reference_dims], dtype=numpy.int64)
 #     b = numpy.array([list(compound)], dtype=numpy.int64)
+    A = numpy.asarray(A, dtype=numpy.int64)
+    b = numpy.asarray(b, dtype=numpy.int64)
+    print "A:"
+    print A
     m, n = A.shape
-    Ab = numpy.concatenate((A, b.reshape(-1, 1)), axis=1)
-    G = numpy.concatenate((Ab, numpy.zeros((m, 1), dtype=numpy.int64)), axis=1)
+    G = numpy.zeros((A.shape[1] + 1, A.shape[0] + 1), dtype=numpy.int64)
+    G[:-1, :-1] = A.T
+    G[-1, :-1] = b
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
-    hnf, unimodular_matrix, rank = lllhermite(G)
+    print "G:"
+    print G
+    hnf, P, rank = lllhermite(G)
     print "HNF:"
     print hnf
-    if (not any(hnf[:(rank - 1), n]) or not any(hnf[(rank - 1), :]) or
-            hnf[(rank - 1), n] != 1):
+    print "P:"
+    print P
+    print "Rank: {}".format(rank)
+    r = rank - 1  # For convenience
+    if not any(chain(hnf[:r, n], hnf[r, :])) and hnf[r, n] == 1:
+        nullity = m - r
+        if nullity:
+            basis = numpy.concatenate(P[r:, :], -P[rank, :])
+            print "Basis:\n"
+            print basis
+            x = shortest_distance_axb(basis)
+        else:
+            raise NotImplementedError("Ax=B has unique solution in integers")
+    else:
         raise Exception("AX=B has no solution in integers")
-    x = -unimodular_matrix[rank, :]
-    nullity = m + 1 - rank
-    if nullity:
-        basis = numpy.array(
-            [unimodular_matrix[rank + i, :] for i in xrange(nullity)],
-            dtype=numpy.int64)
-        # joining basis and y
-        basis = numpy.concatenate(basis, x)
-        x = shortest_distance_axb(basis)
     return x
 
 
