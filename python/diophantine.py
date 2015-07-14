@@ -48,6 +48,8 @@ def solve(A, b):
     b = numpy.asarray(b, dtype=numpy.int64)
     print "A:"
     print A
+    print "b: "
+    print b
     m, n = A.shape
     G = numpy.zeros((A.shape[1] + 1, A.shape[0] + 1), dtype=numpy.int64)
     G[:-1, :-1] = A.T
@@ -58,7 +60,7 @@ def solve(A, b):
     print "G:"
     print G
     hnf, P, rank = lllhermite(G)
-    print "HNF:"
+    print "HNF(G):"
     print hnf
     print "P:"
     print P
@@ -93,27 +95,28 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        print "k={k}, m={m}".format(k=k, m=m)
+        #print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
-        print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
-        print_all(A, B, L, D)
+        #print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
+        #print_all(A, B, L, D)
         u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
-        print "u={u}, v={v}".format(u=u, v=v)
+        #print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n - 1) or (col1 == n and col2 == n and u < v):
             swap_rows(k, A, B, L, D)
-            print_all(A, B, L, D)
+            #print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
-                print "col1 <= minim && k > 1"
+                #print "col1 <= minim && k > 1"
             else:
-                print "col1 <= minim"
+                #print "col1 <= minim"
+                pass
         else:
             for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
-            print "col1 > minim"
+            #print "col1 > minim"
     try:
         rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
     except StopIteration:
@@ -192,13 +195,13 @@ def swap_rows(k, A, B, L, D):
     A[(k - 1, k), :] = A[(k, k - 1), :]
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
-#     print_all(A, B, L, D)
+#     #print_all(A, B, L, D)
     t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
          L[(k + 1):, k] * L[k, k - 1] / D[k])
     L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
                           L[(k + 1):, k] * D[k - 1]) / D[k]
     L[(k + 1):, k] = t
-#     print_all(A, B, L, D)
+#     #print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
 
@@ -521,96 +524,100 @@ def print_all(A, B, L, D):
     print_count += 1
 
 
-offset = 0
-if offset:
-    end = offset + 1
-else:
-    end = 5
-# end = 1
-for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
-    print "\n\n-------- {} ----------".format(count + offset)
-    arr = arr[:-3, :-3]
-    x = x[:-2]
-    Ab = arr.T
-    G = numpy.concatenate(
-        (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
-    G[-1, -1] = 1
-    A, B, L, D = initialise_working_matrices(G)
-#     print_all(A, B, L, D)
-    k = 3
-    i = k - 1
-    j = 3
-# Swap
-#     print "swap2($k, $m, $n): "
-#     swap_rows(k, A, B, L, D)
-#     print_all(A, B, L, D)
-# Reduce:
-#     col1, col2 = reduce_matrix(A, B, L, k, i, D)
-#     print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
-#         k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
-#     print_all(A, B, L, D)
-#     minus(j, A[:A.shape[1], :])
-#     print "minus(j, m, L): "
-#     print_all(A, B, L, D)
-# Hermite:
-#     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
-#     print "lllhermite(G, {}, {}, 1, 1): {} ".format(
-#         A.shape[0], A.shape[1], rank)
-#     print "HNF:"
-#     print hnf
-#     print "Unimodular matrix:"
-#     print unimodular_matrix
-#     print arr
-# Gram:
-#     G = gram(arr)
-#     print "G:"
-#     print G
-# LCV:
-#     print "A:"
-#     print arr.T
-#     print "x:"
-#     print x
-#     print "lcv: " + str(lcasvector(arr.T, x))
-# Cholesky:
-#     PD = numpy.dot(arr, arr.T) + 1
-#     print "PD:"
-#     print PD
-#     N, D = cholesky(PD)
-#     print "cholesky(G):"
-#     print "N:"
-#     print N
-#     print "D:"
-#     print D
-# Solve:
+if __name__ == '__main__':
+
     Ab = numpy.loadtxt(os.path.join(os.environ['HOME'], 'Desktop',
-                                     'test_hermite.txt'))
-    print '$test_hermite = "{}";'.format(
-        " ".join([str(e) for e in Ab.ravel()]))
+                                    'test_hermite.txt'))
+#     print '$test_hermite = "{}";'.format(
+#         " ".join([str(e) for e in Ab.ravel()]))
     x = solve(Ab[:, :-1], Ab[:, -1])
 
-#     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
-
-#     a = [-2, -1, 9, 1, 2]
-#     b = [4, 2, -5, 7, -6]
-#     c = [8, -1, 11, -1, 5]
-#     d = [-5, 1, 3, -2, 1]
-#
-#     for i in xrange(5):
-#         print "-------------- i = " + str(i) + " --------------"
-#         print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-#             introot(abs(a[i]), abs(b[i]), c[i], d[i]))
-#         print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
-#             *egcd(a[i], b[i]))
-#         print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
-#             lnearint(a[i], b[i]))
-#         print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-#             *ratior(a[i], b[i], c[i], d[i]))
-#         print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-#             *multr(a[i], b[i], c[i], d[i]))
-#         print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-#             *subr(a[i], b[i], c[i], d[i]))
-#         print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-#             *addr(a[i], b[i], c[i], d[i]))
-#         print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-#             comparer(a[i], abs(b[i]), c[i], abs(d[i])))
+#     offset = 0
+#     if offset:
+#         end = offset + 1
+#     else:
+#         end = 5
+#     # end = 1
+#     for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
+#         print "\n\n-------- {} ----------".format(count + offset)
+#         arr = arr[:-3, :-3]
+#         x = x[:-2]
+#         Ab = arr.T
+#         G = numpy.concatenate(
+#             (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
+#         G[-1, -1] = 1
+#         A, B, L, D = initialise_working_matrices(G)
+#     #     print_all(A, B, L, D)
+#         k = 3
+#         i = k - 1
+#         j = 3
+    # Swap
+    #     print "swap2($k, $m, $n): "
+    #     swap_rows(k, A, B, L, D)
+    #     print_all(A, B, L, D)
+    # Reduce:
+    #     col1, col2 = reduce_matrix(A, B, L, k, i, D)
+    #     print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
+    #         k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
+    #     print_all(A, B, L, D)
+    #     minus(j, A[:A.shape[1], :])
+    #     print "minus(j, m, L): "
+    #     print_all(A, B, L, D)
+    # Hermite:
+    #     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
+    #     print "lllhermite(G, {}, {}, 1, 1): {} ".format(
+    #         A.shape[0], A.shape[1], rank)
+    #     print "HNF:"
+    #     print hnf
+    #     print "Unimodular matrix:"
+    #     print unimodular_matrix
+    #     print arr
+    # Gram:
+    #     G = gram(arr)
+    #     print "G:"
+    #     print G
+    # LCV:
+    #     print "A:"
+    #     print arr.T
+    #     print "x:"
+    #     print x
+    #     print "lcv: " + str(lcasvector(arr.T, x))
+    # Cholesky:
+    #     PD = numpy.dot(arr, arr.T) + 1
+    #     print "PD:"
+    #     print PD
+    #     N, D = cholesky(PD)
+    #     print "cholesky(G):"
+    #     print "N:"
+    #     print N
+    #     print "D:"
+    #     print D
+    # Solve:
+    
+    
+    #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
+    
+    #     a = [-2, -1, 9, 1, 2]
+    #     b = [4, 2, -5, 7, -6]
+    #     c = [8, -1, 11, -1, 5]
+    #     d = [-5, 1, 3, -2, 1]
+    #
+    #     for i in xrange(5):
+    #         print "-------------- i = " + str(i) + " --------------"
+    #         print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+    #             introot(abs(a[i]), abs(b[i]), c[i], d[i]))
+    #         print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
+    #             *egcd(a[i], b[i]))
+    #         print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
+    #             lnearint(a[i], b[i]))
+    #         print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+    #             *ratior(a[i], b[i], c[i], d[i]))
+    #         print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+    #             *multr(a[i], b[i], c[i], d[i]))
+    #         print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+    #             *subr(a[i], b[i], c[i], d[i]))
+    #         print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
+    #             *addr(a[i], b[i], c[i], d[i]))
+    #         print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
+    #             comparer(a[i], abs(b[i]), c[i], abs(d[i])))
 

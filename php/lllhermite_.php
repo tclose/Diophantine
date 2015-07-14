@@ -50,13 +50,13 @@ function axb($Ab,$m,$n,$m1,$n1){
 	}
 	$G[$mplus1][$nplus1]="1";
 	echo "G=";
-	printnp($G,$mplus1,$nplus1);
+	//printnp($G,$mplus1,$nplus1);
 	lllhermite($G,$mplus1,$nplus1,$m1,$n1);
 	echo "HNF(G):\n";
-	printnp($hnf,$mplus1,$nplus1);
+	//printnp($hnf,$mplus1,$nplus1);
 	echo "P is a unimodular matrix such that PG = HNF(G)";
 	echo "P:\n";
-	printnp($unimodular_matrix,$mplus1,$mplus1);
+	//printnp($unimodular_matrix,$mplus1,$mplus1);
 	$flag="0";
 	for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
 		if(neqzero($hnf[$i][$nplus1])){
@@ -77,7 +77,7 @@ function axb($Ab,$m,$n,$m1,$n1){
 		for($j="1";le($j,$m);$j=bcadd($j,"1")){
 			$y[$j]=bcminus($unimodular_matrix[$rank][$j]);
 		}
-		printnparray($y,$m, 1);
+		//printnparray($y,$m, 1);
 		$nullity=bcsub($mplus1,$rank);
 		if(ezero($nullity)){
 			echo "AX=B has a unique solution in integers\n";
@@ -94,7 +94,7 @@ function axb($Ab,$m,$n,$m1,$n1){
 			}else{
 				echo "the rows: ";
 			}
-			printnp($basis,$lim,$m);
+			//printnp($basis,$lim,$m);
 			if(eq($nullity,"1")){
 				echo "of submatrix R of P forms a Z-basis for the lattice AX=0\n";
 			}else{
@@ -106,7 +106,7 @@ function axb($Ab,$m,$n,$m1,$n1){
 				$basis[$limplus1][$j]=$y[$j];
 			}
 			echo "Basis:\n";
-			printnp($basis, $limplus1, $m);
+			//printnp($basis, $limplus1, $m);
 			shortest_distance_axb($basis,$limplus1,$m);
 		}
 	} else {
