@@ -500,13 +500,19 @@ global $lcv;
             $AA[$i][$j]=$A[$i][$j];
         }
     }
-    $G=gram($A,$m,$n); 
+    $G=gram($A,$m,$n);
+    print "G:\n";
+    printnp($G, $m, $m);
     $lengthj=$G[$m][$m];
     cholesky($G,$m);
     $Qnum=$choleskynum;
     $Qden=$choleskyden;
     $QQnum=transpose($Qnum,$m,$m);
     $QQden=transpose($Qden,$m,$m);
+    echo "Qn:\n";
+    printnp($Qnum, $m, $m);
+    echo "Qd:\n";
+    printnp($Qden, $m, $m);
     $m=bcsub($m,"1");
     for($i="1";le($i,$m);$i=bcadd($i,"1")){// the N vector
         $Nnum[$i]=$Qnum[$i][$mplus1];
@@ -515,12 +521,17 @@ global $lcv;
 
     $Cnum="0";
     $Cden="1";
+    echo "Nnum:\n";
+		printnparray($Nnum, 1, $mplus1);    	
+		echo "Nden:\n";
+		printnparray($Nden, 1, $mplus1);
     for($i="1";le($i,$m);$i=bcadd($i,"1")){
         multr($Nnum[$i],$Nden[$i],$Nnum[$i],$Nden[$i]);
         multr($multnum,$multden,$Qnum[$i][$i],$Qden[$i][$i]);
         addr($Cnum,$Cden,$multnum,$multden);
         $Cnum=$addnum;
         $Cden=$addden;
+        echo "i: $i, Cnum: $Cnum, Cden: $Cden\n";
     }
     $i=$m;
     $Tnum[$m]=$Cnum;
@@ -537,14 +548,20 @@ global $lcv;
        $temp2=introot($Znum,$Zden,$subnum,$subden);
        $temp3=bcminus($temp2);
        $x[$i]=bcsub($temp3,"1");
+       echo "x:\n";
+       printnparray($x, $i, $m + 1);
        while("1"){
           $x[$i]=bcadd($x[$i],"1");
           if(le($x[$i],$UB[$i])){
               if(eq($i,"1")){
+              	   echo "x:\n";
+              		 printnparray($x, $i, $m + 1);
                    //$s=printlc($A,$x,$m);
                    lcasvector($AA,$x,$m,$n);
                    $count=bcadd($count,"1");
                //  print "X[$count]=";printarray($x,$m);
+               		 echo "lcv:\n";
+               		 printnparray($lcv, 1, $n);
                    $lcva[$count]=$lcv;
                //  print "lcv[$count]=";printarray($lcv,$n);
                //  print "<br>\n";
@@ -553,7 +570,10 @@ global $lcv;
                        $temp=$A[$mplus1][$k];
                        $multiplier_vector[$count][$k]=bcsub($temp,$lcv[$k]);
                    }
+                   echo "multiplier:\n";
+                   printnparray($multiplier_vector[$count], 1, $nplus1);
                    $l=lengthsquared($multiplier_vector[$count],$n);
+                   echo "l: $l";
                    $multiplier_vector[$count][$nplus1]=$l;
                 // print "P-X[$count]=";printarray($multiplier_vector[$count],$n);print": $l<br>\n";
                    $lengtharray[$count]=$l;

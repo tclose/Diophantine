@@ -203,67 +203,80 @@ def swap_rows(k, A, B, L, D):
 def shortest_distance_axb(A):
     m = A.shape[0]
     n = A.shape[1]
-    m -= 1  # Not sure about this
     G = gram(A)
-    Qn, Qd = cholesky(G)
+    print "G:"
+    print G
+    N, D = cholesky(G)
+    Qn, Qd = N, D
+    print "Qn:"
+    print Qn
+    print "Qd:"
+    print Qd
     m -= 1
-    Nn = Qn[:, m + 1]
-    Nd = Qd[:, m + 1]
+    Nn = Qn[:m, m]
+    Nd = Qd[:m, m]
     Cn = 0
     Cd = 1
+    print "N:"
+    print Nn
+    print "D:"
+    print Nd
     for i in xrange(m):
-        n, d = multr(Nn[i], Nd[i], Nn[i], Nd[i])
-        n, d = multr(n, d, Qn[i][i], Qd[i][i])
-        Cn, Cd = addr(Cn, Cd, n, d)
+        num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
+        num, den = multr(num, den, Qn[i][i], Qd[i][i])
+        Cn, Cd = addr(Cn, Cd, num, den)
     i = m - 1
     Tn = Cn
     Td = Cd
     Un = 0
     Ud = 1
-    multipliers = []  # List to hold multipliers
-    x = numpy.empty(m)  # List to hold pas values of x
+    solutions = []  # List to hold multipliers
+    x = numpy.empty(m, dtype=numpy.int64)  # List to hold pas values of x
     while 1:
         # Calculate UB
-        Zn, Zd = ratior(Tn, Td, Qn, Qd)
-        n, d = subr(Nn, Nd, Un, Ud)
-        UB = introot(Zn, Zd, n, d)
+        Zn, Zd = ratior(Tn, Td, Qn[i, i], Qd[i, i])
+        num, den = subr(Nn[i], Nd[i], Un, Ud)
+        UB = introot(Zn, Zd, num, den)
         # Calculate x
-        n, d = subr(Un, Ud, Nn, Nd)
-        x[i] = -introot(Zn, Zd, n, d) - 1
+        num, den = subr(Un, Ud, Nn[i], Nd[i])
+        x[i] = -introot(Zn, Zd, num, den) - 1
+        print "x:"
+        print x[i:]
         while True:
             x[i] += 1
             if x[i] <= UB:
                 if i == 0:
+                    print "x:"
+                    print x[i:]
                     lcv = lcasvector(A[:-1, :], x)
-                    multiplier = A[m + 1, :n] - lcv
-#                   lengthsquared(mulitpliers[count], n)
-                    l = multiplier ** 2
-                    multiplier[n + 1] = l
-                    multipliers.append(multiplier)
+                    print "lcv:"
+                    print lcv
+                    solution = A[m, :n] - lcv
+                    print "solution:"
+                    print solution
+                    solutions.append(solution)
                     continue
                 else:
-                    # Save x in list of previous xs
-                    xs.append(x)
                     # now update U
                     prev_Un = Un
                     prev_Ud = Ud
                     Un, Ud = 0, 1
                     for j in xrange(i + 1, m):
                         # Loops from back of xs
-                        n, d = multr(Qn[j], Qd[j], xs[i - j], 1)
-                        Un, Ud = addr(Un, Ud, n, d)
+                        num, den = multr(Qn[i, j], Qd[i, j], x[j], 1)
+                        Un, Ud = addr(Un, Ud, num, den)
                     # now update T
-                    n, d = addr(x, 1, prev_Un, prev_Ud)
-                    n, d = subr(n, d, Nn[i], Nd[i])
-                    n, d = multr(n, d, n, d)
-                    n, d = multr(Qn[i][i], Qd[i][i], n, d)
-                    Tn, Td = subr(Tn, Td, n, d)
+                    num, den = addr(x[i], 1, prev_Un, prev_Ud)
+                    num, den = subr(num, den, Nn[i], Nd[i])
+                    num, den = multr(num, den, num, den)
+                    num, den = multr(Qn[i][i], Qd[i][i], num, den)
+                    Tn, Td = subr(Tn, Td, num, den)
                     i = i - 1
                     break
             else:
                 i = i + 1
                 if i == m:
-                    return multipliers
+                    return solutions
                 continue
 
 
@@ -282,10 +295,20 @@ def cholesky(A):
             D[j][i] = D[i][j]
             n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
             N[i][j], D[i][j] = n, d
+            print "i={}, j={}".format(i + 1, j + 1)
+            print "N:"
+            print N
+            print "D:"
+            print D
         for k in xrange(i + 1, m):
             for l in xrange(k, m):
                 n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
                 N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
+                print "k={}, l={}".format(k + 1, l + 1)
+                print "N:"
+                print N
+                print "D:"
+                print D
     return N, D
 
 
@@ -525,6 +548,7 @@ if __name__ == '__main__':
 #     print '$test_hermite = "{}";'.format(
 #         " ".join([str(e) for e in Ab.ravel()]))
     x = solve(Ab[:, :-1], Ab[:, -1])
+    print "The solution is x: {}".format(x)
 
 #     offset = 0
 #     if offset:

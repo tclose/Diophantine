@@ -1498,6 +1498,7 @@ function print_all($m, $n, $m1, $n1) {
 		}
 	}
 	printnp($LL, $m, $m);
+
 // 	$neg = 0;
 // 	$maxlen = 0;
 // 	for($i="2";$i<=$m;$i=bcadd($i,"1")){
