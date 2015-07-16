@@ -21,33 +21,43 @@ class TestDiophantine(TestCase):
                   un.um ** 3 / un.C ** 2,
                   un.K ** 2 / (un.ohm * un.mV * un.ms * un.uF)]
 
+    num_solutionsss = [(2, 2), (1, 1), (1, 1), (3, 1), (1, 2), (1, 1), (3, 1),
+                       (1, 1)]
+
     def test_solve(self):
-        for unit in self.test_units:
+        for unit, num_solutionss in zip(self.test_units, self.num_solutionsss):
             b = numpy.array(list(unit.dimension))
             if verbose:
                 print "Unit '{}':".format(unit.name)
-            for sim_name, basis in (('NEURON', neuron_units),
-                                    ('NEST', nest_units)):
+            for sim_name, basis, num_solutions in zip(
+                    ('NEURON', 'NEST'), (neuron_units, nest_units),
+                    num_solutionss):
                 A = numpy.array([numpy.array(list(u.dimension),
                                              dtype=numpy.int64)
                                  for u in basis]).T
+                # Get solutions for A x = b
                 solutions = solve(A, b)
-                self.assertGreater(len(solutions), 0,
-                                   "No solutions found for unit '{}' with "
-                                   "basis {}".format(unit, basis))
+                # Check number of solutions matches reference
+                self.assertEquals(len(solutions), num_solutions,
+                                   "Incorrect number of solutions found ({}), "
+                                   "expected {}".format(len(solutions),
+                                                        num_solutions))
                 if verbose:
                     print solutions
+                # Check validity of solutions
                 for solution in solutions:
                     if verbose:
                         print '  {}: '.format(sim_name) + ', '.join(
                             '{}={}'.format(u.name, d)
                             for u, d in zip(basis, solution))
-                    new_dim = reduce(add, (numpy.array(list(u.dimension)) * v
-                                           for u, v in zip(basis, solution)))
-                    self.assertEqual(list(new_dim), list(unit.dimension),
-                                     "Reconstructed dimension ({}) does not "
-                                     "match original ({})".format(
-                                         list(new_dim), list(unit.dimension)))
+                    # Get reconstructed b vector
+                    reconstructed_b = reduce(
+                        add, (numpy.array(list(u.dimension)) * v
+                              for u, v in zip(basis, solution)))
+                    self.assertEqual(
+                        list(reconstructed_b), list(b),
+                        "Reconstructed dimension ({}) does not match original "
+                        "({})".format(reconstructed_b, b))
 
 
 test_matrices = [
