@@ -1,5 +1,4 @@
 from unittest import TestCase
-import os
 import numpy
 from nineml import units as un
 from pype9.neuron import units as neuron_units

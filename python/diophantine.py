@@ -24,22 +24,25 @@
 #
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
 from copy import deepcopy
-from math import copysign, sqrt
+from math import copysign, sqrt, log10, floor
 from fractions import gcd
 from sympy import Matrix, zeros, ones, eye
 from itertools import chain, product
 global print_count
 print_count = 0
-verbose_solve = False
+verbose_solve = True
 verbose_hnf = False
 verbose_chol = False
 
-# Sign of a variable, which isn't included in math for some reason
-sign = lambda x: copysign(1, x)
 
-nonzero = lambda m: [
-    (i, j) for i, j in product(xrange(m.shape[0]), xrange(m.shape[1]))
-    if m[i, j] != 0]
+# Sign of a variable, which isn't included in math for some reason
+def sign(x):
+    return copysign(1, x) if x else 0
+
+
+def nonzero(m):
+    return [(i, j) for i, j in product(xrange(m.shape[0]), xrange(m.shape[1]))
+            if m[i, j] != 0]
 
 
 def solve(A, b):
@@ -54,7 +57,7 @@ def solve(A, b):
                         " in A matrix ({})".format(b.shape[0], A.shape[0]))
     if verbose_solve:
         Ab = A.row_join(b)
-        print 'Ab: "' + ' '.join(str(v) for v in Ab.vec()) + '"'
+        print 'Ab: "' + ' '.join(str(v) for v in Ab.T.vec()) + '"'
     G = zeros(A.shape[1] + 1, A.shape[0] + 1)
     G[:-1, :-1] = A.T
     G[-1, :-1] = b.reshape(1, b.shape[0])
@@ -63,13 +66,13 @@ def solve(A, b):
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
     if verbose_solve:
         print "G:"
-        print G
+        printnp(G)
     hnf, P, rank = lllhermite(G)
     if verbose_solve:
         print "HNF(G):"
-        print hnf
+        printnp(hnf)
         print "P:"
-        print P
+        printnp(P)
         print "Rank: {}".format(rank)
     r = rank - 1  # For convenience
     if not any(chain(hnf[:r, -1], hnf[r, :-1])) and hnf[r, -1] == 1:
@@ -78,7 +81,7 @@ def solve(A, b):
             basis = P[rank:, :-1].col_join(-P[r, :-1])
             if verbose_solve:
                 print "Basis:\n"
-                print basis
+                printnp(basis)
             solutions = get_solutions(basis)
         else:
             raise NotImplementedError("Ax=B has unique solution in integers")
@@ -146,7 +149,7 @@ def initialise_working_matrices(G):
     B = eye(G.shape[0])
     # Lower triang matrix
     L = zeros(G.shape[0], G.shape[0])
-    D = ones(G.shape[0] + 1)
+    D = ones(G.shape[0] + 1, 1)
     A = Matrix(G)
     return A, B, L, D
 
@@ -231,14 +234,14 @@ def get_solutions(A):
     G = gram(A)
     if verbose_solve:
         print "G:"
-        print G
+        printnp(G)
     N, D = cholesky(G)
     Qn, Qd = N, D
     if verbose_solve:
         print "Qn:"
-        print Qn
+        printnp(Qn)
         print "Qd:"
-        print Qd
+        printnp(Qd)
     m -= 1
     Nn = Qn[:m, m]
     Nd = Qd[:m, m]
@@ -246,9 +249,9 @@ def get_solutions(A):
     Cd = 1
     if verbose_solve:
         print "N:"
-        print Nn
+        printnp(Nn)
         print "D:"
-        print Nd
+        printnp(Nd)
     for i in xrange(m):
         num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
         num, den = multr(num, den, Qn[i, i], Qd[i, i])
@@ -257,12 +260,12 @@ def get_solutions(A):
             print "i: {}, Cnum: {}, Cden: {}".format(i + 1, Cn, Cd)
     i = m - 1
     # List to hold working variables
-    x = zeros(m)
-    UB = zeros(m)
-    Tn = zeros(m)
-    Td = zeros(m)
-    Un = zeros(m)
-    Ud = zeros(m)
+    x = zeros(m, 1)
+    UB = zeros(m, 1)
+    Tn = zeros(m, 1)
+    Td = zeros(m, 1)
+    Un = zeros(m, 1)
+    Ud = zeros(m, 1)
     Tn[i] = Cn
     Td[i] = Cd
     Un[i] = 0
@@ -274,9 +277,9 @@ def get_solutions(A):
         num, den = subr(Nn[i], Nd[i], Un[i], Ud[i])
         if verbose_solve:
             print "Tn:"
-            print Tn[i:]
+            printnp(Tn[i:])
             print "Td:"
-            print Td[i:]
+            printnp(Td[i:])
             print "Zn: {}, Zd: {}, num: {}, den: {}".format(
                 Zn, Zd, num, den)
         UB[i] = introot(Zn, Zd, num, den)
@@ -287,21 +290,21 @@ def get_solutions(A):
             if verbose_solve:
                 print "i: {}, UB: {}".format(i, UB[i])
                 print "x:"
-                print x[i:]
+                printnp(x[i:])
             x[i] += 1
             if x[i] <= UB[i]:
                 if i == 0:
                     if verbose_solve:
                         print "x:"
-                        print x[i:]
+                        printnp(x[i:])
                     lcv = lcasvector(A[:-1, :], x)
                     if verbose_solve:
                         print "lcv:"
-                        print lcv
-                    solution = A[m, :n] - lcv
+                        printnp(lcv)
+                    solution = A[m, :n] - lcv.reshape(1, lcv.shape[0])
                     if verbose_solve:
                         print "solution:"
-                        print solution
+                        printnp(solution)
                     solutions.append(solution)
                 else:
                     # now update U
@@ -334,7 +337,7 @@ def cholesky(A):
     # A is positive definite mxm
     """
     assert A.shape[0] == A.shape[1]
-    #assert all(A.eigenvals() > 0)
+    # assert all(A.eigenvals() > 0)
     m = A.shape[0]
     N = deepcopy(A)
     D = ones(*A.shape)
@@ -347,9 +350,9 @@ def cholesky(A):
             if verbose_chol:
                 print "i={}, j={}".format(i + 1, j + 1)
                 print "N:"
-                print N
+                printnp(N)
                 print "D:"
-                print D
+                printnp(D)
         for k in xrange(i + 1, m):
             for l in xrange(k, m):
                 n, d = multr(N[k, i], D[k, i], N[i, l], D[i, l])
@@ -357,9 +360,9 @@ def cholesky(A):
                 if verbose_chol:
                     print "k={}, l={}".format(k + 1, l + 1)
                     print "N:"
-                    print N
+                    printnp(N)
                     print "D:"
-                    print D
+                    printnp(D)
     return N, D
 
 
@@ -384,7 +387,7 @@ def introot(a, b, c, d):
     y = c // d
     if a == 0:
         return y
-    x = a / b
+    x = a // b
     assert x >= 0
     x = sqrt(x)
     answer = x + y
@@ -499,10 +502,10 @@ def comparer(a, b, c, d):
 def lcasvector(A, x):
     """lcv[j]=X[1]A[1, j]=...+X[m]A[m, j], 1 <= j <= n+"""
     # global lcv
-#     print x
-#     print A
+#     printnp(x)
+#     printnp(A)
     n = A.shape[1]
-    lcv = zeros(n)
+    lcv = zeros(n, 1)
     for j in xrange(n):
         lcv[j] = x.dot(A[:, j])
     return lcv
@@ -512,11 +515,53 @@ def print_all(A, B, L, D):
     global print_count
     print "------ print {} -----".format(print_count)
     print 'A: '
-    print A
+    printnp(A)
     print 'B: '
-    print B
+    printnp(B)
     print 'L: '
-    print L
+    printnp(L)
     print 'D: '
-    print D
+    printnp(D)
     print_count += 1
+
+
+def num_chars(d):
+    if d == 0:
+        num = 2
+    else:
+        num = int(floor(log10(abs(d)))) + int(sign(d) < 0) + 2
+    return num
+
+
+def printnp(m):
+    """
+    Prints a sympy matrix in the same format as a numpy array
+    """
+    m = Matrix(m)
+    if m.shape[1] == 1:
+        m = m.reshape(1, m.shape[0])
+    elem_len = max(num_chars(d) for d in m.vec())
+    if m.shape[0] > 1:
+        outstr = '[['
+    else:
+        outstr = '['
+    for i in xrange(m.shape[0]):
+        if i:
+            outstr += ' ['
+        char_count = 0
+        for j, elem in enumerate(m[i, :]):
+            char_count += elem_len
+            if char_count > 77:
+                outstr += '\n  '
+                char_count = elem_len + 2
+            # Add spaces
+            outstr += ' ' * (elem_len - num_chars(elem) +
+                             int(j != 0)) + str(elem)
+
+        if i < m.shape[0] - 1:
+            outstr += ']\n'
+    if m.shape[0] > 1:
+        outstr += ']]'
+    else:
+        outstr += ']'
+    print outstr
