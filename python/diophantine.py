@@ -371,7 +371,7 @@ def introot(a, b, c, d):
     y = c // d
     if a == 0:
         return y
-    x = a / b
+    x = a // b
     assert x >= 0
     x = numpy.sqrt(x)
     answer = x + y
