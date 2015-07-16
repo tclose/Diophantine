@@ -136,13 +136,9 @@ class TestDiophantine(TestCase):
                  1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1,
                  2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4,
                  1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-#         run = (2,)
         count = 0
         for i, A in enumerate(As):
             for j, b in enumerate(bs):
-#                 print '$matrices[{}][{}] = "{}";'.format(i, j, ' '.join(
-#                     str(e) for e in A.row_join(b).T.vec()))
-#                 if count in run:
                 xs = solve(A, b)
                 self.assertEqual(len(xs), nsols[count],
                                  "Incorrect number of solutions")
