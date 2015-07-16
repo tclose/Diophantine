@@ -24,14 +24,22 @@
 #
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
 from copy import deepcopy
+from math import copysign, sqrt
 from fractions import gcd
-import numpy
-from itertools import chain
+from sympy import Matrix, zeros, ones, eye
+from itertools import chain, product
 global print_count
 print_count = 0
 verbose_solve = False
 verbose_hnf = False
 verbose_chol = False
+
+# Sign of a variable, which isn't included in math for some reason
+sign = lambda x: copysign(1, x)
+
+nonzero = lambda m: [
+    (i, j) for i, j in product(xrange(m.shape[0]), xrange(m.shape[1]))
+    if m[i, j] != 0]
 
 
 def solve(A, b):
@@ -39,14 +47,17 @@ def solve(A, b):
     Finds the minimal combination of reference dimensions to make the compound
     dimension
     """
-    A = numpy.asarray(A, dtype=numpy.int64)
-    b = numpy.asarray(b, dtype=numpy.int64)
+    A = Matrix(A)
+    b = Matrix(b)
+    if b.shape != (A.shape[0], 1):
+        raise Exception("Length of b vector ({}) does not match number of rows"
+                        " in A matrix ({})".format(b.shape[0], A.shape[0]))
     if verbose_solve:
-        Ab = numpy.concatenate((A, b.reshape(-1, 1)), axis=1)
-        print 'Ab: "' + ' '.join(str(v) for v in Ab.ravel()) + '"'
-    G = numpy.zeros((A.shape[1] + 1, A.shape[0] + 1), dtype=numpy.int64)
+        Ab = A.row_join(b)
+        print 'Ab: "' + ' '.join(str(v) for v in Ab.vec()) + '"'
+    G = zeros(A.shape[1] + 1, A.shape[0] + 1)
     G[:-1, :-1] = A.T
-    G[-1, :-1] = b
+    G[-1, :-1] = b.reshape(1, b.shape[0])
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
@@ -64,8 +75,7 @@ def solve(A, b):
     if not any(chain(hnf[:r, -1], hnf[r, :-1])) and hnf[r, -1] == 1:
         nullity = hnf.shape[0] - rank
         if nullity:
-            basis = numpy.concatenate((P[rank:, :-1],
-                                       -P[r, :-1].reshape(1, -1)))
+            basis = P[rank:, :-1].col_join(-P[r, :-1])
             if verbose_solve:
                 print "Basis:\n"
                 print basis
@@ -122,7 +132,8 @@ def lllhermite(G, m1=1, n1=1):
             if verbose_hnf:
                 print "col1 > minim"
     try:
-        rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
+        rank = A.shape[0] - next(i for i in xrange(A.shape[0])
+                                 if nonzero(A[i, :]))
     except StopIteration:
         assert False, "A matrix contains only zeros"
     hnf = A[::-1, :]
@@ -132,11 +143,11 @@ def lllhermite(G, m1=1, n1=1):
 
 def initialise_working_matrices(G):
     """  G is a nonzero matrix with at least two rows.  """
-    B = numpy.eye(G.shape[0], dtype=numpy.int64)
+    B = eye(G.shape[0])
     # Lower triang matrix
-    L = numpy.zeros((G.shape[0], G.shape[0]), dtype=numpy.int64)
-    D = numpy.ones(G.shape[0] + 1, dtype=numpy.int64)
-    A = numpy.array(G, dtype=numpy.int64)
+    L = zeros(G.shape[0], G.shape[0])
+    D = ones(G.shape[0] + 1)
+    A = Matrix(G)
     return A, B, L, D
 
 
@@ -147,30 +158,28 @@ def first_nonzero_is_negative(A):
     if the first nonzero column j of A contains only one nonzero entry, which
     is negative+ This assumes A is a nonzero matrix with at least two rows+
     """
-    nonzero_columns = numpy.nonzero(
-        numpy.sum(A, axis=0, dtype=numpy.int64) != 0)[0]
-    assert len(nonzero_columns)
+    nonzero_columns = zip(*nonzero(A))[1]  # Should always be nonzero
     # Get the first nonzero column
-    nonzero_col = A[:, numpy.min(nonzero_columns)]
+    nonzero_col = A[:, min(nonzero_columns)]
     # Get the nonzero elements
-    nonzero_elems = numpy.nonzero(nonzero_col)[0]
+    nonzero_elems = [e for e in nonzero_col if e != 0]
     # If there is only one and it is negative return 1 else 0
     return len(nonzero_elems) == 1 and nonzero_elems[0] < 0
 
 
 def reduce_matrix(A, B, L, k, i, D):
-    nonzero_i_elems = numpy.nonzero(A[i])[0]
+    nonzero_i_elems = zip(*nonzero(A[i, :]))
     if len(nonzero_i_elems):
-        col1 = nonzero_i_elems[0]
+        col1 = nonzero_i_elems[1][0]
         if A[i, col1] < 0:
             minus(i, L)
-            A[i, :] *= -1.0
-            B[i, :] *= -1.0
+            A[i, :] *= -1
+            B[i, :] *= -1
     else:
         col1 = A.shape[1]
-    nonzero_k_elems = numpy.nonzero(A[k])[0]
+    nonzero_k_elems = zip(*nonzero(A[k, :]))
     if len(nonzero_k_elems):
-        col2 = nonzero_k_elems[0]
+        col2 = nonzero_k_elems[1][0]
     else:
         col2 = A.shape[1]
     if col1 < A.shape[1]:
@@ -196,9 +205,13 @@ def minus(j, L):
 
 
 def swap_rows(k, A, B, L, D):
-    A[(k - 1, k), :] = A[(k, k - 1), :]
-    B[(k - 1, k), :] = B[(k, k - 1), :]
-    L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
+    # To avoid the interpretation of -1 as the last index of the matrix create
+    # a reverse stop that ends past the negative of the length of the matrix
+    reverse_stop = k - 2 if k > 1 else -(A.shape[0] + 1)
+    # Swap rows of the matrices
+    A[(k - 1):(k + 1), :] = A[k:reverse_stop:-1, :]
+    B[(k - 1):(k + 1), :] = B[k:reverse_stop:-1, :]
+    L[(k - 1):(k + 1), :(k - 1)] = L[k:reverse_stop:-1, :(k - 1)]
     if verbose_hnf:
         print_all(A, B, L, D)
     t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
@@ -238,18 +251,18 @@ def get_solutions(A):
         print Nd
     for i in xrange(m):
         num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
-        num, den = multr(num, den, Qn[i][i], Qd[i][i])
+        num, den = multr(num, den, Qn[i, i], Qd[i, i])
         Cn, Cd = addr(Cn, Cd, num, den)
         if verbose_solve:
             print "i: {}, Cnum: {}, Cden: {}".format(i + 1, Cn, Cd)
     i = m - 1
     # List to hold working variables
-    x = numpy.empty(m, dtype=numpy.int64)
-    UB = numpy.empty(m, dtype=numpy.int64)
-    Tn = numpy.empty(m, dtype=numpy.int64)
-    Td = numpy.empty(m, dtype=numpy.int64)
-    Un = numpy.empty(m, dtype=numpy.int64)
-    Ud = numpy.empty(m, dtype=numpy.int64)
+    x = zeros(m)
+    UB = zeros(m)
+    Tn = zeros(m)
+    Td = zeros(m)
+    Un = zeros(m)
+    Ud = zeros(m)
     Tn[i] = Cn
     Td[i] = Cd
     Un[i] = 0
@@ -306,7 +319,7 @@ def get_solutions(A):
                     num, den = addr(x[i], 1, Un[i], Ud[i])
                     num, den = subr(num, den, Nn[i], Nd[i])
                     num, den = multr(num, den, num, den)
-                    num, den = multr(Qn[i][i], Qd[i][i], num, den)
+                    num, den = multr(Qn[i, i], Qd[i, i], num, den)
                     Tn[i - 1], Td[i - 1] = subr(Tn[i], Td[i], num, den)
                     i = i - 1
                     break
@@ -320,17 +333,17 @@ def cholesky(A):
     """
     # A is positive definite mxm
     """
-    assert A.ndim == 2 and A.shape[0] == A.shape[1]
-    assert numpy.all(numpy.linalg.eigvals(A) > 0)
+    assert A.shape[0] == A.shape[1]
+    #assert all(A.eigenvals() > 0)
     m = A.shape[0]
     N = deepcopy(A)
-    D = numpy.ones(A.shape, dtype=numpy.int64)
+    D = ones(*A.shape)
     for i in xrange(m - 1):
         for j in xrange(i + 1, m):
-            N[j][i] = N[i][j]
-            D[j][i] = D[i][j]
-            n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
-            N[i][j], D[i][j] = n, d
+            N[j, i] = N[i, j]
+            D[j, i] = D[i, j]
+            n, d = ratior(N[i, j], D[i, j], N[i, i], D[i, i])
+            N[i, j], D[i, j] = n, d
             if verbose_chol:
                 print "i={}, j={}".format(i + 1, j + 1)
                 print "N:"
@@ -339,8 +352,8 @@ def cholesky(A):
                 print D
         for k in xrange(i + 1, m):
             for l in xrange(k, m):
-                n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
-                N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
+                n, d = multr(N[k, i], D[k, i], N[i, l], D[i, l])
+                N[k, l], D[k, l] = subr(N[k, l], D[k, l], n, d)
                 if verbose_chol:
                     print "k={}, l={}".format(k + 1, l + 1)
                     print "N:"
@@ -355,17 +368,17 @@ def gram(A):
     Need to check for row and column operations
     """
     m = A.shape[0]
-    B = numpy.empty((m, m), dtype=numpy.int64)
+    B = zeros(m, m)
     for i in xrange(m):
         for j in xrange(m):
-            B[i][j] = A[i].dot(A[j])  # dotproduct(A[i], A[j], n)
-    return numpy.array(B, dtype=numpy.int64)
+            B[i, j] = A[i, :].dot(A[j, :])  # dotproduct(A[i], A[j], n)
+    return Matrix(B)
 
 
 def introot(a, b, c, d):
     """
-    With Z=a/b, U=c/d, returns [numpy.sqrt(a/b)+c/d]. First ANSWER =
-    [numpy.sqrt(Z)] + [U]. One then tests if Z < ([numpy.sqrt(Z)] + 1 -U)^2. If
+    With Z=a/b, U=c/d, returns [sqrt(a/b)+c/d]. First ANSWER =
+    [sqrt(Z)] + [U]. One then tests if Z < ([sqrt(Z)] + 1 -U)^2. If
     this does not hold, ANSWER += 1+ For use in fincke_pohst()+
     """
     y = c // d
@@ -373,13 +386,13 @@ def introot(a, b, c, d):
         return y
     x = a / b
     assert x >= 0
-    x = numpy.sqrt(x)
+    x = sqrt(x)
     answer = x + y
-    n, d = subr(c, d, y, 1)
-    n, d = subr(1, 1, n, d)
-    n, d = addr(x, 1, n, d)
-    n, d = multr(n, d, n, d)
-    t = comparer(n, d, a, b)
+    num, den = subr(c, d, y, 1)
+    num, den = subr(1, 1, num, den)
+    num, den = addr(x, 1, num, den)
+    num, den = multr(num, den, num, den)
+    t = comparer(num, den, a, b)
     if t <= 0:
         answer = answer + 1
     int_answer = int(answer)
@@ -390,7 +403,7 @@ def introot(a, b, c, d):
 def egcd(p, q):
     if q == 0:
         if p != 0:
-            s = numpy.sign(p)
+            s = sign(p)
             if s == 1:
                 k1 = 1
             else:
@@ -401,7 +414,7 @@ def egcd(p, q):
     a = p
     b = abs(q)
     c = a % b
-    s = numpy.sign(q)
+    s = sign(q)
     if c == 0:
         if s == 1:
             k2 = 1
@@ -480,16 +493,16 @@ def addr(a, b, c, d):
 def comparer(a, b, c, d):
     """Assumes b>0 and d>0.  Returns -1, 0 or 1 according as a/b <,=,> c/d+ """
     assert b > 0 and d > 0
-    return numpy.sign(a * d - b * c)
+    return sign(a * d - b * c)
 
 
 def lcasvector(A, x):
-    """lcv[j]=X[1]A[1][j]=...+X[m]A[m][j], 1 <= j <= n+"""
+    """lcv[j]=X[1]A[1, j]=...+X[m]A[m, j], 1 <= j <= n+"""
     # global lcv
 #     print x
 #     print A
     n = A.shape[1]
-    lcv = numpy.empty(n, dtype=numpy.int64)
+    lcv = zeros(n)
     for j in xrange(n):
         lcv[j] = x.dot(A[:, j])
     return lcv
@@ -499,11 +512,11 @@ def print_all(A, B, L, D):
     global print_count
     print "------ print {} -----".format(print_count)
     print 'A: '
-    print numpy.array(A, dtype=numpy.int64)
+    print A
     print 'B: '
-    print numpy.array(B, dtype=numpy.int64)
+    print B
     print 'L: '
-    print numpy.array(L, dtype=numpy.int64)
+    print L
     print 'D: '
-    print numpy.array(D, dtype=numpy.int64)
+    print D
     print_count += 1
