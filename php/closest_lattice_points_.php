@@ -113,17 +113,13 @@ global $lcv;
 
     $count="0";
     $min_count="0";
-
-    echo "matrix A:";
-    printmat1($A,$m,$n);
-    echo "<br>\n";
+		if ($verbose_solve) {
+	    echo "matrix A:";
+	    printmat1($A,$m,$n);
+	    echo "\n";
+	    print "P = A[$m] =  ";printarray($A[$m],$n);print "<br>\n";
+		}
     $nplus1=bcadd($n,"1");
-    //for($j="1";le($j,$n);$j=bcadd($j,"1")){
-    // $Am[$j]=$A[$m][$j];
-  //}
-    print "P = A[$m] =  ";printarray($A[$m],$n);print "<br>\n";
-   // $lengthj=dotproduct($Am,$Am,$m);
-
     $mplus1=$m;
     $mminus1=bcsub($m,"1");
     if(gt($mminus1,"1")){

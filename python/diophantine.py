@@ -30,9 +30,13 @@ from sympy import Matrix, zeros, ones, eye
 from itertools import chain, product
 global print_count
 print_count = 0
-verbose_solve = True
+verbose_solve = False
 verbose_hnf = False
 verbose_chol = False
+
+
+class NoSolutionException(Exception):
+    pass
 
 
 # Sign of a variable, which isn't included in math for some reason
@@ -86,7 +90,7 @@ def solve(A, b):
         else:
             raise NotImplementedError("Ax=B has unique solution in integers")
     else:
-        raise Exception("AX=B has no solution in integers")
+        solutions = []
     return solutions
 
 
@@ -305,7 +309,7 @@ def get_solutions(A):
                     if verbose_solve:
                         print "solution:"
                         printnp(solution)
-                    solutions.append(solution)
+                    solutions.append(solution.T)
                 else:
                     # now update U
                     Un[i - 1], Ud[i - 1] = 0, 1
@@ -389,11 +393,11 @@ def introot(a, b, c, d):
         return y
     x = a // b
     assert x >= 0
-    x = sqrt(x)
-    answer = x + y
+    x_sqrt = int(floor(sqrt(x)))
+    answer = x_sqrt + y
     num, den = subr(c, d, y, 1)
     num, den = subr(1, 1, num, den)
-    num, den = addr(x, 1, num, den)
+    num, den = addr(x_sqrt, 1, num, den)
     num, den = multr(num, den, num, den)
     t = comparer(num, den, a, b)
     if t <= 0:
@@ -552,7 +556,7 @@ def printnp(m):
         for j, elem in enumerate(m[i, :]):
             char_count += elem_len
             if char_count > 77:
-                outstr += '\n  '
+                outstr += '\n '
                 char_count = elem_len + 2
             # Add spaces
             outstr += ' ' * (elem_len - num_chars(elem) +

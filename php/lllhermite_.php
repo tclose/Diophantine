@@ -39,6 +39,7 @@ function axb($Ab,$m,$n,$m1,$n1){
 	global $unimodular_matrix;
 	global $rank;
 	global $verbose_solve;
+	global $print_solutions;
 	$mplus1=bcadd($m,"1");
 	for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
 		for($j="1";le($j,$n);$j=bcadd($j,"1")){
@@ -93,16 +94,16 @@ function axb($Ab,$m,$n,$m1,$n1){
 					$basis[$i][$j]=$unimodular_matrix[$rankplusi][$j];
 				}
 			}
-			if(eq($nullity,"1")){
-				echo "the row: ";
-			}else{
-				echo "the rows: ";
-			}
-			if(eq($nullity,"1")){
-				echo "of submatrix R of P forms a Z-basis for the lattice AX=0\n";
-			}else{
-				echo "of submatrix R of P form a Z-basis for the lattice AX=0\n";
-			}
+// 			if(eq($nullity,"1")){
+// 				echo "the row: ";
+// 			}else{
+// 				echo "the rows: ";
+// 			}
+// 			if(eq($nullity,"1")){
+// 				echo "of submatrix R of P forms a Z-basis for the lattice AX=0\n";
+// 			}else{
+// 				echo "of submatrix R of P form a Z-basis for the lattice AX=0\n";
+// 			}
 			//joining $basis and $y
 			$limplus1=bcadd($lim,"1");
 			for($j="1";le($j,$m);$j=bcadd($j,"1")){
@@ -115,7 +116,11 @@ function axb($Ab,$m,$n,$m1,$n1){
 			shortest_distance_axb($basis,$limplus1,$m);
 		}
 	} else {
-		print "AX=B has no solution in integers\n";
+		if ($print_solutions) {
+			print "AX=B has no solution in integers\n";
+		} else {
+			print "0, ";
+		}
 	}
   return;
 }
@@ -482,6 +487,7 @@ global $rationum;
 global $ratioden;
 global $lcv;
 global $verbose_solve;
+global $print_solutions;
 
     $count="0";
     $min_count="0";
@@ -534,9 +540,9 @@ global $verbose_solve;
     $Cnum="0";
     $Cden="1";
     if ($verbose_solve) {
-	    echo "Nnum:\n";
+	    echo "N:\n";
 			printnparray($Nnum, 1, $mplus1);    	
-			echo "Nden:\n";
+			echo "D:\n";
 			printnparray($Nden, 1, $mplus1);
     }
     for($i="1";le($i,$m);$i=bcadd($i,"1")){
@@ -580,8 +586,6 @@ global $verbose_solve;
           $x[$i]=bcadd($x[$i],"1");
           if(le($x[$i],$UB[$i])){
               if(eq($i,"1")){
-              	   echo "x:\n";
-              		 printnparray($x, $i, $m + 1);
                    //$s=printlc($A,$x,$m);
                    lcasvector($AA,$x,$m,$n);
                    $count=bcadd($count,"1");
@@ -640,23 +644,26 @@ global $verbose_solve;
           }else{
              $i=bcadd($i,"1");
              if(gt($i,$m)){
-             				echo "All solution vectors with length squared < $lengthj\n";
-                    for($k="1";le($k,$count);$k=bcadd($k,"1")){
-                       printnparray($multiplier_vector[$k],1,$n + 1);
-                    }
-                    echo "where,\n";
-                    $min_length=mina($lengtharray,$count);
-                    for($k="1";le($k,$count);$k=bcadd($k,"1")){
-                        if(eq($multiplier_vector[$k][$nplus1],$min_length)){
-                           printnparray($multiplier_vector[$k],1,$n + 1);
-                           $min_count=bcadd($min_count,"1");
-                        }
-                    }
-                    if(eq($min_count,"1")){
-                       print " is the shortest solution vector, with length squared $min_length";
-                    }else{
-                       print " are the shortest solution vectors, with length squared $min_length";
-                    }
+//              				echo "All solution vectors with length squared < $lengthj\n";
+										echo "$count, ";
+										if ($print_solutions) {
+	                    for($k="1";le($k,$count);$k=bcadd($k,"1")){
+	                       printnparray($multiplier_vector[$k],1,$n + 1);
+	                    }
+										}
+//                     echo "where,\n";
+//                     $min_length=mina($lengtharray,$count);
+//                     for($k="1";le($k,$count);$k=bcadd($k,"1")){
+//                         if(eq($multiplier_vector[$k][$nplus1],$min_length)){
+//                            printnparray($multiplier_vector[$k],1,$n + 1);
+//                            $min_count=bcadd($min_count,"1");
+//                         }
+//                     }
+//                     if(eq($min_count,"1")){
+//                        print " is the shortest solution vector, with length squared $min_length";
+//                     }else{
+//                        print " are the shortest solution vectors, with length squared $min_length";
+//                     }
                     return;
              }
              continue;
