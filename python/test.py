@@ -7,6 +7,7 @@ from pype9.nest import units as nest_units
 from diophantine import solve
 from operator import add
 from sympy import Matrix
+verbose = False
 
 
 class TestDiophantine(TestCase):
@@ -23,18 +24,24 @@ class TestDiophantine(TestCase):
     def test_solve(self):
         for unit in self.test_units:
             b = numpy.array(list(unit.dimension))
-            print "Unit '{}':".format(unit.name)
+            if verbose:
+                print "Unit '{}':".format(unit.name)
             for sim_name, basis in (('NEURON', neuron_units),
                                     ('NEST', nest_units)):
                 A = numpy.array([numpy.array(list(u.dimension),
                                              dtype=numpy.int64)
                                  for u in basis]).T
                 solutions = solve(A, b)
-                print solutions
+                self.assertGreater(len(solutions), 0,
+                                   "No solutions found for unit '{}' with "
+                                   "basis {}".format(unit, basis))
+                if verbose:
+                    print solutions
                 for solution in solutions:
-                    print '  {}: '.format(sim_name) + ', '.join(
-                        '{}={}'.format(u.name, d)
-                        for u, d in zip(basis, solution))
+                    if verbose:
+                        print '  {}: '.format(sim_name) + ', '.join(
+                            '{}={}'.format(u.name, d)
+                            for u, d in zip(basis, solution))
                     new_dim = reduce(add, (numpy.array(list(u.dimension)) * v
                                            for u, v in zip(basis, solution)))
                     self.assertEqual(list(new_dim), list(unit.dimension),
@@ -91,41 +98,6 @@ xs = [
     Matrix([0, -4, 0, 1, -4, 4, 4, -2, 3]),
     Matrix([1, 2, -3, 3, -4, 1, -3, -3, -4]),
     Matrix([0, -4, -1, -2, -4, 0, 4, 3, -4])]
-
-
-# for i, arr in enumerate(arrays):
-#     print '$arrays[{}] = "{}";'.format(
-#         i, " ".join([str(e) for e in arr.ravel()]))
-# quit()
-
-# for i, x in enumerate(xs):
-#     print '$xs[{}] = "{}";'.format(
-#         i, " ".join([str(e) for e in x]))
-# quit()
-
-
-def print_all(A, B, L, D):
-    global print_count
-    print "------ print {} -----".format(print_count)
-    print 'A: '
-    print A
-    print 'B: '
-    print B
-    print 'L: '
-    print L
-    print 'D: '
-    print D
-    print_count += 1
-
-
-if __name__ == '__main__':
-
-    Ab = numpy.loadtxt(os.path.join(os.environ['HOME'], 'Desktop',
-                                    'test_hermite.txt'))
-#     print '$test_hermite = "{}";'.format(
-#         " ".join([str(e) for e in Ab.ravel()]))
-    x = solve(Ab[:, :-1], Ab[:, -1])
-    print "The solution is x: {}".format(x)
 
 #     offset = 0
 #     if offset:
