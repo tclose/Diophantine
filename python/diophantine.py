@@ -23,18 +23,15 @@
 # Original written in PHP by Keith Matthews (webmaster@number-theory.org)
 #
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
-import os
 from copy import deepcopy
 from fractions import gcd
 import numpy
-from nineml import units as un
 from itertools import chain
 global print_count
 print_count = 0
-
-numpy.seterr(over='raise')
-# import warnings
-# warnings.filterwarnings('error')
+verbose_solve = False
+verbose_hnf = False
+verbose_chol = False
 
 
 def solve(A, b):
@@ -44,34 +41,40 @@ def solve(A, b):
     """
     A = numpy.asarray(A, dtype=numpy.int64)
     b = numpy.asarray(b, dtype=numpy.int64)
+    if verbose_solve:
+        Ab = numpy.concatenate((A, b.reshape(-1, 1)), axis=1)
+        print 'Ab: "' + ' '.join(str(v) for v in Ab.ravel()) + '"'
     G = numpy.zeros((A.shape[1] + 1, A.shape[0] + 1), dtype=numpy.int64)
     G[:-1, :-1] = A.T
     G[-1, :-1] = b
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
-    print "G:"
-    print G
+    if verbose_solve:
+        print "G:"
+        print G
     hnf, P, rank = lllhermite(G)
-    print "HNF(G):"
-    print hnf
-    print "P:"
-    print P
-    print "Rank: {}".format(rank)
+    if verbose_solve:
+        print "HNF(G):"
+        print hnf
+        print "P:"
+        print P
+        print "Rank: {}".format(rank)
     r = rank - 1  # For convenience
     if not any(chain(hnf[:r, -1], hnf[r, :-1])) and hnf[r, -1] == 1:
         nullity = hnf.shape[0] - rank
         if nullity:
             basis = numpy.concatenate((P[rank:, :-1],
                                        -P[r, :-1].reshape(1, -1)))
-            print "Basis:\n"
-            print basis
-            x = shortest_distance_axb(basis)
+            if verbose_solve:
+                print "Basis:\n"
+                print basis
+            solutions = get_solutions(basis)
         else:
             raise NotImplementedError("Ax=B has unique solution in integers")
     else:
         raise Exception("AX=B has no solution in integers")
-    return x
+    return solutions
 
 
 def lllhermite(G, m1=1, n1=1):
@@ -89,28 +92,35 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        #print "k={k}, m={m}".format(k=k, m=m)
+        if verbose_hnf:
+            print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
-        #print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
-        #print_all(A, B, L, D)
+        if verbose_hnf:
+            print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
+        if verbose_hnf:
+            print_all(A, B, L, D)
         u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
-        #print "u={u}, v={v}".format(u=u, v=v)
+        if verbose_hnf:
+            print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n - 1) or (col1 == n and col2 == n and u < v):
             swap_rows(k, A, B, L, D)
-            #print_all(A, B, L, D)
+            if verbose_hnf:
+                print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
-                #print "col1 <= minim && k > 1"
+                if verbose_hnf:
+                    print "col1 <= minim && k > 1"
             else:
-                #print "col1 <= minim"
-                pass
+                if verbose_hnf:
+                    print "col1 <= minim"
         else:
             for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
-            #print "col1 > minim"
+            if verbose_hnf:
+                print "col1 > minim"
     try:
         rank = len(A) - next(i for i, row in enumerate(A) if any(row != 0))
     except StopIteration:
@@ -189,95 +199,121 @@ def swap_rows(k, A, B, L, D):
     A[(k - 1, k), :] = A[(k, k - 1), :]
     B[(k - 1, k), :] = B[(k, k - 1), :]
     L[(k - 1, k), :(k - 1)] = L[(k, k - 1), :(k - 1)]
-#     #print_all(A, B, L, D)
+    if verbose_hnf:
+        print_all(A, B, L, D)
     t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
          L[(k + 1):, k] * L[k, k - 1] / D[k])
     L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
                           L[(k + 1):, k] * D[k - 1]) / D[k]
     L[(k + 1):, k] = t
-#     #print_all(A, B, L, D)
+    if verbose_hnf:
+        print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
 
 
-def shortest_distance_axb(A):
+def get_solutions(A):
     m = A.shape[0]
     n = A.shape[1]
     G = gram(A)
-    print "G:"
-    print G
+    if verbose_solve:
+        print "G:"
+        print G
     N, D = cholesky(G)
     Qn, Qd = N, D
-    print "Qn:"
-    print Qn
-    print "Qd:"
-    print Qd
+    if verbose_solve:
+        print "Qn:"
+        print Qn
+        print "Qd:"
+        print Qd
     m -= 1
     Nn = Qn[:m, m]
     Nd = Qd[:m, m]
     Cn = 0
     Cd = 1
-    print "N:"
-    print Nn
-    print "D:"
-    print Nd
+    if verbose_solve:
+        print "N:"
+        print Nn
+        print "D:"
+        print Nd
     for i in xrange(m):
         num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
         num, den = multr(num, den, Qn[i][i], Qd[i][i])
         Cn, Cd = addr(Cn, Cd, num, den)
+        if verbose_solve:
+            print "i: {}, Cnum: {}, Cden: {}".format(i + 1, Cn, Cd)
     i = m - 1
-    Tn = Cn
-    Td = Cd
-    Un = 0
-    Ud = 1
+    # List to hold working variables
+    x = numpy.empty(m, dtype=numpy.int64)
+    UB = numpy.empty(m, dtype=numpy.int64)
+    Tn = numpy.empty(m, dtype=numpy.int64)
+    Td = numpy.empty(m, dtype=numpy.int64)
+    Un = numpy.empty(m, dtype=numpy.int64)
+    Ud = numpy.empty(m, dtype=numpy.int64)
+    Tn[i] = Cn
+    Td[i] = Cd
+    Un[i] = 0
+    Ud[i] = 1
     solutions = []  # List to hold multipliers
-    x = numpy.empty(m, dtype=numpy.int64)  # List to hold pas values of x
-    while 1:
+    while True:
         # Calculate UB
-        Zn, Zd = ratior(Tn, Td, Qn[i, i], Qd[i, i])
-        num, den = subr(Nn[i], Nd[i], Un, Ud)
-        UB = introot(Zn, Zd, num, den)
+        Zn, Zd = ratior(Tn[i], Td[i], Qn[i, i], Qd[i, i])
+        num, den = subr(Nn[i], Nd[i], Un[i], Ud[i])
+        if verbose_solve:
+            print "Tn:"
+            print Tn[i:]
+            print "Td:"
+            print Td[i:]
+            print "Zn: {}, Zd: {}, num: {}, den: {}".format(
+                Zn, Zd, num, den)
+        UB[i] = introot(Zn, Zd, num, den)
         # Calculate x
-        num, den = subr(Un, Ud, Nn[i], Nd[i])
+        num, den = subr(Un[i], Ud[i], Nn[i], Nd[i])
         x[i] = -introot(Zn, Zd, num, den) - 1
-        print "x:"
-        print x[i:]
         while True:
+            if verbose_solve:
+                print "i: {}, UB: {}".format(i, UB[i])
+                print "x:"
+                print x[i:]
             x[i] += 1
-            if x[i] <= UB:
+            if x[i] <= UB[i]:
                 if i == 0:
-                    print "x:"
-                    print x[i:]
+                    if verbose_solve:
+                        print "x:"
+                        print x[i:]
                     lcv = lcasvector(A[:-1, :], x)
-                    print "lcv:"
-                    print lcv
+                    if verbose_solve:
+                        print "lcv:"
+                        print lcv
                     solution = A[m, :n] - lcv
-                    print "solution:"
-                    print solution
+                    if verbose_solve:
+                        print "solution:"
+                        print solution
                     solutions.append(solution)
-                    continue
                 else:
                     # now update U
-                    prev_Un = Un
-                    prev_Ud = Ud
-                    Un, Ud = 0, 1
-                    for j in xrange(i + 1, m):
+                    Un[i - 1], Ud[i - 1] = 0, 1
+                    for j in xrange(i, m):
                         # Loops from back of xs
-                        num, den = multr(Qn[i, j], Qd[i, j], x[j], 1)
-                        Un, Ud = addr(Un, Ud, num, den)
+                        num, den = multr(Qn[i - 1, j], Qd[i - 1, j], x[j], 1)
+                        Un[i - 1], Ud[i - 1] = addr(Un[i - 1], Ud[i - 1], num,
+                                                    den)
+                        if verbose_solve:
+                            print ("i: {}, j: {}, Un: {}, Ud: {}, num: {}, "
+                                   "den: {}".format(i, j, Un[i - 1], Ud[i - 1],
+                                                    num, den))
                     # now update T
-                    num, den = addr(x[i], 1, prev_Un, prev_Ud)
+                    num, den = addr(x[i], 1, Un[i], Ud[i])
                     num, den = subr(num, den, Nn[i], Nd[i])
                     num, den = multr(num, den, num, den)
                     num, den = multr(Qn[i][i], Qd[i][i], num, den)
-                    Tn, Td = subr(Tn, Td, num, den)
+                    Tn[i - 1], Td[i - 1] = subr(Tn[i], Td[i], num, den)
                     i = i - 1
                     break
             else:
                 i = i + 1
                 if i == m:
                     return solutions
-                continue
 
 
 def cholesky(A):
@@ -295,20 +331,22 @@ def cholesky(A):
             D[j][i] = D[i][j]
             n, d = ratior(N[i][j], D[i][j], N[i][i], D[i][i])
             N[i][j], D[i][j] = n, d
-            print "i={}, j={}".format(i + 1, j + 1)
-            print "N:"
-            print N
-            print "D:"
-            print D
-        for k in xrange(i + 1, m):
-            for l in xrange(k, m):
-                n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
-                N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
-                print "k={}, l={}".format(k + 1, l + 1)
+            if verbose_chol:
+                print "i={}, j={}".format(i + 1, j + 1)
                 print "N:"
                 print N
                 print "D:"
                 print D
+        for k in xrange(i + 1, m):
+            for l in xrange(k, m):
+                n, d = multr(N[k][i], D[k][i], N[i][l], D[i][l])
+                N[k][l], D[k][l] = subr(N[k][l], D[k][l], n, d)
+                if verbose_chol:
+                    print "k={}, l={}".format(k + 1, l + 1)
+                    print "N:"
+                    print N
+                    print "D:"
+                    print D
     return N, D
 
 
@@ -457,76 +495,6 @@ def lcasvector(A, x):
     return lcv
 
 
-if __name__ == '__main__':
-    reference_dims = [un.current, un.time, un.voltage,
-                      un.specificCapacitance,
-                      un.conductanceDensity, un.luminous_intensity,
-                      un.temperature, un.substance]
-    compound = (un.voltage * un.temperature) / un.specificCapacitance
-#     diophantine(compound, reference_dims)
-
-
-arrays = [
-    numpy.array([
-        [-3, -2, -4, -3, -1, 0, -3, 0, 1, 3],
-        [3, -4, 3, -1, 3, -2, -4, -2, -1, 0],
-        [2, 1, 0, -2, -4, 3, 3, -4, 0, 0],
-        [4, 4, 3, -4, 2, 4, 1, 0, -3, -2],
-        [1, 2, 2, 1, -2, 0, 2, 0, -3, -1],
-        [4, 0, -2, -1, 0, 4, 4, 2, 0, 0],
-        [-4, 1, -4, 4, -4, 0, -2, 3, 4, 4]], dtype=numpy.int64),
-    numpy.array([
-        [-1, 0, 0, -3, -3, -3, 4, 0, 1, 4],
-        [0, -2, -2, 4, 2, -4, 0, -3, -4, 2],
-        [-2, 3, 1, -4, 2, -1, 1, -4, 0, 1],
-        [4, -3, -2, 2, -1, 1, -4, -2, 4, 1],
-        [-3, -2, -1, -3, 0, -4, 1, -3, 3, 1],
-        [-4, -1, 0, -3, 0, 0, 3, 3, -4, 0],
-        [1, 1, -1, -3, 2, 2, -3, 3, 2, 2]], dtype=numpy.int64),
-    numpy.array([
-        [-1, -2, 3, 0, 4, 0, -4, -3, 4, -2],
-        [-3, 2, -2, 0, -4, 3, 3, 2, 0, -4],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [-1, -1, 0, 0, -1, -1, 3, -3, 4, 2],
-        [3, -1, 2, 0, -4, -3, -1, -1, 2, 3],
-        [-4, 0, -1, 0, 4, 0, 1, -4, -2, 0],
-        [4, 2, 3, 0, 0, -2, 2, -2, -4, 1]], dtype=numpy.int64),
-    numpy.array([
-        [-3, 3, 4, -1, 0, -4, -1, -4, 2, -2],
-        [1, 2, 3, -1, -3, 3, -3, -2, 1, -2],
-        [-4, 2, 2, -2, -3, -1, -2, -4, 0, 2],
-        [0, -4, -3, -3, 1, 2, 0, -3, 1, -1],
-        [-1, -1, 3, 1, 1, 4, -3, -3, 0, 2],
-        [0, 1, -4, 1, -3, 0, -1, 0, 1, 0],
-        [0, 0, -2, -2, 4, 0, 4, 1, 2, 0]], dtype=numpy.int64),
-    numpy.array([
-        [4, -3, 0, 0, 0, 3, 4, -4, 0, -3],
-        [-4, 4, -3, 0, -3, -3, 2, 0, -1, -1],
-        [0, 3, 4, 0, 2, -2, 2, 2, 0, 3],
-        [-3, 1, 0, 0, 2, 0, 0, -3, 1, 1],
-        [0, -4, -3, 0, 0, 1, -3, -1, 1, 0],
-        [4, 3, 2, 0, 1, -1, 0, -2, 2, -2],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=numpy.int64)]
-
-xs = [
-    numpy.array([3, 4, 1, 0, -3, 0, 1, 4, -2], dtype=numpy.int64),
-    numpy.array([0, 4, 4, 3, 2, 4, 0, 1, 4], dtype=numpy.int64),
-    numpy.array([0, -4, 0, 1, -4, 4, 4, -2, 3], dtype=numpy.int64),
-    numpy.array([1, 2, -3, 3, -4, 1, -3, -3, -4], dtype=numpy.int64),
-    numpy.array([0, -4, -1, -2, -4, 0, 4, 3, -4], dtype=numpy.int64)]
-
-
-# for i, arr in enumerate(arrays):
-#     print '$arrays[{}] = "{}";'.format(
-#         i, " ".join([str(e) for e in arr.ravel()]))
-# quit()
-
-# for i, x in enumerate(xs):
-#     print '$xs[{}] = "{}";'.format(
-#         i, " ".join([str(e) for e in x]))
-# quit()
-
-
 def print_all(A, B, L, D):
     global print_count
     print "------ print {} -----".format(print_count)
@@ -539,103 +507,3 @@ def print_all(A, B, L, D):
     print 'D: '
     print numpy.array(D, dtype=numpy.int64)
     print_count += 1
-
-
-if __name__ == '__main__':
-
-    Ab = numpy.loadtxt(os.path.join(os.environ['HOME'], 'Desktop',
-                                    'test_hermite.txt'))
-#     print '$test_hermite = "{}";'.format(
-#         " ".join([str(e) for e in Ab.ravel()]))
-    x = solve(Ab[:, :-1], Ab[:, -1])
-    print "The solution is x: {}".format(x)
-
-#     offset = 0
-#     if offset:
-#         end = offset + 1
-#     else:
-#         end = 5
-#     # end = 1
-#     for count, (arr, x) in enumerate(zip(arrays[offset:end], xs[offset:end])):
-#         print "\n\n-------- {} ----------".format(count + offset)
-#         arr = arr[:-3, :-3]
-#         x = x[:-2]
-#         Ab = arr.T
-#         G = numpy.concatenate(
-#             (Ab, numpy.zeros((Ab.shape[0], 1), dtype=numpy.int64)), axis=1)
-#         G[-1, -1] = 1
-#         A, B, L, D = initialise_working_matrices(G)
-#     #     print_all(A, B, L, D)
-#         k = 3
-#         i = k - 1
-#         j = 3
-    # Swap
-    #     print "swap2($k, $m, $n): "
-    #     swap_rows(k, A, B, L, D)
-    #     print_all(A, B, L, D)
-    # Reduce:
-    #     col1, col2 = reduce_matrix(A, B, L, k, i, D)
-    #     print "reduce2({k}, {i}, {m}, {n}, D): {col1}, {col2}".format(
-    #         k=k, i=i, m=A.shape[0], n=A.shape[1], col1=col1, col2=col2)
-    #     print_all(A, B, L, D)
-    #     minus(j, A[:A.shape[1], :])
-    #     print "minus(j, m, L): "
-    #     print_all(A, B, L, D)
-    # Hermite:
-    #     hnf, unimodular_matrix, rank = lllhermite(G, m1=1, n1=1)
-    #     print "lllhermite(G, {}, {}, 1, 1): {} ".format(
-    #         A.shape[0], A.shape[1], rank)
-    #     print "HNF:"
-    #     print hnf
-    #     print "Unimodular matrix:"
-    #     print unimodular_matrix
-    #     print arr
-    # Gram:
-    #     G = gram(arr)
-    #     print "G:"
-    #     print G
-    # LCV:
-    #     print "A:"
-    #     print arr.T
-    #     print "x:"
-    #     print x
-    #     print "lcv: " + str(lcasvector(arr.T, x))
-    # Cholesky:
-    #     PD = numpy.dot(arr, arr.T) + 1
-    #     print "PD:"
-    #     print PD
-    #     N, D = cholesky(PD)
-    #     print "cholesky(G):"
-    #     print "N:"
-    #     print N
-    #     print "D:"
-    #     print D
-    # Solve:
-    
-    
-    #     print "shortest_distance(A, m, n): " + shortest_distance(A, m, n)
-    
-    #     a = [-2, -1, 9, 1, 2]
-    #     b = [4, 2, -5, 7, -6]
-    #     c = [8, -1, 11, -1, 5]
-    #     d = [-5, 1, 3, -2, 1]
-    #
-    #     for i in xrange(5):
-    #         print "-------------- i = " + str(i) + " --------------"
-    #         print "introot(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-    #             introot(abs(a[i]), abs(b[i]), c[i], d[i]))
-    #         print "egcd(" + str(a[i]) + ", " + str(b[i]) + "): {}, {}, {}".format(
-    #             *egcd(a[i], b[i]))
-    #         print "lnearint(" + str(a[i]) + ", " + str(b[i]) + "): {}".format(
-    #             lnearint(a[i], b[i]))
-    #         print "ratior(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-    #             *ratior(a[i], b[i], c[i], d[i]))
-    #         print "multr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-    #             *multr(a[i], b[i], c[i], d[i]))
-    #         print "subr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-    #             *subr(a[i], b[i], c[i], d[i]))
-    #         print "addr(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}, {}".format(
-    #             *addr(a[i], b[i], c[i], d[i]))
-    #         print "comparer(" + str(a[i]) + ", " + str(b[i]) + ", " + str(c[i]) + ", " + str(d[i]) + "): {}".format(
-    #             comparer(a[i], abs(b[i]), c[i], abs(d[i])))
-

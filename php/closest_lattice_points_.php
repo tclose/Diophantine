@@ -8,6 +8,7 @@ function cholesky($A,$m){ // A is positive definite mxm
   global $subden;
   global $choleskynum;
   global $choleskyden;
+  global $verbose_chol;
 
   $Qnum=$A;
   for($i=1;le($i,$m);$i=bcadd($i,"1")){
@@ -25,11 +26,13 @@ function cholesky($A,$m){ // A is positive definite mxm
 				 $d = $ratioden;         
          $Qnum[$i][$j]=$rationum;
          $Qden[$i][$j]=$ratioden;
-         echo "i=$i, j=$j\n";
-         echo "N:\n";
-         printnp($Qnum, $m, $m);
-         echo "D:\n";
-         printnp($Qden, $m, $m);
+         if ($verbose_chol) {
+	         echo "i=$i, j=$j\n";
+	         echo "N:\n";
+	         printnp($Qnum, $m, $m);
+	         echo "D:\n";
+	         printnp($Qden, $m, $m);
+         }
      }
      for($k=$iplus1;le($k,$m);$k=bcadd($k,"1")){
          for($l=$k;le($l,$m);$l=bcadd($l,"1")){
@@ -39,11 +42,13 @@ function cholesky($A,$m){ // A is positive definite mxm
                subr($Qnum[$k][$l],$Qden[$k][$l],$t2num,$t2den);
                $Qnum[$k][$l]=$subnum;
                $Qden[$k][$l]=$subden;
-               echo "k=$k, l=$l\n";
-               echo "N:\n";
-               printnp($Qnum, $m, $m);
-               echo "D:\n";
-               printnp($Qden, $m, $m);               
+               if ($verbose_chol) {
+	               echo "k=$k, l=$l\n";
+	               echo "N:\n";
+	               printnp($Qnum, $m, $m);
+	               echo "D:\n";
+	               printnp($Qden, $m, $m);
+               }               
          }
      }
   }

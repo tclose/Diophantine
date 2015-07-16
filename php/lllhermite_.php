@@ -38,6 +38,7 @@ function axb($Ab,$m,$n,$m1,$n1){
 	global $hnf;
 	global $unimodular_matrix;
 	global $rank;
+	global $verbose_solve;
 	$mplus1=bcadd($m,"1");
 	for($i="1";le($i,$mplus1);$i=bcadd($i,"1")){
 		for($j="1";le($j,$n);$j=bcadd($j,"1")){
@@ -49,13 +50,17 @@ function axb($Ab,$m,$n,$m1,$n1){
 		$G[$i][$nplus1]="0";
 	}
 	$G[$mplus1][$nplus1]="1";
-	echo "G=";
-	printnp($G,$mplus1,$nplus1);
+	if ($verbose_solve) {
+    echo "G=";
+  	printnp($G,$mplus1,$nplus1);
+	}
 	lllhermite($G,$mplus1,$nplus1,$m1,$n1);
-	echo "HNF(G):\n";
-	printnp($hnf,$mplus1,$nplus1);
-	echo "P:\n";
-	printnp($unimodular_matrix,$mplus1,$mplus1);
+	if ($verbose_solve) {
+  	echo "HNF(G):\n";
+  	printnp($hnf,$mplus1,$nplus1);
+  	echo "P:\n";
+  	printnp($unimodular_matrix,$mplus1,$mplus1);
+	}
 	$flag="0";
 	for($i="1";lt($i,$rank);$i=bcadd($i,"1")){
 		if(neqzero($hnf[$i][$nplus1])){
@@ -93,7 +98,6 @@ function axb($Ab,$m,$n,$m1,$n1){
 			}else{
 				echo "the rows: ";
 			}
-			//printnp($basis,$lim,$m);
 			if(eq($nullity,"1")){
 				echo "of submatrix R of P forms a Z-basis for the lattice AX=0\n";
 			}else{
@@ -104,8 +108,10 @@ function axb($Ab,$m,$n,$m1,$n1){
 			for($j="1";le($j,$m);$j=bcadd($j,"1")){
 				$basis[$limplus1][$j]=$y[$j];
 			}
-			echo "Basis:\n";
-			printnp($basis, $limplus1, $m);
+			if ($verbose_solve) {
+				echo "Basis:\n";
+				printnp($basis, $limplus1, $m);
+			}
 			shortest_distance_axb($basis,$limplus1,$m);
 		}
 	} else {
@@ -167,6 +173,7 @@ global $hnf;
 global $unimodular_matrix;
 global $rank;
 global $print_count;
+global $verbose_hnf;
 
    for($i="1";le($i,$m);$i=bcadd($i,"1")){
        for($j="1";le($j,$m);$j=bcadd($j,"1")){
@@ -474,6 +481,7 @@ global $subden;
 global $rationum;
 global $ratioden;
 global $lcv;
+global $verbose_solve;
 
     $count="0";
     $min_count="0";
@@ -501,18 +509,22 @@ global $lcv;
         }
     }
     $G=gram($A,$m,$n);
-    print "G:\n";
-    printnp($G, $m, $m);
+    if ($verbose_solve) {
+	    print "G:\n";
+	    printnp($G, $m, $m);
+    }
     $lengthj=$G[$m][$m];
     cholesky($G,$m);
     $Qnum=$choleskynum;
     $Qden=$choleskyden;
     $QQnum=transpose($Qnum,$m,$m);
     $QQden=transpose($Qden,$m,$m);
-    echo "Qn:\n";
-    printnp($Qnum, $m, $m);
-    echo "Qd:\n";
-    printnp($Qden, $m, $m);
+    if ($verbose_solve) {
+	    echo "Qn:\n";
+	    printnp($Qnum, $m, $m);
+	    echo "Qd:\n";
+	    printnp($Qden, $m, $m);
+    }
     $m=bcsub($m,"1");
     for($i="1";le($i,$m);$i=bcadd($i,"1")){// the N vector
         $Nnum[$i]=$Qnum[$i][$mplus1];
@@ -521,17 +533,21 @@ global $lcv;
 
     $Cnum="0";
     $Cden="1";
-    echo "Nnum:\n";
-		printnparray($Nnum, 1, $mplus1);    	
-		echo "Nden:\n";
-		printnparray($Nden, 1, $mplus1);
+    if ($verbose_solve) {
+	    echo "Nnum:\n";
+			printnparray($Nnum, 1, $mplus1);    	
+			echo "Nden:\n";
+			printnparray($Nden, 1, $mplus1);
+    }
     for($i="1";le($i,$m);$i=bcadd($i,"1")){
         multr($Nnum[$i],$Nden[$i],$Nnum[$i],$Nden[$i]);
         multr($multnum,$multden,$Qnum[$i][$i],$Qden[$i][$i]);
         addr($Cnum,$Cden,$multnum,$multden);
         $Cnum=$addnum;
         $Cden=$addden;
-        echo "i: $i, Cnum: $Cnum, Cden: $Cden\n";
+        if ($verbose_solve) {
+        	echo "i: $i, Cnum: $Cnum, Cden: $Cden\n";
+        }
     }
     $i=$m;
     $Tnum[$m]=$Cnum;
@@ -543,14 +559,24 @@ global $lcv;
        $Znum=$rationum;
        $Zden=$ratioden;
        subr($Nnum[$i],$Nden[$i],$Unum[$i],$Uden[$i]);
+       if ($verbose_solve) {
+	       print "Tn:\n";
+	       printnparray($Tnum, $i, $mplus1);
+	       print "Td:\n";
+	       printnparray($Tden, $i, $mplus1);
+	       echo "Zn: $Znum, Zd: $Zden, num: $subnum, den: $subden\n";
+       }
        $UB[$i]=introot($Znum,$Zden,$subnum,$subden);
        subr($Unum[$i],$Uden[$i],$Nnum[$i],$Nden[$i]);
        $temp2=introot($Znum,$Zden,$subnum,$subden);
        $temp3=bcminus($temp2);
        $x[$i]=bcsub($temp3,"1");
-       echo "x:\n";
-       printnparray($x, $i, $m + 1);
        while("1"){
+       		if ($verbose_solve) {
+       			echo "i: $i, UB: $UB[$i]\n";
+       			echo "x:\n";
+       			printnparray($x, $i, $m + 1);
+       		}       	
           $x[$i]=bcadd($x[$i],"1");
           if(le($x[$i],$UB[$i])){
               if(eq($i,"1")){
@@ -560,8 +586,10 @@ global $lcv;
                    lcasvector($AA,$x,$m,$n);
                    $count=bcadd($count,"1");
                //  print "X[$count]=";printarray($x,$m);
-               		 echo "lcv:\n";
-               		 printnparray($lcv, 1, $n);
+                   if ($verbose_solve) {
+	               		 echo "lcv:\n";
+	               		 printnparray($lcv, 1, $n);
+                   }
                    $lcva[$count]=$lcv;
                //  print "lcv[$count]=";printarray($lcv,$n);
                //  print "<br>\n";
@@ -570,10 +598,14 @@ global $lcv;
                        $temp=$A[$mplus1][$k];
                        $multiplier_vector[$count][$k]=bcsub($temp,$lcv[$k]);
                    }
-                   echo "multiplier:\n";
-                   printnparray($multiplier_vector[$count], 1, $nplus1);
+                   if ($verbose_solve) {
+	                   echo "multiplier:\n";
+	                   printnparray($multiplier_vector[$count], 1, $nplus1);
+                   }
                    $l=lengthsquared($multiplier_vector[$count],$n);
-                   echo "l: $l";
+                   if ($verbose_solve) {
+                   		echo "l: $l";
+                   }
                    $multiplier_vector[$count][$nplus1]=$l;
                 // print "P-X[$count]=";printarray($multiplier_vector[$count],$n);print": $l<br>\n";
                    $lengtharray[$count]=$l;
@@ -589,6 +621,9 @@ global $lcv;
                     addr($sumnum,$sumden,$multnum,$multden);
                     $sumnum=$addnum;
                     $sumden=$addden;
+                    if ($verbose_solve) {
+                    	echo "i: $i, j: $j, Un: $sumnum, Ud: $sumden, num: $multnum, den: $multden\n";
+                    }
                 }
                 $Unum[$i]=$sumnum;
                 $Uden[$i]=$sumden;
@@ -605,37 +640,22 @@ global $lcv;
           }else{
              $i=bcadd($i,"1");
              if(gt($i,$m)){
-                    echo "Here are the solution vectors with length squared &le; $lengthj<br>\n";
-                    print "<TABLE BORDER=\"1\" CELLSPACING=\"0\">\n";
+             				echo "All solution vectors with length squared < $lengthj\n";
                     for($k="1";le($k,$count);$k=bcadd($k,"1")){
-                           print "<TR>";
-                           print "<TD ALIGN=\"RIGHT\">";
-                           printarray($multiplier_vector[$k],$n);
-                           print "</TD>";
-                           print "<TD>";
-                           print " $lengtharray[$k]";
-                           print "</TD>";
-                           print "</TR>\n";
+                       printnparray($multiplier_vector[$k],1,$n + 1);
                     }
-                    print "</TABLE>\n";
-                    print "Also<br>\n";
+                    echo "where,\n";
                     $min_length=mina($lengtharray,$count);
-                    print "<TABLE BORDER=\"0\" CELLSPACING=\"0\">\n";
                     for($k="1";le($k,$count);$k=bcadd($k,"1")){
                         if(eq($multiplier_vector[$k][$nplus1],$min_length)){
-                           print "<TR>";
-                           print "<TD ALIGN=\"RIGHT\">";
-                           printarray($multiplier_vector[$k],$n);
-                           print "</TD>";
-                           print "</TR>\n";
+                           printnparray($multiplier_vector[$k],1,$n + 1);
                            $min_count=bcadd($min_count,"1");
                         }
                     }
-                    print "</TABLE>\n";
                     if(eq($min_count,"1")){
-                       print " is the shortest solution vector, length squared $min_length<br>\n";
+                       print " is the shortest solution vector, with length squared $min_length";
                     }else{
-                       print " are the shortest solution vectors, length squared $min_length<br>\n";
+                       print " are the shortest solution vectors, with length squared $min_length";
                     }
                     return;
              }
