@@ -1,3 +1,12 @@
+"""
+Diophantine is a python package for solving systems of diophantine equations 
+(see https://en.wikipedia.org/wiki/Diophantine_equation). It is based on 
+PHP code by Keith Matthews (webmaster@number-theory.org) that implements the 
+algorithm described in the included 'algorithm.pdf' (see
+http://www.numbertheory.org/lll.html for a list of associated publications).
+
+Author: Thomas G. Close (tom.g.close@gmail.com)
+"""
 # The MIT License (MIT)
 #
 # Copyright (c) 2015 Thomas G. Close
@@ -20,9 +29,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# Original written in PHP by Keith Matthews (webmaster@number-theory.org)
-#
-# Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
 from copy import deepcopy
 from fractions import gcd
 from math import ceil
