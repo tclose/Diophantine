@@ -25,6 +25,7 @@
 # Converted from PHP to Python by Thomas G. Close (tom.g.close@gmail.com)
 from copy import deepcopy
 from fractions import gcd
+from math import ceil
 import numpy
 from itertools import chain
 global print_count
@@ -373,7 +374,7 @@ def introot(a, b, c, d):
         return y
     x = a // b
     assert x >= 0
-    x = numpy.sqrt(x)
+    x = int(ceil(numpy.sqrt(x)))
     answer = x + y
     n, d = subr(c, d, y, 1)
     n, d = subr(1, 1, n, d)
