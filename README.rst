@@ -1,5 +1,5 @@
 Diophantine
----
+======
 
 Diophantine is a python package for solving systems of diophantine equations 
 (see https://en.wikipedia.org/wiki/Diophantine_equation). It is based on 
