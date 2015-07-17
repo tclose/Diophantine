@@ -137,15 +137,15 @@ class TestDiophantine(TestCase):
                  2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4,
                  1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
         count = 0
-        for i, A in enumerate(As):
-            for j, b in enumerate(bs):
+        for A in As:
+            for b in bs:
                 xs = solve(A, b)
                 self.assertEqual(len(xs), nsols[count],
                                  "Incorrect number of solutions")
                 for x in xs:
                     self.assertEquals(A * x, b, "A * x doesn't match b")
                 count += 1
-                print count
+
 
 if __name__ == '__main__':
     test = TestDiophantine('test_dimension_basis')
