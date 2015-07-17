@@ -1,3 +1,6 @@
 .DS_store
 *.pyc
 .settings
+.project
+.pydevproject
+.buildpath
