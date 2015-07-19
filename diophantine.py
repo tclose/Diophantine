@@ -5,6 +5,14 @@ PHP code by Keith Matthews (webmaster@number-theory.org) that implements the
 algorithm described in the included 'algorithm.pdf' (see
 http://www.numbertheory.org/lll.html for a list of associated publications).
 
+There are two branches of this code in the GitHub repository
+(see https://github.com/tclose/Diophantine.git), 'master', which uses the
+sympy library and therefore uses arbitrarily long integer representations, and
+'numpy', which uses the numpy library, which is faster but can suffer from
+integer overflow errors despite using int64 representations.
+
+Diophantine is released under the MIT Licence (see Licence for details)
+
 Author: Thomas G. Close (tom.g.close@gmail.com)
 """
 # The MIT License (MIT)
@@ -43,8 +51,28 @@ verbose_chol = False
 
 def solve(A, b):
     """
-    Finds the minimal combination of reference dimensions to make the compound
-    dimension
+    Finds small solutions to systems of diophantine equations, A x = b, where A
+    is a M x N matrix of coefficents, b is a M x 1 vector and x is the
+    N x 1 solution vector, e.g.
+
+    >>> from numpy import array
+    >>> from diophantine import solve
+    >>> A = array([[1, 0, 0, 2], [0, 2, 3, 5], [2, 0, 3, 1], [-6, -1, 0, 2],
+                    [0, 1, 1, 1], [-1, 2, 0,1], [-1, -2, 1, 0]]).T
+    >>> b = array([1, 1, 1, 1])
+    >>> solve(A, b)
+    [array([
+    [-1],
+    [ 1],
+    [ 0],
+    [ 0],
+    [-1],
+    [-1],
+    [-1]])]
+
+    The returned solution vector will tend to be one with the smallest norms.
+    If multiple solutions with the same norm are found they will all be
+    returned. If there are no solutions the empty list will be returned.
     """
     A = numpy.asarray(A, dtype=numpy.int64)
     b = numpy.asarray(b, dtype=numpy.int64)
