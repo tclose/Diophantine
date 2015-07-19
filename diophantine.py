@@ -64,8 +64,28 @@ def nonzero(m):
 
 def solve(A, b):
     """
-    Finds the minimal combination of reference dimensions to make the compound
-    dimension
+    Finds small solutions to systems of diophantine equations, A x = b, where A
+    is a M x N matrix of coefficents, b is a M x 1 vector and x is the
+    N x 1 solution vector, e.g.
+
+    >>> from sympy import Matrix
+    >>> from diophantine import solve
+    >>> A = Matrix([[1, 0, 0, 2], [0, 2, 3, 5], [2, 0, 3, 1], [-6, -1, 0, 2],
+                    [0, 1, 1, 1], [-1, 2, 0,1], [-1, -2, 1, 0]]).T
+    >>> b = Matrix([1, 1, 1, 1])
+    >>> solve(A, b)
+    [Matrix([
+    [-1],
+    [ 1],
+    [ 0],
+    [ 0],
+    [-1],
+    [-1],
+    [-1]])]
+
+    The returned solution vector will tend to be one with the smallest norms.
+    If multiple solutions with the same norm are found they will all be
+    returned. If there are no solutions the empty list will be returned.
     """
     A = Matrix(A)
     b = Matrix(b)
