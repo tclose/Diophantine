@@ -45,8 +45,6 @@ Diophantine is released under the MIT Licence (see Licence for details)
 
 Author: Thomas G. Close (tom.g.close@gmail.com)
 
-https://travis-ci.org/tclose/Diophantine.svg?branch=master
-
 .. image:: https://travis-ci.org/tclose/Diophantine.svg?branch=master
    :target: https://travis-ci.org/tclose/Diophantine
    :alt: Unit Test Status
