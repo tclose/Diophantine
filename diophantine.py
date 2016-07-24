@@ -413,11 +413,3 @@ def lcasvector(A, x):
     for j in xrange(n):
         lcv[j] = x.dot(A[:, j])
     return lcv
-
-
-def num_chars(d):
-    if d == 0:
-        num = 2
-    else:
-        num = int(floor(log10(abs(d)))) + int(sign(d) < 0) + 2
-    return num
