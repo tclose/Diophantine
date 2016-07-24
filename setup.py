@@ -5,15 +5,14 @@ from setuptools import setup, find_packages
 setup(
     name="Diophantine",
     version="0.1",
-    package_data={'diophantine': []},
-    packages=find_packages(),
+    py_modules=['diophantine'],
     author="Thomas G. Close",
     # add your name here if you contribute to the code
     author_email="tom.g.close@gmail.com",
     description=(
         "A python package for finding small solutions of systems of"
         "diophantine equations"),
-    long_description=open("README").read(),
+    long_description=open("README.rst").read(),
     license="MIT License",
     keywords="mathematics diophantine algebra integer",
     url="http://github.com/tclose/Diophantine",
