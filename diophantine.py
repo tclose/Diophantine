@@ -348,47 +348,6 @@ def introot(a, b, c, d):
     return int_answer
 
 
-def egcd(p, q):
-    if q == 0:
-        if p != 0:
-            s = sign(p)
-            if s == 1:
-                k1 = 1
-            else:
-                k1 = -1
-            return abs(p), k1, 0
-        else:
-            return 0, 0, 0
-    a = p
-    b = abs(q)
-    c = a % b
-    s = sign(q)
-    if c == 0:
-        if s == 1:
-            k2 = 1
-        else:
-            k2 = -1
-        return b, 0, k2
-    l1 = 1
-    k1 = 0
-    l2 = 0
-    k2 = 1
-    while c != 0:
-        q = a // b
-        a = b
-        b = c
-        c = a % b
-        h1 = l1 - q * k1
-        h2 = l2 - q * k2
-        l1 = k1
-        l2 = k2
-        k1 = h1
-        k2 = h2
-    if s == -1:
-        k2 = 0 - k2
-    return b, k1, k2
-
-
 def lnearint(a, b):
     """
     left nearest integer
