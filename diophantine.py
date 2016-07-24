@@ -41,11 +41,6 @@ from math import copysign, sqrt, log10, floor
 from fractions import gcd
 from sympy import Matrix, zeros, ones, eye
 from itertools import chain, product
-global print_count
-print_count = 0
-verbose_solve = False
-verbose_hnf = False
-verbose_chol = False
 
 
 class NoSolutionException(Exception):
@@ -92,33 +87,18 @@ def solve(A, b):
     if b.shape != (A.shape[0], 1):
         raise Exception("Length of b vector ({}) does not match number of rows"
                         " in A matrix ({})".format(b.shape[0], A.shape[0]))
-    if verbose_solve:
-        Ab = A.row_join(b)
-        print 'Ab: "' + ' '.join(str(v) for v in Ab.T.vec()) + '"'
     G = zeros(A.shape[1] + 1, A.shape[0] + 1)
     G[:-1, :-1] = A.T
     G[-1, :-1] = b.reshape(1, b.shape[0])
     G[-1, -1] = 1
     # A is m x n, b is m x 1, solving AX=b, X is n x 1+
     # Ab is the (n+1) x m transposed augmented matrix. G=[A^t|0] [b^t]1]
-    if verbose_solve:
-        print "G:"
-        printnp(G)
     hnf, P, rank = lllhermite(G)
-    if verbose_solve:
-        print "HNF(G):"
-        printnp(hnf)
-        print "P:"
-        printnp(P)
-        print "Rank: {}".format(rank)
     r = rank - 1  # For convenience
     if not any(chain(hnf[:r, -1], hnf[r, :-1])) and hnf[r, -1] == 1:
         nullity = hnf.shape[0] - rank
         if nullity:
             basis = P[rank:, :-1].col_join(-P[r, :-1])
-            if verbose_solve:
-                print "Basis:\n"
-                printnp(basis)
             solutions = get_solutions(basis)
         else:
             raise NotImplementedError("Ax=B has unique solution in integers")
@@ -142,35 +122,18 @@ def lllhermite(G, m1=1, n1=1):
         A[m, :] *= -1
     k = 1
     while k < m:
-        if verbose_hnf:
-            print "k={k}, m={m}".format(k=k, m=m)
         col1, col2 = reduce_matrix(A, B, L, k, k - 1, D)
-        if verbose_hnf:
-            print "col1={col1}, col2={col2}".format(col1=col1, col2=col2)
-        if verbose_hnf:
-            print_all(A, B, L, D)
         u = n1 * (int(D[k - 1]) * int(D[k + 1]) +
                   int(L[k, k - 1]) * int(L[k, k - 1]))
         v = m1 * int(D[k]) * int(D[k])
-        if verbose_hnf:
-            print "u={u}, v={v}".format(u=u, v=v)
         if col1 <= min(col2, n - 1) or (col1 == n and col2 == n and u < v):
             swap_rows(k, A, B, L, D)
-            if verbose_hnf:
-                print_all(A, B, L, D)
             if k > 1:
                 k = k - 1
-                if verbose_hnf:
-                    print "col1 <= minim && k > 1"
-            else:
-                if verbose_hnf:
-                    print "col1 <= minim"
         else:
             for i in reversed(xrange(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
-            if verbose_hnf:
-                print "col1 > minim"
     try:
         rank = A.shape[0] - next(i for i in xrange(A.shape[0])
                                  if nonzero(A[i, :]))
@@ -252,15 +215,11 @@ def swap_rows(k, A, B, L, D):
     A[(k - 1):(k + 1), :] = A[k:reverse_stop:-1, :]
     B[(k - 1):(k + 1), :] = B[k:reverse_stop:-1, :]
     L[(k - 1):(k + 1), :(k - 1)] = L[k:reverse_stop:-1, :(k - 1)]
-    if verbose_hnf:
-        print_all(A, B, L, D)
     t = (L[(k + 1):, k - 1] * D[k + 1] / D[k] -
          L[(k + 1):, k] * L[k, k - 1] / D[k])
     L[(k + 1):, k - 1] = (L[(k + 1):, k - 1] * L[k, k - 1] +
                           L[(k + 1):, k] * D[k - 1]) / D[k]
     L[(k + 1):, k] = t
-    if verbose_hnf:
-        print_all(A, B, L, D)
     t = int(D[k - 1]) * int(D[k + 1]) + int(L[k, k - 1]) * int(L[k, k - 1])
     D[k] = t / D[k]
 
@@ -269,32 +228,17 @@ def get_solutions(A):
     m = A.shape[0]
     n = A.shape[1]
     G = gram(A)
-    if verbose_solve:
-        print "G:"
-        printnp(G)
     N, D = cholesky(G)
     Qn, Qd = N, D
-    if verbose_solve:
-        print "Qn:"
-        printnp(Qn)
-        print "Qd:"
-        printnp(Qd)
     m -= 1
     Nn = Qn[:m, m]
     Nd = Qd[:m, m]
     Cn = 0
     Cd = 1
-    if verbose_solve:
-        print "N:"
-        printnp(Nn)
-        print "D:"
-        printnp(Nd)
     for i in xrange(m):
         num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
         num, den = multr(num, den, Qn[i, i], Qd[i, i])
         Cn, Cd = addr(Cn, Cd, num, den)
-        if verbose_solve:
-            print "i: {}, Cnum: {}, Cden: {}".format(i + 1, Cn, Cd)
     i = m - 1
     # List to hold working variables
     x = zeros(m, 1)
@@ -312,36 +256,16 @@ def get_solutions(A):
         # Calculate UB
         Zn, Zd = ratior(Tn[i], Td[i], Qn[i, i], Qd[i, i])
         num, den = subr(Nn[i], Nd[i], Un[i], Ud[i])
-        if verbose_solve:
-            print "Tn:"
-            printnp(Tn[i:])
-            print "Td:"
-            printnp(Td[i:])
-            print "Zn: {}, Zd: {}, num: {}, den: {}".format(
-                Zn, Zd, num, den)
         UB[i] = introot(Zn, Zd, num, den)
         # Calculate x
         num, den = subr(Un[i], Ud[i], Nn[i], Nd[i])
         x[i] = -introot(Zn, Zd, num, den) - 1
         while True:
-            if verbose_solve:
-                print "i: {}, UB: {}".format(i, UB[i])
-                print "x:"
-                printnp(x[i:])
             x[i] += 1
             if x[i] <= UB[i]:
                 if i == 0:
-                    if verbose_solve:
-                        print "x:"
-                        printnp(x[i:])
                     lcv = lcasvector(A[:-1, :], x)
-                    if verbose_solve:
-                        print "lcv:"
-                        printnp(lcv)
                     solution = A[m, :n] - lcv.reshape(1, lcv.shape[0])
-                    if verbose_solve:
-                        print "solution:"
-                        printnp(solution)
                     solutions.append(solution.T)
                 else:
                     # now update U
@@ -351,10 +275,6 @@ def get_solutions(A):
                         num, den = multr(Qn[i - 1, j], Qd[i - 1, j], x[j], 1)
                         Un[i - 1], Ud[i - 1] = addr(Un[i - 1], Ud[i - 1], num,
                                                     den)
-                        if verbose_solve:
-                            print ("i: {}, j: {}, Un: {}, Ud: {}, num: {}, "
-                                   "den: {}".format(i, j, Un[i - 1], Ud[i - 1],
-                                                    num, den))
                     # now update T
                     num, den = addr(x[i], 1, Un[i], Ud[i])
                     num, den = subr(num, den, Nn[i], Nd[i])
@@ -384,22 +304,10 @@ def cholesky(A):
             D[j, i] = D[i, j]
             n, d = ratior(N[i, j], D[i, j], N[i, i], D[i, i])
             N[i, j], D[i, j] = n, d
-            if verbose_chol:
-                print "i={}, j={}".format(i + 1, j + 1)
-                print "N:"
-                printnp(N)
-                print "D:"
-                printnp(D)
         for k in xrange(i + 1, m):
             for l in xrange(k, m):
                 n, d = multr(N[k, i], D[k, i], N[i, l], D[i, l])
                 N[k, l], D[k, l] = subr(N[k, l], D[k, l], n, d)
-                if verbose_chol:
-                    print "k={}, l={}".format(k + 1, l + 1)
-                    print "N:"
-                    printnp(N)
-                    print "D:"
-                    printnp(D)
     return N, D
 
 
@@ -548,57 +456,9 @@ def lcasvector(A, x):
     return lcv
 
 
-def print_all(A, B, L, D):
-    global print_count
-    print "------ print {} -----".format(print_count)
-    print 'A: '
-    printnp(A)
-    print 'B: '
-    printnp(B)
-    print 'L: '
-    printnp(L)
-    print 'D: '
-    printnp(D)
-    print_count += 1
-
-
 def num_chars(d):
     if d == 0:
         num = 2
     else:
         num = int(floor(log10(abs(d)))) + int(sign(d) < 0) + 2
     return num
-
-
-def printnp(m):
-    """
-    Prints a sympy matrix in the same format as a numpy array
-    """
-    m = Matrix(m)
-    if m.shape[1] == 1:
-        m = m.reshape(1, m.shape[0])
-    elem_len = max(num_chars(d) for d in m.vec())
-    if m.shape[0] > 1:
-        outstr = '[['
-    else:
-        outstr = '['
-    for i in xrange(m.shape[0]):
-        if i:
-            outstr += ' ['
-        char_count = 0
-        for j, elem in enumerate(m[i, :]):
-            char_count += elem_len
-            if char_count > 77:
-                outstr += '\n '
-                char_count = elem_len + 2
-            # Add spaces
-            outstr += ' ' * (elem_len - num_chars(elem) +
-                             int(j != 0)) + str(elem)
-
-        if i < m.shape[0] - 1:
-            outstr += ']\n'
-    if m.shape[0] > 1:
-        outstr += ']]'
-    else:
-        outstr += ']'
-    print outstr
