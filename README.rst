@@ -2,10 +2,10 @@ Diophantine
 ===========
 
 Diophantine is a python package for finding small (integer) solutions of systems of
-diophantine equations (see https://en.wikipedia.org/wiki/Diophantine_equation).
+diophantine equations (see http://en.wikipedia.org/wiki/Diophantine_equation).
 It is based on  PHP code by Keith Matthews (see www.number-theory.org) that
-implements the algorithm described in the included 'algorithm.pdf' (see
-http://www.numbertheory.org/lll.html for a list of associated publications),
+implements the algorithm described in https://github.com/tclose/Diophantine/blob/master/algorithm.pdf
+(see http://www.numbertheory.org/lll.html for a list of associated publications),
 which uses the LLL algorithm to calculate the Hermite-normal-form described in
 the paper:
 
