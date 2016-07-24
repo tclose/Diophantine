@@ -7,14 +7,14 @@ setup(
     version="0.1",
     py_modules=['diophantine'],
     author="Thomas G. Close",
-    # add your name here if you contribute to the code
     author_email="tom.g.close@gmail.com",
     description=(
-        "A python package for finding small solutions of systems of"
+        "A python package for finding small solutions of systems of "
         "diophantine equations"),
     long_description=open("README.rst").read(),
     license="MIT License",
-    keywords="mathematics diophantine algebra integer",
+    keywords=["mathematics", "diophantine", "algebra", "integer",
+              "systems"],
     url="http://github.com/tclose/Diophantine",
     classifiers=['Development Status :: 4 - Beta',
                  'Environment :: Console',

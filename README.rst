@@ -1,7 +1,7 @@
 Diophantine
 ===========
 
-Diophantine is a python package for finding small (integer) solutions of systems of
+Diophantine is a Python package for finding small (integer) solutions of systems of
 diophantine equations (see http://en.wikipedia.org/wiki/Diophantine_equation).
 It is based on  PHP code by Keith Matthews (see www.number-theory.org) that
 implements the algorithm described in https://github.com/tclose/Diophantine/blob/master/algorithm.pdf
