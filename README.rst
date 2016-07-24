@@ -44,3 +44,12 @@ The returned solution vector will tend to be one with the smallest norms. If mul
 Diophantine is released under the MIT Licence (see Licence for details)
 
 Author: Thomas G. Close (tom.g.close@gmail.com)
+
+https://travis-ci.org/tclose/Diophantine.svg?branch=master
+
+.. image:: https://travis-ci.org/tclose/Diophantine.svg?branch=master
+   :target: https://travis-ci.org/tclose/Diophantine
+   :alt: Unit Test Status
+.. image:: https://coveralls.io/repos/tclose/Diophantine/badge.png
+   :target: https://coveralls.io/r/tclose/Diophantine
+   :alt: Unit Test Coverage
