@@ -48,6 +48,6 @@ Author: Thomas G. Close (tom.g.close@gmail.com)
 .. image:: https://travis-ci.org/tclose/Diophantine.svg?branch=master
    :target: https://travis-ci.org/tclose/Diophantine
    :alt: Unit Test Status
-.. image:: https://coveralls.io/repos/tclose/Diophantine/badge.png
-   :target: https://coveralls.io/r/tclose/Diophantine
+.. image:: https://coveralls.io/repos/github/tclose/Diophantine/badge.svg?branch=master
+   :target: https://coveralls.io/repos/github/tclose/Diophantine/badge.svg?branch=master
    :alt: Unit Test Coverage
