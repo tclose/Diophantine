@@ -10,12 +10,12 @@ setup(
     author_email="tom.g.close@gmail.com",
     description=(
         "A python package for finding small solutions of systems of "
-        "diophantine equations"),
+        "diophantine (integer algebra) equations"),
     long_description=open("README.rst").read(),
     license="MIT License",
     keywords=["mathematics", "diophantine", "algebra", "integer",
               "systems"],
-    url="http://github.com/tclose/Diophantine",
+    url="http://github.com/tclose/Diophantine/tarball/0.1",
     classifiers=['Development Status :: 4 - Beta',
                  'Environment :: Console',
                  'Intended Audience :: Science/Research',
