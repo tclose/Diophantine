@@ -1,6 +1,15 @@
 Diophantine
 ===========
 
+.. image:: https://travis-ci.org/tclose/Diophantine.svg?branch=master
+   :target: https://travis-ci.org/tclose/Diophantine
+   :alt: Unit Test Status
+.. image:: https://coveralls.io/repos/github/tclose/Diophantine/badge.svg?branch=master
+   :target: https://coveralls.io/github/tclose/Diophantine?branch=master
+   :alt: Unit Test Coverage
+
+Author: Thomas G. Close (tom.g.close@gmail.com)
+
 Diophantine (http://github.com/tclose/Diophantine) is a Python package for
 finding small (integer) solutions of systems of diophantine equations
 (see http://en.wikipedia.org/wiki/Diophantine_equation). It is based on  PHP
@@ -44,11 +53,15 @@ The returned solution vector will tend to be one with the smallest norms. If mul
 
 Diophantine is released under the MIT Licence (see Licence for details)
 
-Author: Thomas G. Close (tom.g.close@gmail.com)
+Installation
+------------
 
-.. image:: https://travis-ci.org/tclose/Diophantine.svg?branch=master
-   :target: https://travis-ci.org/tclose/Diophantine
-   :alt: Unit Test Status
-.. image:: https://coveralls.io/repos/github/tclose/Diophantine/badge.svg?branch=master
-   :target: https://coveralls.io/github/tclose/Diophantine?branch=master
-   :alt: Unit Test Coverage
+Diophantine is available from the Python Package Index (http://pypi.python.org) and can be installed with the command
+
+    pip install diophantine
+
+Alternatively, the master branch can be installed from using the setuptools install command
+
+    python setup.py install
+
+ from a clone of the GitHub repository (https://github.com/tclose/Diophantine) or simply adding the cloned directory to your PYTHONPATH.
