@@ -1,2 +1,1 @@
-recursive-exclude * .gitignore
-recursive-exclude * .DS_Store
+prune .gitignore
