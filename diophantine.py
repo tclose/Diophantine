@@ -123,8 +123,8 @@ def lllhermite(G, m1=1, n1=1):
     n = G.shape[1]
     A, B, L, D = initialise_working_matrices(G)
     if first_nonzero_is_negative(A):
-        B[m, m] = -1
-        A[m, :] *= -1
+        B[m - 1, m - 1] = -1
+        A[m - 1, :] *= -1
     k = 1
     while k < m:
         if verbose_hnf:
