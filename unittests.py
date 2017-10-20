@@ -1,3 +1,4 @@
+from builtins import zip
 from unittest import TestCase
 from diophantine import solve
 from sympy import Matrix

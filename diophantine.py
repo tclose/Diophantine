@@ -36,6 +36,9 @@ Author: Thomas G. Close (tom.g.close@gmail.com)
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+from builtins import zip
+from builtins import next
+from builtins import range
 from copy import deepcopy
 from math import copysign, sqrt, log10, floor
 from fractions import gcd
@@ -53,7 +56,7 @@ def sign(x):
 
 
 def nonzero(m):
-    return [(i, j) for i, j in product(xrange(m.shape[0]), xrange(m.shape[1]))
+    return [(i, j) for i, j in product(range(m.shape[0]), range(m.shape[1]))
             if m[i, j] != 0]
 
 
@@ -131,11 +134,11 @@ def lllhermite(G, m1=1, n1=1):
             if k > 1:
                 k = k - 1
         else:
-            for i in reversed(xrange(k - 1)):
+            for i in reversed(range(k - 1)):
                 reduce_matrix(A, B, L, k, i, D)
             k = k + 1
     try:
-        rank = A.shape[0] - next(i for i in xrange(A.shape[0])
+        rank = A.shape[0] - next(i for i in range(A.shape[0])
                                  if nonzero(A[i, :]))
     except StopIteration:
         assert False, "A matrix contains only zeros"
@@ -161,7 +164,7 @@ def first_nonzero_is_negative(A):
     if the first nonzero column j of A contains only one nonzero entry, which
     is negative+ This assumes A is a nonzero matrix with at least two rows+
     """
-    nonzero_columns = zip(*nonzero(A))[1]  # Should always be nonzero
+    nonzero_columns = list(zip(*nonzero(A)))[1]  # Should always be nonzero
     # Get the first nonzero column
     nonzero_col = A[:, min(nonzero_columns)]
     # Get the nonzero elements
@@ -171,7 +174,7 @@ def first_nonzero_is_negative(A):
 
 
 def reduce_matrix(A, B, L, k, i, D):
-    nonzero_i_elems = zip(*nonzero(A[i, :]))
+    nonzero_i_elems = list(zip(*nonzero(A[i, :])))
     if len(nonzero_i_elems):
         col1 = nonzero_i_elems[1][0]
         if A[i, col1] < 0:
@@ -180,7 +183,7 @@ def reduce_matrix(A, B, L, k, i, D):
             B[i, :] *= -1
     else:
         col1 = A.shape[1]
-    nonzero_k_elems = zip(*nonzero(A[k, :]))
+    nonzero_k_elems = list(zip(*nonzero(A[k, :])))
     if len(nonzero_k_elems):
         col2 = nonzero_k_elems[1][0]
     else:
@@ -235,7 +238,7 @@ def get_solutions(A):
     Nd = Qd[:m, m]
     Cn = 0
     Cd = 1
-    for i in xrange(m):
+    for i in range(m):
         num, den = multr(Nn[i], Nd[i], Nn[i], Nd[i])
         num, den = multr(num, den, Qn[i, i], Qd[i, i])
         Cn, Cd = addr(Cn, Cd, num, den)
@@ -270,7 +273,7 @@ def get_solutions(A):
                 else:
                     # now update U
                     Un[i - 1], Ud[i - 1] = 0, 1
-                    for j in xrange(i, m):
+                    for j in range(i, m):
                         # Loops from back of xs
                         num, den = multr(Qn[i - 1, j], Qd[i - 1, j], x[j], 1)
                         Un[i - 1], Ud[i - 1] = addr(Un[i - 1], Ud[i - 1], num,
@@ -298,14 +301,14 @@ def cholesky(A):
     m = A.shape[0]
     N = deepcopy(A)
     D = ones(*A.shape)
-    for i in xrange(m - 1):
-        for j in xrange(i + 1, m):
+    for i in range(m - 1):
+        for j in range(i + 1, m):
             N[j, i] = N[i, j]
             D[j, i] = D[i, j]
             n, d = ratior(N[i, j], D[i, j], N[i, i], D[i, i])
             N[i, j], D[i, j] = n, d
-        for k in xrange(i + 1, m):
-            for l in xrange(k, m):
+        for k in range(i + 1, m):
+            for l in range(k, m):
                 n, d = multr(N[k, i], D[k, i], N[i, l], D[i, l])
                 N[k, l], D[k, l] = subr(N[k, l], D[k, l], n, d)
     return N, D
@@ -317,8 +320,8 @@ def gram(A):
     """
     m = A.shape[0]
     B = zeros(m, m)
-    for i in xrange(m):
-        for j in xrange(m):
+    for i in range(m):
+        for j in range(m):
             B[i, j] = A[i, :].dot(A[j, :])  # dotproduct(A[i], A[j], n)
     return Matrix(B)
 
@@ -410,6 +413,6 @@ def lcasvector(A, x):
 #     printnp(A)
     n = A.shape[1]
     lcv = zeros(n, 1)
-    for j in xrange(n):
+    for j in range(n):
         lcv[j] = x.dot(A[:, j])
     return lcv
