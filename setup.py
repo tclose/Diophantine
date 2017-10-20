@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="Diophantine",
-    version="0.1",
+    version="0.1.1",
     py_modules=['diophantine'],
     author="Thomas G. Close",
     author_email="tom.g.close@gmail.com",
