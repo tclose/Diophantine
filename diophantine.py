@@ -40,8 +40,7 @@ from builtins import zip
 from builtins import next
 from builtins import range
 from copy import deepcopy
-from math import copysign, sqrt, log10, floor
-from fractions import gcd
+from math import copysign, sqrt, log10, floor, gcd
 from sympy import Matrix, zeros, ones, eye
 from itertools import chain, product
 
