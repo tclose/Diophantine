@@ -40,7 +40,11 @@ from builtins import zip
 from builtins import next
 from builtins import range
 from copy import deepcopy
-from math import copysign, sqrt, log10, floor, gcd
+from math import copysign, sqrt, log10, floor
+try:
+    from math import gcd  # Py >= 3.6
+except ImportError:
+    from fractions import gcd  # Py < 3.6
 from sympy import Matrix, zeros, ones, eye
 from itertools import chain, product
 
