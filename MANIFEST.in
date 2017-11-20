@@ -1,1 +1,2 @@
 prune .gitignore
+include LICENCE.txt
