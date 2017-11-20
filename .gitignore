@@ -5,3 +5,4 @@
 .pydevproject
 .buildpath
 *.egg-info
+/dist
